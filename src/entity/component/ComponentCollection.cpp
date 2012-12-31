@@ -1,13 +1,17 @@
 #include "ComponentCollection.h"
 
+#include <iostream>
+
 namespace scim
 {
 
 void ComponentCollection::AddComponent(GameComponent* gc)
 {
 	std::map<GameComponent::Type, GameComponent*>::iterator it = compMap.find(gc->GetType());
-	if (it != compMap.end())
+	if (it == compMap.end())
+	{
 		compMap.insert(std::pair<GameComponent::Type, GameComponent*>(gc->GetType(), gc));
+	}
 }
 void ComponentCollection::RemoveComponent(GameComponent::Type type)
 {
@@ -21,7 +25,10 @@ GameComponent* ComponentCollection::GetComponent(GameComponent::Type type)
 	if (it != compMap.end())
 		return it->second;
 	else
+	{
+		std::cout << "cannot find component" << std::endl;
 		return 0;
+	}
 }
 
 }
