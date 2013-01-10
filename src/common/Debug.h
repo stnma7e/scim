@@ -4,14 +4,21 @@
 #include <iostream>
 #include <string>
 
-#ifdef DEBUG
+#ifndef NDEBUG
 
 #define DEBUG_PRINT(x) std::cout << x << std::endl
+
+#define ASSERT(x) \
+	if (x) { } \
+	else \
+	{ \
+		exit(1); \
+	}
 
 #endif
 
 #else
 
-#define DEBUG_PRINT(x) if(1)
+#define DEBUG_PRINT(x)
 
 #endif

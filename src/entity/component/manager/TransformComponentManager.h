@@ -10,10 +10,12 @@ namespace scim
 
 class TransformComponentManager: public ComponentManager, public Singleton<TransformComponentManager>
 {
-	math::Vector3* toInitVec;
-public:
-	TransformComponentManager();
+	friend class Singleton<TransformComponentManager>;
 
+	math::Vector3* toInitVec;
+
+	TransformComponentManager();
+public:
 	virtual GameComponent* CreateComponent(GameObject* owner);
 };
 
