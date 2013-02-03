@@ -26,7 +26,7 @@ GameComponent* ComponentCollection::GetComponent(GameComponent::Type type)
 		return it->second;
 	else
 	{
-		std::cout << "cannot find component" << std::endl;
+		std::cout << "ERROR: cannot find component" << std::endl;
 		return 0;
 	}
 }

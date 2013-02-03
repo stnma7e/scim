@@ -2,7 +2,7 @@
 #define TRANSFORMCOMPONENT_H_
 
 #include "GameComponent.h"
-#include "../../math/Vector3.h"
+#include "../../math/Vec3.h"
 
 namespace scim
 {
@@ -10,9 +10,9 @@ namespace scim
 class TransformComponent: public scim::GameComponent
 {
 private:
-	math::Vector3* locVec;
+	math::Vec3 locVec;
 public:
-	TransformComponent(GameObject* owner, math::Vector3* initVec);
+	TransformComponent(GameObject* owner, math::Vec3 initVec);
 };
 
 }

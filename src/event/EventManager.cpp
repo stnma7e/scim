@@ -1,5 +1,7 @@
 #include "EventManager.h"
 
+#include <iostream>
+
 namespace scim
 {
 
@@ -14,7 +16,7 @@ bool EventManager::AddListener(const EventListenerDelegate& eventDelegate, Event
 	{
 		if (eventDelegate == (*it))
 		{
-			DEBUG_PRINT("Warning: attempting to double-register delegate");
+			std::cout << "WARN: attempting to double-register delegate" << std::endl;
 			return false;
 		}
 	}

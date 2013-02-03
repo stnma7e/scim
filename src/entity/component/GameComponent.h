@@ -11,7 +11,8 @@ class GameComponent
 public:
 	enum Type
 	{
-		Transform
+		TRANSFORM,
+		RENDER
 	};
 protected:
 	GameObject* m_owner;

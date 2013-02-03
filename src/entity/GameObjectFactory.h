@@ -14,7 +14,7 @@ class GameObjectFactory: public Singleton<GameObjectFactory>
 protected:
 	GameObjectFactory();
 public:
-	GameObject* CreateObject(GOid id, const char* type, I8 numComps, GameComponent::Type compList[]);
+	GameObject* CreateObject(const char* type, I8 numComps, GameComponent::Type compList[]);
 };
 
 }

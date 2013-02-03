@@ -3,7 +3,7 @@
 
 #include "ComponentManager.h"
 #include "../../../common/Singleton.h"
-#include "../../../math/Vector3.h"
+#include "../../../math/Vec3.h"
 
 namespace scim
 {
@@ -12,11 +12,15 @@ class TransformComponentManager: public ComponentManager, public Singleton<Trans
 {
 	friend class Singleton<TransformComponentManager>;
 
-	math::Vector3* toInitVec;
+	math::Vec3 toInitVec;
 
 	TransformComponentManager();
 public:
 	virtual GameComponent* CreateComponent(GameObject* owner);
+
+	virtual bool Init();
+	virtual void OnUpdate(F64 dtime);
+	virtual void Shutdown();
 };
 
 }

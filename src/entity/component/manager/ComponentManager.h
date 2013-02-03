@@ -2,18 +2,20 @@
 #define COMPONENTMANAGER_H_
 
 #include "../GameComponent.h"
+#include "../../../common/Program.h"
 
-class ComponentCollection;
+#include <list>
 
 namespace scim
 {
 
-class ComponentManager
+typedef std::list<GameComponent*> ComponentList;
+
+class ComponentManager: public Program
 {
-private:
-	ComponentCollection* compColl;
 protected:
 	GameComponent::Type m_type;
+	ComponentList compList;
 public:
 	ComponentManager(GameComponent::Type type);
 	virtual ~ComponentManager() { }
@@ -22,6 +24,10 @@ public:
 
 	virtual GameComponent* CreateComponent(GameObject* owner) = 0;
 	void RegisterManager(ComponentManager* toReg);
+
+	virtual bool Init() = 0;
+	virtual void OnUpdate(F64 dtime) = 0;
+	virtual void Shutdown() = 0;
 };
 
 }

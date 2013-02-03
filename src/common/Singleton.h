@@ -7,23 +7,19 @@ namespace scim
 template <typename T>
 class Singleton
 {
-protected:
-	static T* m_instance;
 public:
 	Singleton() {}
-	virtual ~Singleton() {}
+	virtual ~Singleton() { }
 
-	//
-	static T* GetInstance()
+	static T& GetInstance()
 	{
-		if (m_instance == 0)
-			m_instance = new T;
+		static T m_instance;
 
 		return m_instance;
 	}
 };
 
-template <typename T> T* Singleton<T>::m_instance = 0;
+// template <typename T> T* Singleton<T>::m_instance = 0;
 
 }
 #endif

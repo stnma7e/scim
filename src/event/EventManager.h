@@ -1,7 +1,7 @@
 #ifndef EVENTMANAGER_H_
 #define EVENTMANAGER_H_
 
-#include "../../ext/fast_delegate/FastDelegate.h"
+#include "../../dep/fast_delegate/FastDelegate.h"
 #include "GameEvent.h"
 #include "../common/Singleton.h"
 
@@ -27,7 +27,6 @@ class EventManager: public Singleton<EventManager>
 public:
 	EventManager();
 
-	//
 	bool AddListener(const EventListenerDelegate& eventDelegate, EventType type);
 	bool RemoveListener(const EventListenerDelegate& eventDelegate, EventType type);
 
