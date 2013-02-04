@@ -37,7 +37,7 @@ void TransformComponentManager::Shutdown()
 	printf("end: %d\n", *compList.end());
 	printf("%s", "stop");*/
 }
-GameComponent* TransformComponentManager::CreateComponent(GameObject* owner)
+GameComponent* TransformComponentManager::CreateComponent(XMLNode& compRoot, GameObject* owner)
 {
 	TransformComponent* t = new TransformComponent(owner, toInitVec);
 	compList.push_back(t);

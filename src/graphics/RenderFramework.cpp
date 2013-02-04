@@ -68,8 +68,9 @@ bool RenderFramework::Init()
     glFrontFace(GL_CW);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_CLAMP);
     glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
     glDepthRange(0.0f, 1.0f);
 
 	InitProgram();
@@ -106,7 +107,21 @@ void RenderFramework::OnUpdate(F64 dtime)
 }
 void GLFWCALL RenderFramework::OnResize(int width, int height)
 { 
+/*
+    math::Frustum frustum = RenderFramework::GetInstance().m_Frustum;
+    GLuint program = RenderFramework::GetInstance().theProgram;
+    float* perspectiveMatrix = RenderFramework::GetInstance().thePerspMatx;
+    GLuint perspectiveMatrixUnif = RenderFramework::GetInstance().perspMatUnf;
+
+    perspectiveMatrix[0] = frustum.GetScale() * frustum.GetAspectRatio();
+    perspectiveMatrix[5] = frustum.GetScale();
+
+    glUseProgram(program);
+    glUniformMatrix4fv(perspectiveMatrixUnif, 1, GL_FALSE, perspectiveMatrix);
+    glUseProgram(0);
+*/
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+
 }
 void RenderFramework::PreRender()
 {

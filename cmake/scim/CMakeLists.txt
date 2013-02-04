@@ -42,9 +42,12 @@ ENDFOREACH (head)
 ADD_EXECUTABLE (scim ${SRCS} ${HEADERS})
 ADD_DEPENDENCIES(scim glew glfw_proj)
 
+ADD_LIBRARY(xmlParser ${ROOT_PATH}/dep/xmlParser/xmlParser.cpp)
+
 SET (LINK_LIBS
 	glfw
 	GLEW
+	xmlParser
 )
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${sbdir} ${lib})

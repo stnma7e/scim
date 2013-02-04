@@ -114,7 +114,7 @@ class RenderComponentManager: public ComponentManager, public Singleton<RenderCo
 	};
 
 public:
-	virtual GameComponent* CreateComponent(GameObject* owner);
+	virtual GameComponent* CreateComponent(XMLNode& compRoot, GameObject* owner);
 
 	virtual bool Init();
 	virtual void OnUpdate(F64 dtime);

@@ -15,6 +15,7 @@ class RenderComponent: public GameComponent
 	GLuint m_VBO;
 	static char plusOne;
 	char m_plusOne;
+	size_t colorData;
 
 	const float vertData[288] = {
 		 0.25f,  0.25f, -1.25f, 1.0f,

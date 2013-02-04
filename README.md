@@ -4,4 +4,5 @@ scimc
 Revamped game engine in C++
 
 ----
-To use in eclipse, just import this directory into your workspace
+
+Must have libglfw & libglew on system. (This will be changed in the future.)

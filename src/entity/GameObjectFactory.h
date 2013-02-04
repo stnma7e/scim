@@ -5,6 +5,8 @@
 #include "GameObject.h"
 #include "component/GameComponent.h"
 
+#include <xmlParser.h>
+
 namespace scim
 {
 
@@ -14,7 +16,7 @@ class GameObjectFactory: public Singleton<GameObjectFactory>
 protected:
 	GameObjectFactory();
 public:
-	GameObject* CreateObject(const char* type, I8 numComps, GameComponent::Type compList[]);
+	GameObject* CreateObject(I8 numObjs, XMLNode& breedNode);
 };
 
 }

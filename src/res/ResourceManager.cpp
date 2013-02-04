@@ -6,8 +6,8 @@
 #include <exception>
 #include <stdexcept>
 
-#define GLOBAL_FILE_DIR "../../assets/graphics/shader/"
-#define LOCAL_FILE_DIR "../../assets/graphics/shader/"
+#define GLOBAL_FILE_DIR "../../res/graphics/shader/"
+#define LOCAL_FILE_DIR "../../res/graphics/shader/"
 
 namespace scim
 {

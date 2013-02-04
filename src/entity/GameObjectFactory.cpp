@@ -2,6 +2,9 @@
 #include "component/GameComponentFactory.h"
 #include "component/ComponentCollection.h"
 
+#include <xmlParser.h>
+#include <iostream>
+
 namespace scim
 {
 
@@ -9,14 +12,16 @@ GameObjectFactory::GameObjectFactory()
 {
 }
 
-GameObject* GameObjectFactory::CreateObject(const char* type, I8 numComps, GameComponent::Type compList[])
+GameObject* GameObjectFactory::CreateObject(I8 numObjs, XMLNode& breedNode)
 {
-	GameObject* go = new GameObject(GameObject::GetNextGOid(), type);
+	GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"));
 	GameComponentFactory* fact = &GameComponentFactory::GetInstance();
 
-	for (int i = 0; i < numComps; i++)
+	for (int i = 0; i < breedNode.nChildNode("component"); ++i)
 	{
-		GameComponent* gc = fact->CreateComponent(compList[i], go);
+		XMLNode compNode = breedNode.getChildNode("component", i);
+
+		GameComponent* gc = fact->CreateComponent(compNode, go);
 		if (gc)
 		{
 			go->compColl->AddComponent(gc);

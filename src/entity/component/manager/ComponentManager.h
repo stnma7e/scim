@@ -5,6 +5,7 @@
 #include "../../../common/Program.h"
 
 #include <list>
+#include <xmlParser.h>
 
 namespace scim
 {
@@ -22,7 +23,7 @@ public:
 
 	GameComponent::Type GetType() const { return m_type; }
 
-	virtual GameComponent* CreateComponent(GameObject* owner) = 0;
+	virtual GameComponent* CreateComponent(XMLNode& compRoot, GameObject* owner) = 0;
 	void RegisterManager(ComponentManager* toReg);
 
 	virtual bool Init() = 0;

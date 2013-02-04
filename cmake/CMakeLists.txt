@@ -29,13 +29,19 @@ ExternalProject_Add(glfw_proj
 IF (CMAKE_GENERATOR MATCHES Unix)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -g3 -O0 -std=c++11")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -include ${ROOT_PATH}/src/common/Types.h")
+
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${ROOT_PATH}/dep/glm")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${ROOT_PATH}/dep/glew-1.9.0/include")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${ROOT_PATH}/dep/glfw-2.7.7/include")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${ROOT_PATH}/dep/xmlParser")
 ENDIF ()
 
 IF (CMAKE_GENERATOR MATCHES Visual*)
-	SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " /FI" ${ROOT_PATH}/src/common/Types.h)
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Wall /Wextra")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  /FI ${ROOT_PATH}/src/common/Types.h")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /II ${ROOT_PATH}/dep/glm")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /I ${ROOT_PATH}/dep/glew-1.9.0/include")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /I ${ROOT_PATH}/dep/glfw-2.7.7/include")
 ENDIF()
 
 SET (SUBDIRS

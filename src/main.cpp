@@ -6,6 +6,7 @@
 #include "entity/component/ComponentCollection.h"
 
 #include <iostream>
+#include <bitset>
 
 using namespace scim;
 
@@ -23,9 +24,11 @@ int main(int argc, char* argv[])
 	if (!init())
 		return 1;
 
+	XMLNode deerNode = XMLNode::parseFile("/home/sam/Dropbox/csim/res/breed/ball.xml").getChildNode("breed");
+
 	for (int i = 0; i < 0x2; i++)
 	{
-		GameObject* go = GameObjectFactory::GetInstance().CreateObject("deer", 2, deerComps);
+		GameObject* go = GameObjectFactory::GetInstance().CreateObject(1, deerNode);
 		if (go)
 		{
 			if (go->GetID() % 0x1 == 0)
