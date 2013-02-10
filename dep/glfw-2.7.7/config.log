@@ -11,7 +11,7 @@ running ./compile.sh, to aid debugging if ./compile.sh makes a mistake.
 ./compile.sh: cc -c -I/usr/X11R6/include  -pthread conftest.c 1>&5
 ./compile.sh: Checking for clock_gettime
 ./compile.sh: cc -o conftest -I/usr/X11R6/include  -pthread conftest.c  1>&5
-/tmp/ccOvbRCB.o: In function `main':
+/tmp/ccScm0T1.o: In function `main':
 conftest.c:(.text+0xf): undefined reference to `clock_gettime'
 collect2: error: ld returned 1 exit status
 ./compile.sh: failed program was:

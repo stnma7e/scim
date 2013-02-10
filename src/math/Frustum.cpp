@@ -1,9 +1,5 @@
 #include "Frustum.h"
 
-#include <cmath>
-
-#define PI 3.14159
-
 namespace scim
 {
 	namespace math
@@ -15,7 +11,6 @@ namespace scim
 		m_AspectRatio = 1.0f;
 		m_Near = 1.0f;
 		m_Far = 1000.f;
-		m_Scale = 1.0f;
 	}
 
 	bool Frustum::Inside(const Vec3& point) const

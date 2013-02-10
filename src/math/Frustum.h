@@ -4,6 +4,10 @@
 #include "Plane.h"
 #include "Vec3.h"
 
+#include <cmath>
+
+#define PI 3.14159
+
 namespace scim
 {
 	namespace math
@@ -31,7 +35,6 @@ namespace scim
 		F32 m_AspectRatio;
 		F32 m_Near;
 		F32 m_Far;
-		F32 m_Scale; // INTEGRATE THIS
 	public:
 		Frustum();
 
@@ -40,9 +43,11 @@ namespace scim
 
 		const Plane& Get(Side side) { return m_Planes[side]; }
 
-		void SetFOV(F32 fov)
+		void SetFOV(F32 deg)
 		{
-			m_Fov = fov;
+			const float degToRad = PI * 2.0f / 360.0f;
+			float fFovRad = deg * degToRad;
+			m_Fov = 1.0f / std::tan(fFovRad / 2.0f);
 			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
 		void SetAspectRatio(F32 aspect)
@@ -60,16 +65,11 @@ namespace scim
 			m_Far = far;
 			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
-		void SetScale(F32 scale)
-		{
-			m_Scale = scale;
-		}
 
 		F32 GetFOV() { return m_Fov; }
 		F32 GetAspectRatio() { return m_AspectRatio; }
 		F32 GetNear() { return m_Near; }
 		F32 GetFar() { return m_Far; }
-		F32 GetScale() { return m_Scale; }
 
 		void Init(const F32 fov, const F32 aspect, const F32 near, const F32 far);
 	};

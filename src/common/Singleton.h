@@ -19,7 +19,5 @@ public:
 	}
 };
 
-// template <typename T> T* Singleton<T>::m_instance = 0;
-
 }
 #endif

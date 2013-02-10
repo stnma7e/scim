@@ -19,13 +19,17 @@ RenderComponent::RenderComponent(GameObject* owner, const float vertDatafds[]) :
 	m_plusOne = plusOne++;
 }
 
+bool RenderComponent::Init()
+{
+	return 1;
+}
 void RenderComponent::Render()
 {
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
 	glUseProgram(RenderFramework::GetInstance().theProgram);
 
-	glUniform2f(RenderFramework::GetInstance().offsetUnf, 0.5f + m_plusOne, 0.5f + m_plusOne);
+	glUniform2f(RenderFramework::GetInstance().modelToCamUnf, 0.5f + m_plusOne, 0.5f + m_plusOne);
 
 	size_t colorData = sizeof(vertData) / 2;
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);

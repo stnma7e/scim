@@ -34,8 +34,12 @@ void RenderComponentManager::Shutdown()
 GameComponent* RenderComponentManager::CreateComponent(XMLNode& compRoot, GameObject* owner)
 {
 	RenderComponent* t = new RenderComponent(owner, vertData);
-	compList.push_back(t);
-	return t;
+	if (t->Init())
+	{
+		compList.push_back(t);
+		return t;
+	} else
+		return 0;
 }
 
 }

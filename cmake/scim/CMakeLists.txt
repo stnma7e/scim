@@ -1,5 +1,12 @@
 SET (prefix ${ROOT_PATH}/src)
 
+INCLUDE_DIRECTORIES (
+	${ROOT_PATH}/dep/lfw-2.7.7/include
+	${ROOT_PATH}/dep/glew-1.9.0/include
+	${ROOT_PATH}/dep/glm
+	${ROOT_PATH}/dep/xmlParser
+)
+
 SET (PROJ_SOURCE_PAIR
 	entity/GameObject
 	entity/GameObjectFactory

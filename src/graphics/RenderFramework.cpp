@@ -14,22 +14,25 @@
 #include <cstring>
 #include <iostream>
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace scim
 {
+    U16 RenderFramework::window_w = 1024;
+    U16 RenderFramework::window_h = 640;
+    bool RenderFramework::isResized = false;
 
-RenderFramework::RenderFramework()
+RenderFramework::RenderFramework() : camToClipMatx(0.0f)
 {
     running = 0;
 
     theProgram = 0;
     m_VAO = 0;
 
-    window_w = 1024;
-    window_h = 640;
     window_title = "Scim";
 
-    offsetUnf = 0;
-    perspMatUnf = 0;
+    modelToCamUnf = 0;
+    camToClipUnf = 0;
 }
 bool RenderFramework::Init()
 {
@@ -43,7 +46,7 @@ bool RenderFramework::Init()
 		return 0;
 
     glfwSetWindowTitle(window_title);
-    glfwSetWindowSizeCallback(RenderFramework::OnResize);
+    glfwSetWindowSizeCallback(RenderFramework::ResizeCallback);
 
     fprintf(stdout, "Status: Using hardware accelerated graphics? %s\n", (glfwGetWindowParam(GLFW_ACCELERATED) ? "True" : "False"));
     fprintf(stdout, "Status: Refresh rate? %d\n", glfwGetWindowParam(GLFW_REFRESH_RATE));
@@ -75,24 +78,26 @@ bool RenderFramework::Init()
 
 	InitProgram();
 
-    offsetUnf = glGetUniformLocation(theProgram, "offset");
+    modelToCamUnf = glGetUniformLocation(theProgram, "modelToCamMatx");
 
-    perspMatUnf = glGetUniformLocation(theProgram, "perspectiveMatrix");
+    camToClipUnf = glGetUniformLocation(theProgram, "camToClipMatx");
 
-    m_Frustum.SetScale(0.5f);
+    m_Frustum.SetFOV(120.0f);
     m_Frustum.SetNear(0.5f);
     m_Frustum.SetFar(5.0f);
 
-    std::memset(thePerspMatx, 0, sizeof(float) * 16);
+    F32 near = m_Frustum.GetNear();
+    F32 far = m_Frustum.GetFar();
+    F32 scale = m_Frustum.GetFOV();
 
-    thePerspMatx[0] = m_Frustum.GetScale();
-    thePerspMatx[5] = m_Frustum.GetScale();
-    thePerspMatx[10] = (m_Frustum.GetFar() + m_Frustum.GetNear()) / (m_Frustum.GetNear() - m_Frustum.GetFar());
-    thePerspMatx[14] = (2 * m_Frustum.GetFar() * m_Frustum.GetNear()) / (m_Frustum.GetNear() - m_Frustum.GetFar());
-    thePerspMatx[11] = -1.0f;
+    camToClipMatx[0].x = scale;
+    camToClipMatx[1].y = scale;
+    camToClipMatx[2].z = (far + near) / (near - far);
+    camToClipMatx[2].w = (2 * far * near) / (near - far);
+    camToClipMatx[3].z = -1.0f;
 
     glUseProgram(theProgram);
-    glUniformMatrix4fv(perspMatUnf, 1, GL_FALSE, thePerspMatx);
+    glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
     glUseProgram(0);
 
 	printf("\n");
@@ -101,27 +106,29 @@ bool RenderFramework::Init()
 }
 void RenderFramework::OnUpdate(F64 dtime)
 {
-	running = !glfwGetKey( GLFW_KEY_ESC ) && glfwGetWindowParam( GLFW_OPENED );
+	running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
 	if (!running)
 		Shutdown();
+    if(isResized)
+        OnResize(window_w, window_h);
 }
-void GLFWCALL RenderFramework::OnResize(int width, int height)
+void GLFWCALL RenderFramework::ResizeCallback(int width, int height)
+{
+    isResized = true;
+
+    window_w = width;
+    window_h = height;
+}
+void RenderFramework::OnResize(int width, int height)
 { 
-/*
-    math::Frustum frustum = RenderFramework::GetInstance().m_Frustum;
-    GLuint program = RenderFramework::GetInstance().theProgram;
-    float* perspectiveMatrix = RenderFramework::GetInstance().thePerspMatx;
-    GLuint perspectiveMatrixUnif = RenderFramework::GetInstance().perspMatUnf;
+    camToClipMatx[0].x = m_Frustum.GetFOV() * (height / (float)width);
+    camToClipMatx[1].y = m_Frustum.GetFOV();
 
-    perspectiveMatrix[0] = frustum.GetScale() * frustum.GetAspectRatio();
-    perspectiveMatrix[5] = frustum.GetScale();
-
-    glUseProgram(program);
-    glUniformMatrix4fv(perspectiveMatrixUnif, 1, GL_FALSE, perspectiveMatrix);
+    glUseProgram(theProgram);
+    glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
     glUseProgram(0);
-*/
-    glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
+    glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 }
 void RenderFramework::PreRender()
 {
@@ -144,6 +151,9 @@ void RenderFramework::InitProgram()
 
     GLuint vert = LoadShader(GL_VERTEX_SHADER, "MatrixPerspective.v.glsl");
     GLuint frag = LoadShader(GL_FRAGMENT_SHADER, "StandardColors.f.glsl");
+    
+    if (!(vert && frag))
+    	Shutdown();
 
     theProgram = glCreateProgram();
     LinkProgram(theProgram, vert, frag);
@@ -158,7 +168,10 @@ GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strSha
 
     try
     {
-        return MakeShader(eShaderType, shaderData.str());
+	    GLuint shader_id = MakeShader(eShaderType, shaderData.str());
+        
+
+        return shader_id;
     }
     catch(std::exception &e)
     {
@@ -166,21 +179,27 @@ GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strSha
         throw;
     }
 }
-GLuint RenderFramework::MakeShader(GLenum type, const std::string &strShader)
+GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strShader)
 {
     GLint length = strShader.size();
     GLchar* source = (char*)strShader.c_str();
     GLuint shader;
     GLint shader_ok;
+    const char* shad_type = eShaderType == 35633 ? "vertex shader" : (eShaderType == 35632 ? "fragment shader" : "unkown shader type");
 
-    shader = glCreateShader(type);
+    shader = glCreateShader(eShaderType);
     glShaderSource(shader, 1, (const GLchar**)&source, &length);
     glCompileShader(shader);
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok)
-    {
-        std::fprintf(stderr, "Failed to compile %s:\n", strShader.c_str());
+    { 
+        std::fprintf(stderr, "Failed to compile %s\n", shad_type);
+        GLint i;
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &i);
+        char logBuffer[2048];
+        glGetShaderInfoLog(shader, 2048, NULL, logBuffer);
+        std::fprintf(stderr, "%s\n", logBuffer);
         glDeleteShader(shader);
         return 0;
     }

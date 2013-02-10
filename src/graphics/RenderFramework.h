@@ -8,6 +8,7 @@
 #include "GL/glew.h"
 #include "GL/glfw.h"
 
+#include <glm/glm.hpp>
 #include <string>
 
 namespace scim
@@ -20,9 +21,10 @@ class RenderFramework: public Singleton<RenderFramework>, public Program
 	RenderFramework();
 
 	bool running;
+	static bool isResized;
 
-	U16 window_w;
-	U16 window_h;
+	static U16 window_w;
+	static U16 window_h;
 	const char* window_title;
 
 	math::Frustum m_Frustum;
@@ -30,17 +32,18 @@ class RenderFramework: public Singleton<RenderFramework>, public Program
 	GLuint theProgram;
 	GLuint m_VAO;
 
-	GLuint offsetUnf;
-	GLuint perspMatUnf;
+	GLuint modelToCamUnf;
+	GLuint camToClipUnf;
 
-	F32 thePerspMatx[16];
+	glm::mat4 camToClipMatx;
 
 	void InitProgram();
 	GLuint MakeShader(GLenum type, const std::string &strShader);
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
 	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);
+	void OnResize(int width, int height);
 
-	static void GLFWCALL OnResize(int width, int height);
+	static void GLFWCALL ResizeCallback(int width, int height);
 public:
 	virtual bool Init();
 	virtual void OnUpdate(F64 dtime);
@@ -49,9 +52,6 @@ public:
 	virtual void Shutdown();
 
 	GLuint GetProgram() const { return theProgram; }
-	math::Frustum GetFrustum() const { return m_Frustum; }
-	GLuint GetPerspMatUnf() const { return perspMatUnf; }
-	const F32* GetPerspMatrix() const { return thePerspMatx; }
 };
 
 }
