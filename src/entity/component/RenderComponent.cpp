@@ -25,9 +25,10 @@ bool RenderComponent::Init()
 }
 void RenderComponent::Render()
 {
+	GLuint theProgram = RenderFramework::GetInstance().theProgram;
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
-	glUseProgram(RenderFramework::GetInstance().theProgram);
+	glUseProgram(theProgram);
 
 	glUniform2f(RenderFramework::GetInstance().modelToCamUnf, 0.5f + m_plusOne, 0.5f + m_plusOne);
 

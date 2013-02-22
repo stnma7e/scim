@@ -1,9 +1,9 @@
-#version 330
+#version 120
 
-layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 color;
+attribute vec4 position;
+attribute vec4 color;
 
-smooth out vec4 theColor;
+varying vec4 theColor;
 
 uniform vec2 modelToCamMatx;
 uniform mat4 camToClipMatx;

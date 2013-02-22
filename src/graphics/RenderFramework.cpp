@@ -79,7 +79,6 @@ bool RenderFramework::Init()
 	InitProgram();
 
     modelToCamUnf = glGetUniformLocation(theProgram, "modelToCamMatx");
-
     camToClipUnf = glGetUniformLocation(theProgram, "camToClipMatx");
 
     m_Frustum.SetFOV(120.0f);
@@ -188,8 +187,8 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
     const char* shad_type = eShaderType == 35633 ? "vertex shader" : (eShaderType == 35632 ? "fragment shader" : "unkown shader type");
 
     shader = glCreateShader(eShaderType);
-    glShaderSource(shader, 1, (const GLchar**)&source, &length);
-    glCompileShader(shader);
+    glShaderSource(shader, 1, (const GLchar**)&source, NULL); // assumes null-terminated string as this will
+    glCompileShader(shader);                                  // happen with the conversion from std::string to c_str()
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok)
@@ -208,8 +207,10 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
 GLuint RenderFramework::LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo)
 {
     glAttachShader(program, shaderOne);
-    glAttachShader(program, shaderTwo);   
+    glAttachShader(program, shaderTwo);
 
+    glBindAttribLocation(program, 0, "position");
+    glBindAttribLocation(program, 1, "color");
     glLinkProgram(program);
 
     glDetachShader(program, shaderOne);

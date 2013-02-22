@@ -1,10 +1,8 @@
-#version 330
+#version 120
 
-smooth in vec4 theColor;
-
-out vec4 outputColor;
+varying vec4 theColor;
 
 void main()
 {
-	outputColor = theColor;
+	gl_FragColor = theColor;
 }

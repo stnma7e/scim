@@ -54,6 +54,7 @@ ADD_LIBRARY(xmlParser ${ROOT_PATH}/dep/xmlParser/xmlParser.cpp)
 SET (LINK_LIBS
 	glfw
 	GLEW
+	GL
 	xmlParser
 )
 FOREACH (lib ${LINK_LIBS})

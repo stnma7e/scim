@@ -10,21 +10,21 @@ SET (CMAKE_VERBOSE_MAKEFILE)
 
 # SET (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 
-INCLUDE (ExternalProject)
-ExternalProject_Add(glew
-	SOURCE_DIR ${ROOT_PATH}/dep/glew-1.9.0
-	CONFIGURE_COMMAND ""
-	BUILD_COMMAND make
-	BUILD_IN_SOURCE 1
-	INSTALL_COMMAND ""
-)
-ExternalProject_Add(glfw_proj
-	SOURCE_DIR ${ROOT_PATH}/dep/glfw-2.7.7
-	CONFIGURE_COMMAND "./compile.sh"
-	BUILD_COMMAND make x11
-	BUILD_IN_SOURCE 1
-	INSTALL_COMMAND ""
-)
+#INCLUDE (ExternalProject)
+#ExternalProject_Add(glew
+#	SOURCE_DIR ${ROOT_PATH}/dep/glew-1.9.0
+#	CONFIGURE_COMMAND ""
+#	BUILD_COMMAND make
+#	BUILD_IN_SOURCE 1
+#	INSTALL_COMMAND ""
+#)
+#ExternalProject_Add(glfw_proj
+#	SOURCE_DIR ${ROOT_PATH}/dep/glfw-2.7.7
+#	CONFIGURE_COMMAND "./compile.sh"
+#	BUILD_COMMAND make x11
+#	BUILD_IN_SOURCE 1
+#	INSTALL_COMMAND ""
+#)
 
 IF (CMAKE_GENERATOR MATCHES Unix)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -g3 -O0 -std=c++11")
