@@ -4,8 +4,8 @@
 #include "GameComponent.h"
 #include "../GameObject.h"
 
-#include "GL/glew.h"
-#include "GL/glfw.h"
+#include <GL/glew.h>
+#include <GL/glfw.h>
 
 namespace scim
 {

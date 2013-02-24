@@ -24,6 +24,7 @@ SET (PROJ_SOURCE_PAIR
 	math/Vec3
 	math/Plane
 	math/Frustum
+	math/MatrixStack
 )
 SET (PROJ_SOURCES
 	main

@@ -4,6 +4,7 @@
 #include "entity/component/manager/RenderComponentManager.h"
 #include "graphics/RenderFramework.h"
 #include "entity/component/ComponentCollection.h"
+#include "res/ResourceManager.h"
 
 #include <iostream>
 #include <bitset>
@@ -24,7 +25,15 @@ int main(int argc, char* argv[])
 	if (!init())
 		return 1;
 
-	XMLNode deerNode = XMLNode::parseFile("/home/sam/Dropbox/csim/res/breed/ball.xml").getChildNode("breed");
+	std::string deerFile = ResourceManager::GetInstance().GetFileContents(ResourceManager::GetInstance().FindFileOrThrow(("entity/deer.xml")));
+	XMLResults* res = NULL;
+	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
+	if (res)
+	{
+		std::cout << "Error: invalid XML resource" << std::endl;
+		shutdown();
+		return 1;
+	}
 
 	for (int i = 0; i < 0x2; i++)
 	{

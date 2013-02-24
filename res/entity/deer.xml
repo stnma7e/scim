@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<breed type="ball">
+	<component type="transform">
+	</component>
+	<component type="render">
+	</component>
+</breed>

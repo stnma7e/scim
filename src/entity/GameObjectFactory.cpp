@@ -27,7 +27,7 @@ GameObject* GameObjectFactory::CreateObject(I8 numObjs, XMLNode& breedNode)
 			go->compColl->AddComponent(gc);
 		}
 		else
-			return 0;
+			return NULL;
 	}
 
 	return go;

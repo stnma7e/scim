@@ -13,7 +13,8 @@ class ResourceManager: public Singleton<ResourceManager>
 	friend class Singleton<ResourceManager>;
 	ResourceManager();
 public:
-	std::string FindFileOrThrow(const std::string &strBasename);
+	std::string FindFileOrThrow(const std::string &strBasename); // returns name of file if in resource directory
+	std::string GetFileContents(const std::string &strFilename);
 };
 
 }

@@ -6,8 +6,8 @@
 #include <exception>
 #include <stdexcept>
 
-#define GLOBAL_FILE_DIR "../../res/graphics/shader/"
-#define LOCAL_FILE_DIR "../../res/graphics/shader/"
+#define GLOBAL_FILE_DIR "../../res/"
+#define LOCAL_FILE_DIR GLOBAL_FILE_DIR
 
 namespace scim
 {
@@ -17,7 +17,7 @@ ResourceManager::ResourceManager()
 
 }
 
-std::string ResourceManager::FindFileOrThrow( const std::string &strBasename )
+std::string ResourceManager::FindFileOrThrow(const std::string &strBasename)
 {
     std::string strFilename = LOCAL_FILE_DIR + strBasename;
     std::ifstream testFile(strFilename.c_str());
@@ -31,6 +31,14 @@ std::string ResourceManager::FindFileOrThrow( const std::string &strBasename )
         return strFilename.c_str();
 
     throw std::runtime_error("Could not find the file " + strBasename);
+}
+std::string ResourceManager::GetFileContents(const std::string &strFilename)
+{
+	std::ifstream resFile(strFilename.c_str());
+    std::stringstream fileData;
+    fileData << resFile.rdbuf();
+    resFile.close();
+    return fileData.str();
 }
 
 }

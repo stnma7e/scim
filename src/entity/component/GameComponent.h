@@ -17,8 +17,8 @@ public:
 protected:
 	GameObject* m_owner;
 	Type m_type;
-public:
 	GameComponent(GameObject* owner, Type type);
+public:
 	virtual ~GameComponent() { }
 	Type GetType() const { return m_type; }
 };

@@ -14,7 +14,7 @@ TransformComponentManager::TransformComponentManager() : ComponentManager(GameCo
 }
 bool TransformComponentManager::Init()
 {
-	return 1;
+	return TRUE;
 }
 void TransformComponentManager::OnUpdate(F64 dtime)
 {

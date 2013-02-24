@@ -21,7 +21,7 @@ RenderComponent::RenderComponent(GameObject* owner, const float vertDatafds[]) :
 
 bool RenderComponent::Init()
 {
-	return 1;
+	return true;
 }
 void RenderComponent::Render()
 {

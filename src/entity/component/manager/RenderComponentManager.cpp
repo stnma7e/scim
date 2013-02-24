@@ -17,7 +17,7 @@ bool RenderComponentManager::Init()
 {
 	m_programStatus = RUNNING;
 
-	return 1;
+	return TRUE;
 }
 void RenderComponentManager::OnUpdate(F64 dtime)
 {
@@ -39,7 +39,7 @@ GameComponent* RenderComponentManager::CreateComponent(XMLNode& compRoot, GameOb
 		compList.push_back(t);
 		return t;
 	} else
-		return 0;
+		return NULL;
 }
 
 }

@@ -128,6 +128,8 @@ void RenderFramework::OnResize(int width, int height)
     glUseProgram(0);
 
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
+
+    isResized = false;
 }
 void RenderFramework::PreRender()
 {
@@ -159,15 +161,11 @@ void RenderFramework::InitProgram()
 }
 GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
-    std::string strFilename = ResourceManager::GetInstance().FindFileOrThrow(strShaderFilename);
-    std::ifstream shaderFile(strFilename.c_str());
-    std::stringstream shaderData;
-    shaderData << shaderFile.rdbuf();
-    shaderFile.close();
+    std::string shaderData = ResourceManager::GetInstance().GetFileContents(ResourceManager::GetInstance().FindFileOrThrow("graphics/shader/" + strShaderFilename));
 
     try
     {
-	    GLuint shader_id = MakeShader(eShaderType, shaderData.str());
+	    GLuint shader_id = MakeShader(eShaderType, shaderData);
         
 
         return shader_id;
@@ -187,7 +185,7 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
     const char* shad_type = eShaderType == 35633 ? "vertex shader" : (eShaderType == 35632 ? "fragment shader" : "unkown shader type");
 
     shader = glCreateShader(eShaderType);
-    glShaderSource(shader, 1, (const GLchar**)&source, NULL); // assumes null-terminated string as this will
+    glShaderSource(shader, 1, (const GLchar**)&source, NULL); // fourth parameter assumes null-terminated string as this will
     glCompileShader(shader);                                  // happen with the conversion from std::string to c_str()
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
