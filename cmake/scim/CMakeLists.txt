@@ -20,6 +20,7 @@ SET (PROJ_SOURCE_PAIR
 	entity/component/manager/TransformComponentManager
 	event/EventManager
 	graphics/RenderFramework
+	graphics/Mesh
 	res/ResourceManager
 	math/Vec3
 	math/Plane

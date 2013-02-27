@@ -39,8 +39,6 @@ class RenderFramework: public Singleton<RenderFramework>, public Program
 
 	void InitProgram();
 	GLuint MakeShader(GLenum type, const std::string &strShader);
-	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
-	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);
 	void OnResize(int width, int height);
 
 	static void GLFWCALL ResizeCallback(int width, int height);
@@ -50,6 +48,9 @@ public:
 	void PreRender();
 	void PostRender();
 	virtual void Shutdown();
+
+	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
+	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);
 
 	GLuint GetProgram() const { return theProgram; }
 };
