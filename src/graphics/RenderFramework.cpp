@@ -178,7 +178,6 @@ GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strSha
 }
 GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strShader)
 {
-    GLint length = strShader.size();
     GLchar* source = (char*)strShader.c_str();
     GLuint shader;
     GLint shader_ok;
@@ -194,8 +193,8 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
         std::fprintf(stderr, "Failed to compile %s\n", shad_type);
         GLint i;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &i);
-        char logBuffer[2048];
-        glGetShaderInfoLog(shader, 2048, NULL, logBuffer);
+        char logBuffer[i];
+        glGetShaderInfoLog(shader, i, NULL, logBuffer);
         std::fprintf(stderr, "%s\n", logBuffer);
         glDeleteShader(shader);
         return 0;

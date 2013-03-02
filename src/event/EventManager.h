@@ -1,9 +1,9 @@
 #ifndef EVENTMANAGER_H_
 #define EVENTMANAGER_H_
 
-#include "../../dep/fast_delegate/FastDelegate.h"
 #include "GameEvent.h"
 #include "../common/Singleton.h"
+#include "IEventManager.h"
 
 #include <map>
 #include <list>
@@ -11,30 +11,21 @@
 namespace scim
 {
 
-typedef fastdelegate::FastDelegate1<GameEvent*> EventListenerDelegate;
-typedef std::list<EventListenerDelegate> DelegateList;
-typedef std::map<EventType, DelegateList> DelegateMap;
-typedef std::list<GameEvent*> EventQueue;
-
-class EventManager: public Singleton<EventManager>
+class EventManager: public Singleton<EventManager>, public IEventManager
 {
 	friend class Singleton<EventManager>;
-
-	enum e_constants { kINFINITE = 0xffffffff };
 
 	DelegateMap m_delegateMap;
 	EventQueue m_eventQueue;
 public:
-	EventManager();
+	virtual bool AddListener(const EventListenerDelegate& eventDelegate, EventType type);
+	virtual bool RemoveListener(const EventListenerDelegate& eventDelegate, EventType type);
 
-	bool AddListener(const EventListenerDelegate& eventDelegate, EventType type);
-	bool RemoveListener(const EventListenerDelegate& eventDelegate, EventType type);
+	virtual bool TriggerEvent(GameEvent* pEvent);
+	virtual bool QueueEvent(GameEvent* pEvent);
+	virtual bool AbortEvent(const EventType inType, bool allOfType = false);
 
-	bool TriggerEvent(GameEvent* pEvent);
-	bool QueueEvent(GameEvent* pEvent);
-	bool AbortEvent(const EventType inType, bool allOfType = false);
-
-	// bool Update(U64 maxMillis = kINFINITE);
+	virtual bool OnUpdate(U64 maxMillis = kINFINITE);
 };
 
 }

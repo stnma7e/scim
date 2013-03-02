@@ -1,0 +1,38 @@
+{
+
+"folders":
+[
+	{
+		"path": ".",
+		"name": "scim",
+		"file_exclude_patterns":
+		[
+			"*.gitignore",
+			"*.gitmodules"
+		],
+		"folder_exclude_patterns":
+		[
+			"build",
+			".git"
+		]
+	}
+],
+"build_systems":
+[
+	{
+		"name": "ninja",
+		"cmd": ["ninja"],
+		"working_dir": "${project_path}/build",
+		"variants":
+		[
+			{
+				"name": "Run",
+				"cmd": ["ninja", "clean"],
+				"working_dir": "${project_path}/build"
+
+			}
+		]
+	}
+]
+
+}

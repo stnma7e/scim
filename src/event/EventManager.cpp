@@ -5,9 +5,6 @@
 namespace scim
 {
 
-EventManager::EventManager()
-{
-}
 bool EventManager::AddListener(const EventListenerDelegate& eventDelegate, EventType type)
 {
 	DelegateList& eventListenerList = m_delegateMap[type]; // will find or create entry
@@ -101,6 +98,10 @@ bool EventManager::AbortEvent(const EventType inType, bool allOfType)
 	}
 
 	return success;
+}
+bool EventManager::OnUpdate(U64 maxmillis)
+{
+
 }
 
 }

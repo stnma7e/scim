@@ -8,7 +8,7 @@ GOid GameObject::nextGOid = 0;
 
 GameObject::GameObject(GOid id, const char* type) : m_id(id), m_type(type)
 {
-	compColl = new ComponentCollection;
+	m_compColl = new ComponentCollection;
 }
 
 }
