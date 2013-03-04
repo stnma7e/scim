@@ -16,7 +16,7 @@ class GameObjectFactory: public Singleton<GameObjectFactory>
 protected:
 	GameObjectFactory();
 public:
-	GameObject* CreateObject(I8 numObjs, XMLNode& breedNode);
+	GameObject* CreateObject(XMLNode& breedNode);
 };
 
 }

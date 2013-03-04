@@ -12,7 +12,7 @@ GameObjectFactory::GameObjectFactory()
 {
 }
 
-GameObject* GameObjectFactory::CreateObject(I8 numObjs, XMLNode& breedNode)
+GameObject* GameObjectFactory::CreateObject(XMLNode& breedNode)
 {
 	GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"));
 	GameComponentFactory* fact = &GameComponentFactory::GetInstance();

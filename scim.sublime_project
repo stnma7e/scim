@@ -29,7 +29,6 @@
 				"name": "Run",
 				"cmd": ["ninja", "clean"],
 				"working_dir": "${project_path}/build"
-
 			}
 		]
 	}

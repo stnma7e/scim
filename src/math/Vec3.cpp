@@ -8,16 +8,16 @@ namespace scim
 		const Vec3 kZeroVec(0,0,0);
 
 
-		Vec3::Vec3() : x(0.0f), y(0.0f), z(0.0f)
+		Vec3::Vec3() : glm::vec3(0.0f, 0.0f, 0.0f)
 		{
 		}
-		Vec3::Vec3(const Vec3 &a) : x(a.x), y(a.y), z(a.z)
+		Vec3::Vec3(const Vec3 &a) : glm::vec3(a.x, a.y, a.z)
 		{
 		}
-		Vec3::Vec3(F32 nx, F32 ny, F32 nz) : x(nx), y(ny), z(nz)
+		Vec3::Vec3(F32 nx, F32 ny, F32 nz) : glm::vec3(nx, ny, nz)
 		{
 		}
-		Vec3 Vec3::Normalized(void)
+		Vec3 Vec3::Normalized()
 		{
 			F32 magSq = x*x + y*y + z*z;
 			F32 oneOverMag;

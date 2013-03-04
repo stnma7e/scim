@@ -7,18 +7,11 @@
 #include "res/ResourceManager.h"
 
 #include <iostream>
-#include <bitset>
 
 using namespace scim;
 
 bool init();
 void shutdown();
-
-GameComponent::Type deerComps[] =
-{
-	GameComponent::TRANSFORM,
-	GameComponent::RENDER
-};
 
 int main(int argc, char* argv[])
 {
@@ -37,7 +30,7 @@ int main(int argc, char* argv[])
 
 	for (int i = 0; i < 0x2; i++)
 	{
-		GameObject* go = GameObjectFactory::GetInstance().CreateObject(1, deerNode);
+		GameObject* go = GameObjectFactory::GetInstance().CreateObject(deerNode);
 		if (go)
 		{
 			if (go->GetID() % 0x1 == 0)
@@ -59,17 +52,15 @@ int main(int argc, char* argv[])
 			RenderFramework::GetInstance().OnUpdate(glfwGetTime());
 			RenderFramework::GetInstance().PreRender();
 		}
-		else if (RenderFramework::GetInstance().GetStatus() == Program::STOPPED)
+		else // RenderFramework::GetInstance().GetStatus() == Program::STOPPED
 			break;
-		else
-			RenderFramework::GetInstance().Init();
 
 		if (RenderComponentManager::GetInstance().GetStatus() == Program::RUNNING)
+		{
 			RenderComponentManager::GetInstance().OnUpdate(glfwGetTime());
-		else if (RenderComponentManager::GetInstance().GetStatus() == Program::STOPPED)
+		}
+		else // RenderComponentManager::GetInstance().GetStatus() == Program::STOPPED
 			break;
-		else
-			RenderComponentManager::GetInstance().Init();
 
 		RenderFramework::GetInstance().PostRender();
 	}
@@ -80,14 +71,13 @@ int main(int argc, char* argv[])
 }
 bool init()
 {
-	if (!(TransformComponentManager::GetInstance().Init()
-		&& RenderComponentManager::GetInstance().Init()
-		&& RenderFramework::GetInstance().Init()))
-	{
-		return 0;
-	}
+	bool success = true;
 
-	return 1;
+	success &= TransformComponentManager::GetInstance().Init();
+	success &= RenderComponentManager::GetInstance().Init();
+	success &= RenderFramework::GetInstance().Init();
+
+	return success;
 }
 void shutdown()
 {

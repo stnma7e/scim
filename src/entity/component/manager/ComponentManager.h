@@ -23,7 +23,7 @@ public:
 
 	GameComponent::Type GetType() const { return m_type; }
 
-	virtual GameComponent* CreateComponent(XMLNode& compRoot, GameObject* owner) = 0;
+	virtual GameComponent* CreateComponent(const XMLNode& compRoot, GameObject* owner) = 0;
 	void RegisterManager(ComponentManager* toReg);
 
 	virtual bool Init() = 0;

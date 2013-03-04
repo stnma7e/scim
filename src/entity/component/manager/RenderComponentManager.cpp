@@ -17,7 +17,7 @@ bool RenderComponentManager::Init()
 {
 	m_programStatus = RUNNING;
 
-	return TRUE;
+	return true;
 }
 void RenderComponentManager::OnUpdate(F64 dtime)
 {
@@ -31,9 +31,9 @@ void RenderComponentManager::Shutdown()
 	m_programStatus = STOPPED;
 }
 
-GameComponent* RenderComponentManager::CreateComponent(XMLNode& compRoot, GameObject* owner)
+GameComponent* RenderComponentManager::CreateComponent(const XMLNode& compRoot, GameObject* owner)
 {
-	RenderComponent* t = new RenderComponent(owner, vertData);
+	RenderComponent* t = new RenderComponent(owner, compRoot);
 	if (t->Init())
 	{
 		compList.push_back(t);

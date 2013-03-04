@@ -14,7 +14,7 @@ namespace scim
 {
 
 MeshData::MeshData(const std::vector<F32> &attribList, const std::vector<I32> &indexList, GLuint program) : m_program(program), m_attribArray(attribList)
-{	
+{
 	glGenVertexArrays(1, &m_VAO);
 	glBindVertexArray(m_VAO);
 
@@ -61,7 +61,7 @@ Mesh::Mesh(const XMLNode& compRootNode)
 			GLuint fragShader = RenderFramework::GetInstance().LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText());
 		} else
 		{
-			std::cout << "Error: invalid shader element" << std::endl;
+			std::cout << "Error: invalid shader element type" << std::endl;
 		}
 	}
 

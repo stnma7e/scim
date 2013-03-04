@@ -37,13 +37,13 @@ RenderFramework::RenderFramework() : camToClipMatx(0.0f)
 bool RenderFramework::Init()
 {
 	if (glfwInit() != GL_TRUE)
-		return 0;
+		return false;
     int glfwVers[3];
     glfwGetVersion(&glfwVers[0], &glfwVers[1], &glfwVers[2]);
     fprintf(stdout, "Status: Using GLFW %d.%d.%d\n", glfwVers[0], glfwVers[1], glfwVers[2]);
 
 	if (!glfwOpenWindow(window_w, window_h, 0,0,0,0,0,0, GLFW_WINDOW))
-		return 0;
+		return false;
 
     glfwSetWindowTitle(window_title);
     glfwSetWindowSizeCallback(RenderFramework::ResizeCallback);
@@ -58,6 +58,8 @@ bool RenderFramework::Init()
     {
       /* Problem: glewInit failed, something is seriously wrong. */
       fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+      Shutdown();
+      return false;
     }
     fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
@@ -101,7 +103,7 @@ bool RenderFramework::Init()
 
 	printf("\n");
     m_programStatus = RUNNING;
-	return 1;
+	return true;
 }
 void RenderFramework::OnUpdate(F64 dtime)
 {
@@ -119,7 +121,7 @@ void GLFWCALL RenderFramework::ResizeCallback(int width, int height)
     window_h = height;
 }
 void RenderFramework::OnResize(int width, int height)
-{ 
+{
     camToClipMatx[0].x = m_Frustum.GetFOV() * (height / (float)width);
     camToClipMatx[1].y = m_Frustum.GetFOV();
 
@@ -152,7 +154,7 @@ void RenderFramework::InitProgram()
 
     GLuint vert = LoadShader(GL_VERTEX_SHADER, "MatrixPerspective.v.glsl");
     GLuint frag = LoadShader(GL_FRAGMENT_SHADER, "StandardColors.f.glsl");
-    
+
     if (!(vert && frag))
     	Shutdown();
 
@@ -166,7 +168,7 @@ GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strSha
     try
     {
 	    GLuint shader_id = MakeShader(eShaderType, shaderData);
-        
+
 
         return shader_id;
     }
@@ -178,18 +180,18 @@ GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strSha
 }
 GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strShader)
 {
-    GLchar* source = (char*)strShader.c_str();
+    const GLchar* source = strShader.c_str();
     GLuint shader;
     GLint shader_ok;
     const char* shad_type = eShaderType == 35633 ? "vertex shader" : (eShaderType == 35632 ? "fragment shader" : "unkown shader type");
 
     shader = glCreateShader(eShaderType);
-    glShaderSource(shader, 1, (const GLchar**)&source, NULL); // fourth parameter assumes null-terminated string as this will
+    glShaderSource(shader, 1, &source, NULL); // fourth parameter assumes null-terminated string as this will
     glCompileShader(shader);                                  // happen with the conversion from std::string to c_str()
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok)
-    { 
+    {
         std::fprintf(stderr, "Failed to compile %s\n", shad_type);
         GLint i;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &i);
@@ -211,7 +213,7 @@ GLuint RenderFramework::LinkProgram(GLuint program, GLuint shaderOne, GLuint sha
     glLinkProgram(program);
 
     glDetachShader(program, shaderOne);
-    glDetachShader(program, shaderTwo);   
+    glDetachShader(program, shaderTwo);
     return program;
 }
 

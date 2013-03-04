@@ -14,7 +14,7 @@ TransformComponentManager::TransformComponentManager() : ComponentManager(GameCo
 }
 bool TransformComponentManager::Init()
 {
-	return TRUE;
+	return true;
 }
 void TransformComponentManager::OnUpdate(F64 dtime)
 {
@@ -37,7 +37,7 @@ void TransformComponentManager::Shutdown()
 	printf("end: %d\n", *compList.end());
 	printf("%s", "stop");*/
 }
-GameComponent* TransformComponentManager::CreateComponent(XMLNode& compRoot, GameObject* owner)
+GameComponent* TransformComponentManager::CreateComponent(const XMLNode& compRoot, GameObject* owner)
 {
 	TransformComponent* t = new TransformComponent(owner, toInitVec);
 	compList.push_back(t);

@@ -24,7 +24,7 @@ std::string ResourceManager::FindFileOrThrow(const std::string &strBasename)
     if(testFile.is_open())
         return strFilename.c_str();
 
-    
+
     strFilename = GLOBAL_FILE_DIR + strBasename;
     testFile.open(strFilename.c_str());
     if(testFile.is_open())
@@ -43,14 +43,7 @@ std::string ResourceManager::GetFileContents(const std::string &strFilename)
 
 bool ResourceManager::IsFloatDevice(char t)
 {
-    if ((t >= 48 && t <=57) || (t == 46) || (t == 45) || (t == 43))
-        return true;
-    else
-        return false;
-}
-bool ResourceManager::IsPrintableChar(char t)
-{
-    if ((t >= 33) && (t <= 126))
+    if (((t >= 48) && (t <=57)) || (t == 46) || (t == 45) || (t == 43))
         return true;
     else
         return false;

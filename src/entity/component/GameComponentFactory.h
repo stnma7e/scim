@@ -16,9 +16,9 @@ class GameComponentFactory: public Singleton<GameComponentFactory>
 	friend class Singleton<GameComponentFactory>;
 protected:
 	GameComponentFactory();
-private:
-	std::map<GameComponent::Type, ComponentManager*> mangMap;
 public:
+	std::map<GameComponent::Type, ComponentManager*> mangMap;
+
 	GameComponent* CreateComponent(XMLNode& compNode, GameObject* owner);
 	friend void ComponentManager::RegisterManager(ComponentManager* toReg);
 };

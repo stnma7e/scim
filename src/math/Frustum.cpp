@@ -35,9 +35,9 @@ namespace scim
 		return true;
 	}
 
-	/*
-		void Frustum::Init(const F32 fov, const F32 aspect, const F32 near, const F32 far)
-		{
+	void Frustum::Init(const F32 fov, const F32 aspect, const F32 near, const F32 far)
+	{
+		/*
 			m_Fov = fov;
 			m_AspectRatio = aspect;
 			m_Near = near;
@@ -67,9 +67,8 @@ namespace scim
 			m_Planes[TOP].Init(m_FarClip[1], m_FarClip[0], origin);
 			m_Planes[LEFT].Init(m_FarClip[0], m_FarClip[3], origin);
 			m_Planes[BOTTOM].Init(m_FarClip[3], m_FarClip[2], origin);
-
-		}
-	*/
+		*/
+	}
 
 	}
 }

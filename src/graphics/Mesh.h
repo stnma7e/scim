@@ -34,6 +34,8 @@ public:
 	~Mesh();
 
 	void Render();
+
+	const MeshData* GetMeshData() const { return m_meshData; }
 };
 
 }

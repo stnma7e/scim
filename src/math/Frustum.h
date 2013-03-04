@@ -16,7 +16,7 @@ namespace scim
 	class Frustum
 	{
 		enum Side
-		{ 
+		{
 			NEAR,
 			FAR,
 			TOP,
@@ -48,22 +48,22 @@ namespace scim
 			const float degToRad = PI * 2.0f / 360.0f;
 			float fFovRad = deg * degToRad;
 			m_Fov = 1.0f / std::tan(fFovRad / 2.0f);
-			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
+			Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
 		void SetAspectRatio(F32 aspect)
 		{
 			m_AspectRatio = aspect;
-			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
+			Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
 		void SetNear(F32 near)
 		{
 			m_Near = near;
-			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
+			Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
 		void SetFar(F32 far)
 		{
 			m_Far = far;
-			// Init(m_Fov, m_AspectRatio, m_Near, m_Far);
+			Init(m_Fov, m_AspectRatio, m_Near, m_Far);
 		}
 
 		F32 GetFOV() { return m_Fov; }

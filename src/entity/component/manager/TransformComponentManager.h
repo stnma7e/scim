@@ -16,7 +16,7 @@ class TransformComponentManager: public ComponentManager, public Singleton<Trans
 
 	TransformComponentManager();
 public:
-	virtual GameComponent* CreateComponent(XMLNode& compRoot, GameObject* owner);
+	virtual GameComponent* CreateComponent(const XMLNode& compRoot, GameObject* owner);
 
 	virtual bool Init();
 	virtual void OnUpdate(F64 dtime);

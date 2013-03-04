@@ -5,6 +5,7 @@ INCLUDE_DIRECTORIES (
 	${ROOT_PATH}/dep/glew-1.9.0/include
 	${ROOT_PATH}/dep/glm
 	${ROOT_PATH}/dep/xmlParser
+	${ROOT_PATH}/dep/unittest-cpp/src
 )
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -g3 -O0 -std=c++11")
@@ -37,13 +38,16 @@ SET (PROJ_SOURCE_PAIR
 	math/MatrixStack
 )
 SET (PROJ_SOURCES
-	main
 )
 SET (PROJ_HEADERS
 	event/GameEvent
 	common/Types
 	common/Singleton
 	common/Program
+)
+SET (PROJ_TESTS
+	testMain
+	res/test/TestResourceManager
 )
 
 FOREACH (src IN ITEMS ${PROJ_SOURCE_PAIR})
@@ -56,11 +60,19 @@ ENDFOREACH (src)
 FOREACH (head IN ITEMS ${PROJ_HEADERS})
 	SET (HEADERS ${HEADERS} ${prefix}/${head}.h)
 ENDFOREACH (head)
+FOREACH (test IN ITEMS ${PROJ_TESTS})
+	SET (TESTS ${TESTS} ${prefix}/${test}.cpp)
+ENDFOREACH (test)
 
-ADD_EXECUTABLE (scim ${SRCS} ${HEADERS})
-# ADD_DEPENDENCIES(scim glew glfw_proj)
+ADD_LIBRARY(${sbdir} ${SRCS} ${HEADERS})
+ADD_EXECUTABLE (${sbdir}.exe ${ROOT_PATH}/src/main.cpp)
+ADD_EXECUTABLE (test${sbdir} ${TESTS})
 
 ADD_LIBRARY(xmlParser ${ROOT_PATH}/dep/xmlParser/xmlParser.cpp)
+
+ADD_LIBRARY(unitTest++ STATIC IMPORTED)
+SET_TARGET_PROPERTIES(unitTest++ PROPERTIES IMPORTED_LOCATION ${ROOT_PATH}/dep/unittest-cpp/libUnitTest++.a)
+TARGET_LINK_LIBRARIES(test${sbdir} unitTest++)
 
 SET (LINK_LIBS
 	glfw
@@ -71,3 +83,6 @@ SET (LINK_LIBS
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${sbdir} ${lib})
 ENDFOREACH (lib)
+
+TARGET_LINK_LIBRARIES(${sbdir}.exe ${sbdir})
+TARGET_LINK_LIBRARIES(test${sbdir} ${sbdir})
