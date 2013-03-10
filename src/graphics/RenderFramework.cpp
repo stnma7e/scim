@@ -102,7 +102,6 @@ bool RenderFramework::Init()
     glUseProgram(0);
 
 	printf("\n");
-    m_programStatus = RUNNING;
 	return true;
 }
 void RenderFramework::OnUpdate(F64 dtime)
@@ -144,7 +143,6 @@ void RenderFramework::PostRender()
 void RenderFramework::Shutdown()
 {
 	glfwTerminate();
-	m_programStatus = STOPPED;
 }
 
 void RenderFramework::InitProgram()
@@ -163,13 +161,11 @@ void RenderFramework::InitProgram()
 }
 GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
-    std::string shaderData = ResourceManager::GetInstance().GetFileContents(ResourceManager::GetInstance().FindFileOrThrow("graphics/shader/" + strShaderFilename));
-
+    std::string shaderData = ResourceManager::GetInstance().GetFileContents(
+        ResourceManager::GetInstance().FindFileOrThrow("graphics/shader/" + strShaderFilename));
     try
     {
 	    GLuint shader_id = MakeShader(eShaderType, shaderData);
-
-
         return shader_id;
     }
     catch(std::exception &e)

@@ -2,7 +2,6 @@
 #define RENDERFRAMEWORK_H_
 
 #include "../common/Singleton.h"
-#include "../common/Program.h"
 #include "../math/Frustum.h"
 
 #include <GL/glew.h>
@@ -14,11 +13,9 @@
 namespace scim
 {
 
-class RenderFramework: public Singleton<RenderFramework>, public Program
+class RenderFramework
 {
-	friend class Singleton<RenderFramework>;
 	friend class RenderComponent;
-	RenderFramework();
 
 	bool running;
 	static bool isResized;
@@ -43,11 +40,13 @@ class RenderFramework: public Singleton<RenderFramework>, public Program
 
 	static void GLFWCALL ResizeCallback(int width, int height);
 public:
-	virtual bool Init();
-	virtual void OnUpdate(F64 dtime);
+	RenderFramework();
+
+	bool Init();
+	void OnUpdate(F64 dtime);
 	void PreRender();
 	void PostRender();
-	virtual void Shutdown();
+	void Shutdown();
 
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
 	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);

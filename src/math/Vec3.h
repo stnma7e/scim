@@ -19,7 +19,7 @@ namespace scim
 		Vec3();
 		Vec3(const Vec3 &a);
 		Vec3(F32 nx, F32 ny, F32 nz);
-		Vec3(glm::vec3 vec) : x(vec.x), y(vec.y), z(vec.z) // probably inefficient; should check 
+		Vec3(glm::vec3 vec) : x(vec.x), y(vec.y), z(vec.z)
 		{
 		}
 

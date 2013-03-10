@@ -1,20 +1,41 @@
 #include "entity/GameObjectFactory.h"
 #include "entity/component/GameComponent.h"
-#include "entity/component/manager/TransformComponentManager.h"
 #include "entity/component/manager/RenderComponentManager.h"
 #include "graphics/RenderFramework.h"
 #include "entity/component/ComponentCollection.h"
 #include "res/ResourceManager.h"
+#include "graphics/Scene.h"
 
 #include <iostream>
+#include <stdio.h>
 
 using namespace scim;
 
 bool init();
 void shutdown();
 
+namespace scim
+{
+	RenderFramework* 			g_renderFramework;
+	RenderComponentManager*		g_renderComponentManager;
+	Scene*						g_scene;
+}
+
 int main(int argc, char* argv[])
 {
+	RenderFramework r;
+	g_renderFramework = &r;
+	RenderComponentManager rcm;
+	g_renderComponentManager = &rcm;
+	Scene sc;
+	g_scene = &sc;
+
+	for (size_t i = 1; i < 1024; ++i)
+	{
+		g_scene->CreateNode(i);
+	}
+	std::cout << "done" << std::endl << std::endl;
+
 	if (!init())
 		return 1;
 
@@ -45,24 +66,25 @@ int main(int argc, char* argv[])
 			std::cout << "invalid go" << std::endl;
 	}
 
+	U64 i = 0;
+	F64 oldTime = glfwGetTime();
 	while (1)
 	{
-		if (RenderFramework::GetInstance().GetStatus() == Program::RUNNING)
-		{
-			RenderFramework::GetInstance().OnUpdate(glfwGetTime());
-			RenderFramework::GetInstance().PreRender();
-		}
-		else // RenderFramework::GetInstance().GetStatus() == Program::STOPPED
-			break;
+		g_renderFramework->OnUpdate(glfwGetTime());
+		g_renderFramework->PreRender();
 
-		if (RenderComponentManager::GetInstance().GetStatus() == Program::RUNNING)
-		{
-			RenderComponentManager::GetInstance().OnUpdate(glfwGetTime());
-		}
-		else // RenderComponentManager::GetInstance().GetStatus() == Program::STOPPED
-			break;
+		// RenderComponentManager::GetInstance().OnUpdate(glfwGetTime());
 
-		RenderFramework::GetInstance().PostRender();
+		g_renderFramework->PostRender();
+
+		if (i == 1)
+		{
+			std::cout << glfwGetTime() - oldTime << std::endl;
+			oldTime = glfwGetTime();
+			break;
+		}
+		g_scene->UpdateNodes();
+		++i;
 	}
 
 	shutdown();
@@ -73,17 +95,15 @@ bool init()
 {
 	bool success = true;
 
-	success &= TransformComponentManager::GetInstance().Init();
-	success &= RenderComponentManager::GetInstance().Init();
-	success &= RenderFramework::GetInstance().Init();
+	success &= g_renderComponentManager->Init();
+	success &= g_renderFramework->Init();
 
 	return success;
 }
 void shutdown()
 {
-	RenderFramework::GetInstance().Shutdown();
-	RenderComponentManager::GetInstance().Shutdown();
-	TransformComponentManager::GetInstance().Shutdown();
+	g_renderFramework->Shutdown();
+	g_renderComponentManager->Shutdown();
 
 	std::cout << std::endl << "exit." << std::endl;
 }

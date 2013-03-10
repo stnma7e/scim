@@ -7,12 +7,10 @@
 namespace scim
 {
 
-class RenderComponentManager: public ComponentManager, public Singleton<RenderComponentManager>
+class RenderComponentManager: public ComponentManager
 {
-	friend class Singleton<RenderComponentManager>;
-	RenderComponentManager();
-
 public:
+	RenderComponentManager();
 	virtual GameComponent* CreateComponent(const XMLNode& compRoot, GameObject* owner);
 
 	virtual bool Init();

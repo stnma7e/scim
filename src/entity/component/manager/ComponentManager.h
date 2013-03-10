@@ -2,7 +2,6 @@
 #define COMPONENTMANAGER_H_
 
 #include "../GameComponent.h"
-#include "../../../common/Program.h"
 
 #include <list>
 #include <xmlParser.h>
@@ -12,7 +11,7 @@ namespace scim
 
 typedef std::list<GameComponent*> ComponentList;
 
-class ComponentManager: public Program
+class ComponentManager
 {
 protected:
 	GameComponent::Type m_type;

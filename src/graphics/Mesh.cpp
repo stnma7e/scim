@@ -13,6 +13,8 @@
 namespace scim
 {
 
+extern RenderFramework* g_renderFramework;
+
 MeshData::MeshData(const std::vector<F32> &attribList, const std::vector<I32> &indexList, GLuint program) : m_program(program), m_attribArray(attribList)
 {
 	glGenVertexArrays(1, &m_VAO);
@@ -55,10 +57,10 @@ Mesh::Mesh(const XMLNode& compRootNode)
 		XMLNode shaderNode = compRootNode.getChildNode("program").getChildNode("shader");
 		if (strcmp(shaderNode.getAttribute("type"), "vertex") == 0)
 		{
-			GLuint vertShader = RenderFramework::GetInstance().LoadShader(GL_VERTEX_SHADER, shaderNode.getText());
+			GLuint vertShader = g_renderFramework->LoadShader(GL_VERTEX_SHADER, shaderNode.getText());
 		} else if (strcmp(shaderNode.getAttribute("type"), "fragment") == 0)
 		{
-			GLuint fragShader = RenderFramework::GetInstance().LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText());
+			GLuint fragShader = g_renderFramework->LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText());
 		} else
 		{
 			std::cout << "Error: invalid shader element type" << std::endl;
@@ -66,7 +68,7 @@ Mesh::Mesh(const XMLNode& compRootNode)
 	}
 
 	GLuint program = glCreateProgram();
-	RenderFramework::GetInstance().LinkProgram(program, vertShader, fragShader);
+	g_renderFramework->LinkProgram(program, vertShader, fragShader);
 
 
 	m_meshData = new MeshData(attribList, indexList, program);

@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 <breed type="deer">
-	<component type="transform">
-	</component>
 	<component type="render">
 		<attrib>
 			 0.25f  0.25f -1.25f 1.0f

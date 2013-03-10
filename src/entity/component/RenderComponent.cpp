@@ -8,6 +8,7 @@ namespace scim
 {
 
 I8 RenderComponent::plusOne = 0;
+extern RenderFramework* g_renderFramework;
 
 RenderComponent::RenderComponent(GameObject* owner, const XMLNode& compRoot) : GameComponent(owner, GameComponent::RENDER)
 {
@@ -31,12 +32,12 @@ bool RenderComponent::Init()
 }
 void RenderComponent::Render()
 {
-	GLuint theProgram = RenderFramework::GetInstance().theProgram;
+	GLuint theProgram = g_renderFramework->theProgram;
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 
 	glUseProgram(theProgram);
 
-	glUniform2f(RenderFramework::GetInstance().modelToCamUnf, 0.5f + m_plusOne, 0.5f + m_plusOne);
+	glUniform2f(g_renderFramework->modelToCamUnf, 0.5f + m_plusOne, 0.5f + m_plusOne);
 
 	const std::vector<F32>& attribArray = m_mesh->GetMeshData()->m_attribArray;
 	size_t colorData = (sizeof(attribArray.data()) * attribArray.size()) / 2;

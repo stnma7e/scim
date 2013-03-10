@@ -24,13 +24,12 @@ SET (PROJ_SOURCE_PAIR
 	entity/component/GameComponentFactory
 	entity/component/ComponentCollection
 	entity/component/RenderComponent
-	entity/component/TransformComponent
 	entity/component/manager/ComponentManager
 	entity/component/manager/RenderComponentManager
-	entity/component/manager/TransformComponentManager
 	event/EventManager
 	graphics/RenderFramework
 	graphics/Mesh
+	graphics/Scene
 	res/ResourceManager
 	math/Vec3
 	math/Plane
@@ -43,7 +42,6 @@ SET (PROJ_HEADERS
 	event/GameEvent
 	common/Types
 	common/Singleton
-	common/Program
 )
 SET (PROJ_TESTS
 	testMain

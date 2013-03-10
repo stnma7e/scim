@@ -28,9 +28,9 @@ public:
 	    std::string s(strDataList);
 	    std::string tmp;
 	    std::vector<T> vertVector;
-	    for (std::string::iterator it = s.begin(); it != s.end(); ++it)
+	    for (size_t i = 0; i < s.size(); ++i)
 	    {
-	        char t = (*it);
+	        char t = s[i];
 	        if (IsFloatDevice(t))
 	        {
 	            // printf("char: %c\n", t);
@@ -40,8 +40,7 @@ public:
 	        {
 	            // printf("%c: is not float device\n", t);
 
-	            --it;
-	            if (IsFloatDevice(*it))
+	            if (IsFloatDevice(s[i-1]))
 	            {
 	            	std::string ss(tmp);
 	                // printf("string: %s\n", ss.c_str());
@@ -51,7 +50,6 @@ public:
 	                tmp.clear();
 	                tmp += t;
 	            }
-	            ++it;
 	        }
 	    }
 
