@@ -43,7 +43,7 @@ public:
 	RenderFramework();
 
 	bool Init();
-	void OnUpdate(F64 dtime);
+	bool OnUpdate();
 	void PreRender();
 	void PostRender();
 	void Shutdown();

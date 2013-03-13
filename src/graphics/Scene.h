@@ -21,8 +21,14 @@ class Scene
 
 	U32 m_parents[65536];
 public:
+	enum SceneConstant
+	{
+		ROOT_NODE = 0
+	};
+
 	Scene();
 	void UpdateNodes();
+	void RenderNodes();
 	SceneNode CreateNode(U32 parentNode);
 
 	const SceneNode GetNode(U32 nodeIndex);

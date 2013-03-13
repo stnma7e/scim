@@ -2,7 +2,6 @@
 #define RENDERCOMPONENTMANAGER_H_
 
 #include "ComponentManager.h"
-#include "../../../common/Singleton.h"
 
 namespace scim
 {

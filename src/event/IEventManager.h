@@ -30,8 +30,9 @@ public:
 	virtual bool QueueEvent(GameEvent* pEvent) = 0;
 	virtual bool AbortEvent(const EventType inType, bool allOfType = false) = 0;
 
-	virtual bool OnUpdate(U64 maxMillis = kINFINITE) = 0;
+	virtual bool OnUpdate(F64 maxSeconds = kINFINITE) = 0;
 };
 
 }
+
 #endif

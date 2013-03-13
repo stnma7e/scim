@@ -17,7 +17,7 @@ GameObjectFactory::GameObjectFactory()
 
 GameObject* GameObjectFactory::CreateObject(XMLNode& breedNode)
 {
-	SceneNode sceneNode = g_scene->CreateNode(0); // parent node is root
+	SceneNode sceneNode = g_scene->CreateNode(Scene::ROOT_NODE);
 	GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"), sceneNode);
 	GameComponentFactory* fact = &GameComponentFactory::GetInstance();
 

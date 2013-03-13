@@ -39,9 +39,12 @@ SET (PROJ_SOURCE_PAIR
 SET (PROJ_SOURCES
 )
 SET (PROJ_HEADERS
-	event/GameEvent
 	common/Types
 	common/Singleton
+	common/Logger
+	event/GameEvent
+	event/events/CreateGameObjectEvent
+	event/events/ShutdownGameEvent
 )
 SET (PROJ_TESTS
 	testMain
@@ -63,7 +66,7 @@ FOREACH (test IN ITEMS ${PROJ_TESTS})
 ENDFOREACH (test)
 
 ADD_LIBRARY(${sbdir} ${SRCS} ${HEADERS})
-ADD_EXECUTABLE (${sbdir}.exe ${ROOT_PATH}/src/main.cpp)
+ADD_EXECUTABLE (run${sbdir} ${ROOT_PATH}/src/main.cpp)
 ADD_EXECUTABLE (test${sbdir} ${TESTS})
 
 ADD_LIBRARY(xmlParser ${ROOT_PATH}/dep/xmlParser/xmlParser.cpp)
@@ -82,5 +85,5 @@ FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${sbdir} ${lib})
 ENDFOREACH (lib)
 
-TARGET_LINK_LIBRARIES(${sbdir}.exe ${sbdir})
+TARGET_LINK_LIBRARIES(run${sbdir} ${sbdir})
 TARGET_LINK_LIBRARIES(test${sbdir} ${sbdir})

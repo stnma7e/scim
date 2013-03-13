@@ -28,20 +28,6 @@ Scene::Scene()
 	}
 	std::cout << std::endl;
 }
-void Scene::UpdateNodes()
-{
-	U32* 				parents = m_parents;
-	glm::mat4* 			wmat = m_wmat.data();
-	glm::mat4* 			lmat = m_lmat.data();
-
-	wmat[0] = lmat[0];
-	for (size_t i = 1; i < m_lmat.size(); ++i)
-	{
-		const U32 parentNode = parents[i];
-		wmat[i] = wmat[parentNode] * lmat[i];
-	}
-}
-
 SceneNode Scene::CreateNode(U32 parentNode)
 {
 	m_wmat.push_back(glm::mat4(1));
@@ -64,6 +50,20 @@ const SceneNode Scene::GetNode(U32 nodeIndex)
 		&m_lmat.data()[nodeIndex],
 		m_parents[nodeIndex]
 	};
+}
+
+void Scene::UpdateNodes()
+{
+	U32* 				parents = m_parents;
+	glm::mat4* 			wmat = m_wmat.data();
+	glm::mat4* 			lmat = m_lmat.data();
+
+	wmat[0] = lmat[0];
+	for (size_t i = 1; i < m_lmat.size(); ++i)
+	{
+		const U32 parentNode = parents[i];
+		wmat[i] = wmat[parentNode] * lmat[i];
+	}
 }
 
 }

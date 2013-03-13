@@ -1,5 +1,7 @@
 #include "RenderFramework.h"
 #include "../res/ResourceManager.h"
+#include "../event/events/ShutdownGameEvent.h"
+#include "../event/EventManager.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -21,6 +23,8 @@ namespace scim
     U16 RenderFramework::window_w = 1024;
     U16 RenderFramework::window_h = 640;
     bool RenderFramework::isResized = false;
+
+    extern EventManager* g_eventManager;
 
 RenderFramework::RenderFramework() : camToClipMatx(0.0f)
 {
@@ -97,18 +101,16 @@ bool RenderFramework::Init()
     camToClipMatx[2].w = (2 * far * near) / (near - far);
     camToClipMatx[3].z = -1.0f;
 
-    glUseProgram(theProgram);
-    glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
-    glUseProgram(0);
-
 	printf("\n");
 	return true;
 }
-void RenderFramework::OnUpdate(F64 dtime)
+bool RenderFramework::OnUpdate()
 {
-	running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
+	running = (!glfwGetKey(GLFW_KEY_ESC)) && glfwGetWindowParam(GLFW_OPENED);
 	if (!running)
-		Shutdown();
+    {
+        g_eventManager->QueueEvent(new ShutdownGameEvent(1.0f, "RenderFramework received 'ESC' keypress"));
+    }
     if(isResized)
         OnResize(window_w, window_h);
 }
@@ -124,9 +126,10 @@ void RenderFramework::OnResize(int width, int height)
     camToClipMatx[0].x = m_Frustum.GetFOV() * (height / (float)width);
     camToClipMatx[1].y = m_Frustum.GetFOV();
 
-    glUseProgram(theProgram);
-    glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
-    glUseProgram(0);
+    // glUseProgram(theProgram);
+    // glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
+    // glUseProgram(0);
+    // FIX THIS SHOULD BE REIMPLEMENTED IN SCENE_NODE
 
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
@@ -156,7 +159,6 @@ void RenderFramework::InitProgram()
     if (!(vert && frag))
     	Shutdown();
 
-    theProgram = glCreateProgram();
     LinkProgram(theProgram, vert, frag);
 }
 GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)

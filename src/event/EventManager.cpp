@@ -1,6 +1,7 @@
 #include "EventManager.h"
 
 #include <iostream>
+#include <GL/glfw.h>
 
 namespace scim
 {
@@ -99,9 +100,25 @@ bool EventManager::AbortEvent(const EventType inType, bool allOfType)
 
 	return success;
 }
-bool EventManager::OnUpdate(U64 maxmillis)
+bool EventManager::OnUpdate(F64 maxSeconds)
 {
-
+	F64 curTime = glfwGetTime();
+	while ((glfwGetTime() - curTime) < maxSeconds)
+	{
+		EventQueue::iterator it = m_eventQueue.begin();
+		if (it != m_eventQueue.end())
+		{
+			std::cout << "event type: " << (*it)->GetType() << std::endl;
+			TriggerEvent(*it);
+			m_eventQueue.erase(it);
+		}
+		else
+			return true;
+	}
+	if (m_eventQueue.empty())
+		return true;
+	else
+		return false;
 }
 
 }
