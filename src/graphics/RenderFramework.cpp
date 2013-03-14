@@ -1,7 +1,7 @@
 #include "RenderFramework.h"
-#include "../res/ResourceManager.h"
-#include "../event/events/ShutdownGameEvent.h"
-#include "../event/EventManager.h"
+#include "res/ResourceManager.h"
+#include "event/events/ShutdownGameEvent.h"
+#include "event/EventManager.h"
 
 #include <cstdlib>
 #include <cstdio>
@@ -17,6 +17,8 @@
 #include <iostream>
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <logging/logging.h>
 
 namespace scim
 {
@@ -44,7 +46,8 @@ bool RenderFramework::Init()
 		return false;
     int glfwVers[3];
     glfwGetVersion(&glfwVers[0], &glfwVers[1], &glfwVers[2]);
-    fprintf(stdout, "Status: Using GLFW %d.%d.%d\n", glfwVers[0], glfwVers[1], glfwVers[2]);
+    logging::log::emit<logging::Info>() << "Using GLFW " <<
+        glfwVers[0] << '.' << glfwVers[1] << '.' << glfwVers[2] << logging::log::endl;
 
 	if (!glfwOpenWindow(window_w, window_h, 0,0,0,0,0,0, GLFW_WINDOW))
 		return false;
@@ -52,10 +55,17 @@ bool RenderFramework::Init()
     glfwSetWindowTitle(window_title);
     glfwSetWindowSizeCallback(RenderFramework::ResizeCallback);
 
-    fprintf(stdout, "Status: Using hardware accelerated graphics? %s\n", (glfwGetWindowParam(GLFW_ACCELERATED) ? "True" : "False"));
-    fprintf(stdout, "Status: Refresh rate? %d\n", glfwGetWindowParam(GLFW_REFRESH_RATE));
-    fprintf(stdout, "Status: OpenGL version? %d.%d\n", glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR), glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR));
-    fprintf(stdout, "Status: Using debug version of OpenGL? %s\n", (glfwGetWindowParam(GLFW_OPENGL_DEBUG_CONTEXT) ? "True" : "False"));
+    logging::log::emit<logging::Info>() <<
+        "Using hardware accelerated graphics? " << (glfwGetWindowParam(GLFW_ACCELERATED) ? "True" : "False") <<
+        logging::log::endl;
+    logging::log::emit<logging::Info>() <<
+        "Refresh rate? " << glfwGetWindowParam(GLFW_REFRESH_RATE) << logging::log::endl;
+    logging::log::emit<logging::Info>() <<
+        "OpenGL version? " << glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR) << '.' <<
+        glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR) << logging::log::endl;
+    logging::log::emit<logging::Info>() <<
+        "Using debug version of OpenGL? " << (glfwGetWindowParam(GLFW_OPENGL_DEBUG_CONTEXT) ? "True" : "False") <<
+        logging::log::endl;
 
     GLenum err = glewInit();
     if (GLEW_OK != err)
@@ -65,7 +75,7 @@ bool RenderFramework::Init()
       Shutdown();
       return false;
     }
-    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+    logging::log::emit<logging::Info>() << "Using GLEW " << (const char*)glewGetString(GLEW_VERSION) << logging::log::endl;
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClearDepth(1.0f);
@@ -87,24 +97,12 @@ bool RenderFramework::Init()
     modelToCamUnf = glGetUniformLocation(theProgram, "modelToCamMatx");
     camToClipUnf = glGetUniformLocation(theProgram, "camToClipMatx");
 
-    m_Frustum.SetFOV(120.0f);
-    m_Frustum.SetNear(0.5f);
-    m_Frustum.SetFar(5.0f);
-
-    F32 near = m_Frustum.GetNear();
-    F32 far = m_Frustum.GetFar();
-    F32 scale = m_Frustum.GetFOV();
-
-    camToClipMatx[0].x = scale;
-    camToClipMatx[1].y = scale;
-    camToClipMatx[2].z = (far + near) / (near - far);
-    camToClipMatx[2].w = (2 * far * near) / (near - far);
-    camToClipMatx[3].z = -1.0f;
+    camToClipMatx = glm::perspective(45.0f, 1.0f * window_w / window_h, 0.1f, 10.0f);
 
 	printf("\n");
 	return true;
 }
-bool RenderFramework::OnUpdate()
+void RenderFramework::OnUpdate()
 {
 	running = (!glfwGetKey(GLFW_KEY_ESC)) && glfwGetWindowParam(GLFW_OPENED);
 	if (!running)
@@ -123,8 +121,7 @@ void GLFWCALL RenderFramework::ResizeCallback(int width, int height)
 }
 void RenderFramework::OnResize(int width, int height)
 {
-    camToClipMatx[0].x = m_Frustum.GetFOV() * (height / (float)width);
-    camToClipMatx[1].y = m_Frustum.GetFOV();
+    camToClipMatx = glm::perspective(45.0f, 1.0f * window_w / window_h, 0.1f, 10.0f);
 
     // glUseProgram(theProgram);
     // glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));

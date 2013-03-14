@@ -4,7 +4,7 @@
 #include <map>
 #include <xmlParser.h>
 
-#include "../../common/Singleton.h"
+#include "common/Singleton.h"
 #include "GameComponent.h"
 #include "manager/ComponentManager.h"
 

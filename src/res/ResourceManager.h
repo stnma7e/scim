@@ -1,7 +1,7 @@
 #ifndef RESOURCEMANAGER_H_
 #define RESOURCEMANAGER_H_
 
-#include "../common/Singleton.h"
+#include "common/Singleton.h"
 
 #include <string>
 #include <vector>

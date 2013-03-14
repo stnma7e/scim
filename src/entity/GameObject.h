@@ -1,7 +1,9 @@
 #ifndef GAMEOBJECT_H_
 #define GAMEOBJECT_H_
 
-#include "../graphics/Scene.h"
+#include "graphics/Scene.h"
+#include "event/GameEvent.h"
+#include "GameObjectTools.h"
 
 namespace scim
 {
@@ -12,12 +14,10 @@ class ComponentCollection;
 
 class GameObject
 {
-	friend class GameObjectFactory;
-protected:
 	GameObject(GOid id, const char* type, const SceneNode sceneNode);
-	static GOid GetNextGOid() { return nextGOid++; }
-private:
+
 	static GOid nextGOid;
+	static GOid GetNextGOid() { return nextGOid++; }
 
 	GOid		m_id;
 	const char* m_type;
@@ -25,6 +25,7 @@ private:
 
 	SceneNode 	m_sceneNode;
 public:
+	friend void GameObjectTools::CreateGameObject(GameEvent* evt);
 
 	const GOid& GetID() const { return m_id; }
 	const char* GetType() const { return m_type; }

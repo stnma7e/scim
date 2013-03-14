@@ -1,5 +1,5 @@
 #include "Scene.h"
-#include "../math/Vec3.h"
+#include "math/Vec3.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>

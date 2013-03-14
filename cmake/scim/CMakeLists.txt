@@ -6,6 +6,8 @@ INCLUDE_DIRECTORIES (
 	${ROOT_PATH}/dep/glm
 	${ROOT_PATH}/dep/xmlParser
 	${ROOT_PATH}/dep/unittest-cpp/src
+	${ROOT_PATH}/dep/logging/include
+	${ROOT_PATH}/src
 )
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -g3 -O0 -std=c++11")
@@ -19,7 +21,7 @@ ENDIF()
 
 SET (PROJ_SOURCE_PAIR
 	entity/GameObject
-	entity/GameObjectFactory
+	entity/GameObjectTools
 	entity/component/GameComponent
 	entity/component/GameComponentFactory
 	entity/component/ComponentCollection
@@ -33,7 +35,6 @@ SET (PROJ_SOURCE_PAIR
 	res/ResourceManager
 	math/Vec3
 	math/Plane
-	math/Frustum
 	math/MatrixStack
 )
 SET (PROJ_SOURCES
@@ -41,7 +42,6 @@ SET (PROJ_SOURCES
 SET (PROJ_HEADERS
 	common/Types
 	common/Singleton
-	common/Logger
 	event/GameEvent
 	event/events/CreateGameObjectEvent
 	event/events/ShutdownGameEvent

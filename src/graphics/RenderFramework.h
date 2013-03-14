@@ -1,12 +1,8 @@
 #ifndef RENDERFRAMEWORK_H_
 #define RENDERFRAMEWORK_H_
 
-#include "../common/Singleton.h"
-#include "../math/Frustum.h"
-
 #include <GL/glew.h>
 #include <GL/glfw.h>
-
 #include <glm/glm.hpp>
 #include <string>
 
@@ -24,7 +20,6 @@ class RenderFramework
 	static U16 window_h;
 	const char* window_title;
 
-	math::Frustum m_Frustum;
 
 	GLuint theProgram;
 	GLuint m_VAO;
@@ -43,7 +38,7 @@ public:
 	RenderFramework();
 
 	bool Init();
-	bool OnUpdate();
+	void OnUpdate();
 	void PreRender();
 	void PostRender();
 	void Shutdown();

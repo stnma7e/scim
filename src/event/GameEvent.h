@@ -4,7 +4,7 @@
 namespace scim
 {
 
-typedef U32 EventType;
+typedef U16 EventType;
 
 class GameEvent
 {

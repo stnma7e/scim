@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "../res/ResourceManager.h"
+#include "res/ResourceManager.h"
 #include "RenderFramework.h"
 
 #include <sstream>

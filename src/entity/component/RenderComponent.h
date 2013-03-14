@@ -3,7 +3,7 @@
 
 #include "GameComponent.h"
 #include "../GameObject.h"
-#include "../../graphics/Mesh.h"
+#include "graphics/Mesh.h"
 
 #include <GL/glew.h>
 #include <GL/glfw.h>

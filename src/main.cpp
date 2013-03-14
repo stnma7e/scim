@@ -1,4 +1,3 @@
-#include "entity/GameObjectFactory.h"
 #include "entity/component/GameComponent.h"
 #include "entity/component/manager/RenderComponentManager.h"
 #include "graphics/RenderFramework.h"
@@ -6,7 +5,6 @@
 #include "res/ResourceManager.h"
 #include "graphics/Scene.h"
 #include "event/EventManager.h"
-#include "common/Logger.h"
 #include "event/events/CreateGameObjectEvent.h"
 #include "event/events/ShutdownGameEvent.h"
 
@@ -14,12 +12,14 @@
 #include <string>
 #include <stdio.h>
 
+#include <logging/logging.h>
+
 using namespace scim;
+using namespace logging;
 
 bool init();
 void shutdown();
 void shutdown_delegate(GameEvent*);
-void doGOStuff(GameEvent*);
 
 bool stopFlag;
 
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	if (!init())
 	{
 		shutdown();
-		logger::LogError("initialization failed");
+		log::emit<logging::Error>() << "Initialization failed" << log::endl;
 		return 1;
 	}
 
@@ -62,33 +62,21 @@ int main(int argc, char* argv[])
 	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
 	if (res)
 	{
-		logger::LogError("invalid XML resource");
+		log::emit<logging::Error>() << "Invalid XML resource" << log::endl;
 		shutdown();
 		return 1;
 	}
 
-	g_eventManager->AddListener(doGOStuff, 0);
+	g_eventManager->AddListener(GameObjectTools::CreateGameObject, 0);
 	g_eventManager->AddListener(shutdown_delegate, 1);
 
-	for (int i = 0; i < 0x2; i++)
-	{
-		// GameObject* go = GameObjectFactory::GetInstance().CreateObject(deerNode);
-		// if (go)
-		// {
-		// 	if (go->GetID() % 0x1 == 0)
-		// 	{
-		// 		std::cout << "id: " << go->GetID() << ", type: " << go->GetType() << std::endl;
-		// 	}
-		// 	else
-		// 	{
-		// 	}
-		// }
-		// else
-		// 	logger::LogError("invalid game object");
+	const int numObjs = 3;
+	GameObject* go[numObjs];
 
-		GameObject* go;
-		if (!g_eventManager->QueueEvent(new CreateGameObjectEvent(1.0f, &go, deerNode)))
-			logger::LogError("failed to queue event");
+	for (int i = 0; i < numObjs; ++i)
+	{
+		if (!g_eventManager->TriggerEvent(new CreateGameObjectEvent(1.0f, &go[i], deerNode)))
+			log::emit<logging::Error>() << "Failed to queue event" << log::endl;
 	}
 
 	size_t i = 0;
@@ -109,8 +97,17 @@ int main(int argc, char* argv[])
 		{
 			std::cout << glfwGetTime() - oldTime << std::endl;
 			oldTime = glfwGetTime();
+			for (int i = 0; i < numObjs; ++i)
+			{
+				log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
+			}
 		}
 		++i;
+	}
+
+	for (int i = 0; i < numObjs; ++i)
+	{
+		delete go[i];
 	}
 
 	shutdown();
@@ -130,7 +127,7 @@ bool init()
 }
 void shutdown_delegate(GameEvent* evt)
 {
-	logger::LogInfo(((ShutdownGameEvent*)evt)->GetShutdownString());
+	log::emit<logging::Info>() << ((ShutdownGameEvent*)evt)->GetShutdownString() << log::endl;
 	stopFlag = true;
 	delete evt;
 }
@@ -138,12 +135,4 @@ void shutdown()
 {
 	g_renderFramework->Shutdown();
 	g_renderComponentManager->Shutdown();
-}
-
-void doGOStuff(GameEvent* evt)
-{
-	CreateGameObjectEvent* creEvt = (CreateGameObjectEvent*)evt;
-	GameObject** p_go = creEvt->GetPointerToAssign();
-	*p_go = GameObjectFactory::GetInstance().CreateObject((XMLNode&)*creEvt->GetRootNode());
-	delete evt;
 }

@@ -1,6 +1,6 @@
 #include "RenderComponent.h"
-#include "../../graphics/RenderFramework.h"
-#include "../../graphics/Mesh.h"
+#include "graphics/RenderFramework.h"
+#include "graphics/Mesh.h"
 
 #include <iostream>
 
