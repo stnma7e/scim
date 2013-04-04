@@ -14,7 +14,7 @@ namespace scim
 
 struct MeshData
 {
-	MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<I32> &indexList, GLuint program);
+	MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<U32> &indexList, GLuint program);
 	~MeshData();
 
 	GLuint vertexBuffer;
@@ -26,7 +26,11 @@ struct MeshData
 
 	GLint mvpMatrixUnf;
 
-	std::vector<F32> attribArray;
+	struct
+	{
+		U16 vertex;
+		U16 index;
+	} bufferSizes;
 };
 
 class Mesh

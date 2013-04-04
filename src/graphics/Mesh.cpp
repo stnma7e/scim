@@ -16,7 +16,8 @@ namespace scim
 
 extern RenderFramework* g_renderFramework;
 
-MeshData::MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<I32> &indexList, GLuint program) : program(program), attribArray(vertexList)
+MeshData::MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<U32> &indexList, GLuint program) :
+	program(program)
 {
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
@@ -33,10 +34,16 @@ MeshData::MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &c
 
 	glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indexList.size() * sizeof(I32)), &indexList[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indexList.size() * sizeof(U32)), &indexList[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	mvpMatrixUnf = glGetUniformLocation(program, "mvp");
+
+	bufferSizes =
+	{
+		(U16)vertexList.size(),
+		(U16)indexList.size()
+	};
 }
 MeshData::~MeshData()
 {
@@ -60,7 +67,7 @@ Mesh::Mesh(const XMLNode& compRootNode)
 
 	std::vector<F32> vertexList = ResourceManager::GetListFromSpacedString<F32>(strVertex.str());
 	std::vector<F32> colorList  = ResourceManager::GetListFromSpacedString<F32>(strColors.str());
-	std::vector<I32> indexList  = ResourceManager::GetListFromSpacedString<I32>(strIndicies.str());
+	std::vector<U32> indexList  = ResourceManager::GetListFromSpacedString<U32>(strIndicies.str());
 
 	std::vector<GLuint> shaderList;
 	for (I8 i = 0; i < 2; ++i)
@@ -108,7 +115,8 @@ void Mesh::Render(const glm::mat4& modelToWorldMatrix)
 	glVertexAttribPointer(RenderFramework::VERTEX_COLOR, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, (m_meshData->attribArray.size() / 4));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshData->indexBuffer);
+	glDrawElements(GL_TRIANGLES, m_meshData->bufferSizes.index, GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(RenderFramework::VERTEX_POSITION);
 	glDisableVertexAttribArray(RenderFramework::VERTEX_COLOR);
