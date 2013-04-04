@@ -46,8 +46,16 @@ TEST(GetListFromSpacedStringReturnsCorrect)
 		};
 	}
 
-	vector<float> funcVec = scim::ResourceManager::GetInstance().GetListFromSpacedString<float>(ss.str());
+	vector<float> funcVec = scim::ResourceManager::GetListFromSpacedString<float>(ss.str());
 
 	CHECK_EQUAL(funcVec.size(), checkVec.size());
 	CHECK_ARRAY_CLOSE(funcVec.data(), checkVec.data(), checkVec.size(), 0.001f);
+}
+
+TEST(TryGetFileContents)
+{
+	std::stringstream filename;
+	filename << "test/" << "TestResourceManager" << ".txt";
+	std::string fullFilename = scim::ResourceManager::FindFileOrThrow(filename.str());
+	std::string fileConents = scim::ResourceManager::GetFileContents(fullFilename);
 }

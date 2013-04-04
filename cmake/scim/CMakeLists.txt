@@ -25,9 +25,7 @@ SET (PROJ_SOURCE_PAIR
 	entity/component/GameComponent
 	entity/component/GameComponentFactory
 	entity/component/ComponentCollection
-	entity/component/RenderComponent
 	entity/component/manager/ComponentManager
-	entity/component/manager/RenderComponentManager
 	event/EventManager
 	graphics/RenderFramework
 	graphics/Mesh

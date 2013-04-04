@@ -4,6 +4,7 @@
 #include <xmlParser.h>
 #include <GL/glew.h>
 #include <GL/glfw.h>
+#include <glm/glm.hpp>
 
 #include <vector>
 #include <unordered_map>
@@ -13,16 +14,19 @@ namespace scim
 
 struct MeshData
 {
-	MeshData(const std::vector<F32> &attribs, const std::vector<I32> &indicies, GLuint program);
+	MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<I32> &indexList, GLuint program);
 	~MeshData();
 
-	GLuint m_attribBuffer;
-	GLuint m_indexBuffer;
-	GLuint m_VAO;
-	GLuint m_program;
-	GLuint m_modelToCamUnf;
+	GLuint vertexBuffer;
+	GLuint colorBuffer;
+	GLuint indexBuffer;
 
-	std::vector<F32> m_attribArray;
+	GLuint VAO;
+	GLuint program;
+
+	GLint mvpMatrixUnf;
+
+	std::vector<F32> attribArray;
 };
 
 class Mesh
@@ -33,7 +37,7 @@ public:
 	Mesh(const XMLNode& compRootNode);
 	~Mesh();
 
-	void Render();
+	void Render(const glm::mat4& transformMatrix);
 
 	const MeshData* GetMeshData() const { return m_meshData; }
 };

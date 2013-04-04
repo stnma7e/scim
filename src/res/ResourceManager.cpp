@@ -12,12 +12,10 @@
 namespace scim
 {
 
-ResourceManager::ResourceManager()
+namespace ResourceManager
 {
 
-}
-
-std::string ResourceManager::FindFileOrThrow(const std::string &strBasename)
+std::string FindFileOrThrow(const std::string &strBasename)
 {
     std::string strFilename = LOCAL_FILE_DIR + strBasename;
     std::ifstream testFile(strFilename.c_str());
@@ -32,7 +30,7 @@ std::string ResourceManager::FindFileOrThrow(const std::string &strBasename)
 
     throw std::runtime_error("Could not find the file " + strBasename);
 }
-std::string ResourceManager::GetFileContents(const std::string &strFilename)
+std::string GetFileContents(const std::string &strFilename)
 {
     std::ifstream resFile(strFilename.c_str());
     std::stringstream fileData;
@@ -41,7 +39,7 @@ std::string ResourceManager::GetFileContents(const std::string &strFilename)
     return fileData.str();
 }
 
-bool ResourceManager::IsFloatDevice(char t)
+bool IsFloatDevice(char t)
 {
     if (((t >= 48) && (t <=57)) || (t == 46) || (t == 45) || (t == 43))
         return true;
@@ -49,16 +47,6 @@ bool ResourceManager::IsFloatDevice(char t)
         return false;
 }
 
-template<>
-I32 ResourceManager::ato<I32>(const char* c)
-{
-    return atoi(c);
-}
-
-template<>
-F32 ResourceManager::ato<F32>(const char* c)
-{
-    return atof(c);
 }
 
 }

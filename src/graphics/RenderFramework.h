@@ -5,6 +5,7 @@
 #include <GL/glfw.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <vector>
 
 namespace scim
 {
@@ -27,14 +28,19 @@ class RenderFramework
 	GLuint modelToCamUnf;
 	GLuint camToClipUnf;
 
-	glm::mat4 camToClipMatx;
-
-	void InitProgram();
 	GLuint MakeShader(GLenum type, const std::string &strShader);
 	void OnResize(int width, int height);
 
 	static void GLFWCALL ResizeCallback(int width, int height);
 public:
+	enum AttributeLocations
+	{
+		VERTEX_POSITION = 0,
+		VERTEX_COLOR 	= 1
+	};
+
+	glm::mat4 camToClipMatx;
+
 	RenderFramework();
 
 	bool Init();
@@ -44,7 +50,7 @@ public:
 	void Shutdown();
 
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
-	GLuint LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo);
+	GLuint LinkProgram(GLuint program, const std::vector<GLuint>&);
 
 	GLuint GetProgram() const { return theProgram; }
 };

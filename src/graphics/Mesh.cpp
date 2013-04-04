@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <algorithm>
 #include <string.h>
+#include <vector>
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -15,52 +16,63 @@ namespace scim
 
 extern RenderFramework* g_renderFramework;
 
-MeshData::MeshData(const std::vector<F32> &attribList, const std::vector<I32> &indexList, GLuint program) : m_program(program), m_attribArray(attribList)
+MeshData::MeshData(const std::vector<F32> &vertexList, const std::vector<F32> &colorList, const std::vector<I32> &indexList, GLuint program) : program(program), attribArray(vertexList)
 {
-	glGenVertexArrays(1, &m_VAO);
-	glBindVertexArray(m_VAO);
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &m_attribBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_attribBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(attribList.data()), attribList.data(), GL_STATIC_DRAW);
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, (vertexList.size() * sizeof(F32)), &vertexList[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glGenBuffers(1, &m_indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexList.data()), indexList.data(), GL_STATIC_DRAW);
+	glGenBuffers(1, &colorBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, (colorList.size() * sizeof(F32)), &colorList[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glGenBuffers(1, &indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indexList.size() * sizeof(I32)), &indexList[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	glUseProgram(m_program);
-
-    m_modelToCamUnf = glGetUniformLocation(m_program, "modelToCamMatx");
+	mvpMatrixUnf = glGetUniformLocation(program, "mvp");
 }
 MeshData::~MeshData()
 {
-	glDeleteBuffers(1, &m_attribBuffer);
-	glDeleteBuffers(1, &m_indexBuffer);
-	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &vertexBuffer);
+	glDeleteBuffers(1, &colorBuffer);
+	glDeleteBuffers(1, &indexBuffer);
+	glDeleteVertexArrays(1, &VAO);
 }
 
 Mesh::Mesh(const XMLNode& compRootNode)
 {
-	XMLNode attribNode = compRootNode.getChildNode("attrib");
-	std::stringstream strAttribs(attribNode.getText());
-	XMLNode indexNode = compRootNode.getChildNode("indicies");
+	XMLNode vertexNode = compRootNode.getChildNode("vertex");
+	std::stringstream strVertex(vertexNode.getText());
+
+	XMLNode colorNode = compRootNode.getChildNode("color");
+	std::stringstream strColors(colorNode.getText());
+
+	XMLNode indexNode = compRootNode.getChildNode("index");
 	std::stringstream strIndicies(indexNode.getText());
 
-	std::vector<F32> attribList = ResourceManager::GetInstance().GetListFromSpacedString<F32>(strAttribs.str());
-	std::vector<I32> indexList  = ResourceManager::GetInstance().GetListFromSpacedString<I32>(strIndicies.str());
 
-	GLuint vertShader = 0, fragShader = 0;
+	std::vector<F32> vertexList = ResourceManager::GetListFromSpacedString<F32>(strVertex.str());
+	std::vector<F32> colorList  = ResourceManager::GetListFromSpacedString<F32>(strColors.str());
+	std::vector<I32> indexList  = ResourceManager::GetListFromSpacedString<I32>(strIndicies.str());
+
+	std::vector<GLuint> shaderList;
 	for (I8 i = 0; i < 2; ++i)
 	{
-		XMLNode shaderNode = compRootNode.getChildNode("program").getChildNode("shader");
-		if (strcmp(shaderNode.getAttribute("type"), "vertex") == 0)
+		XMLNode shaderNode = compRootNode.getChildNode("program").getChildNode("shader", i);
+		const char* shaderType = shaderNode.getAttribute("type");
+		if (strcmp(shaderType, "vertex") == 0)
 		{
-			GLuint vertShader = g_renderFramework->LoadShader(GL_VERTEX_SHADER, shaderNode.getText());
-		} else if (strcmp(shaderNode.getAttribute("type"), "fragment") == 0)
+			shaderList.push_back(g_renderFramework->LoadShader(GL_VERTEX_SHADER, shaderNode.getText()));
+		} else if (strcmp(shaderType, "fragment") == 0)
 		{
-			GLuint fragShader = g_renderFramework->LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText());
+			shaderList.push_back(g_renderFramework->LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText()));
 		} else
 		{
 			std::cout << "Error: invalid shader element type" << std::endl;
@@ -68,35 +80,38 @@ Mesh::Mesh(const XMLNode& compRootNode)
 	}
 
 	GLuint program = glCreateProgram();
-	g_renderFramework->LinkProgram(program, vertShader, fragShader);
+	g_renderFramework->LinkProgram(program, shaderList);
 
 
-	m_meshData = new MeshData(attribList, indexList, program);
+	m_meshData = new MeshData(vertexList, colorList, indexList, program);
 }
 Mesh::~Mesh()
 {
 	delete m_meshData;
 }
 
-void Mesh::Render()
+void Mesh::Render(const glm::mat4& modelToWorldMatrix)
 {
-	glBindVertexArray(m_meshData->m_VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_meshData->m_indexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_meshData->m_attribBuffer);
-	glUseProgram(m_meshData->m_program);
+	glBindVertexArray(m_meshData->VAO);
+	glUseProgram(m_meshData->program);
 
-	glUniform2f(m_meshData->m_modelToCamUnf, 0.5f, 0.5f);
+	glm::mat4 transformMatrix = modelToWorldMatrix;
+	glUniformMatrix4fv(m_meshData->mvpMatrixUnf, 1, GL_FALSE, &transformMatrix[0][0]);
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(m_meshData->m_attribArray.data()) / 2));
-
-	glDrawArrays(GL_TRIANGLES, 0, ARRAY_COUNT(m_meshData->m_attribArray.data()));
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshData->vertexBuffer);
+	glEnableVertexAttribArray(RenderFramework::VERTEX_POSITION);
+	glVertexAttribPointer(RenderFramework::VERTEX_POSITION, 4, GL_FLOAT, GL_FALSE, 0, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, m_meshData->colorBuffer);
+	glEnableVertexAttribArray(RenderFramework::VERTEX_COLOR);
+	glVertexAttribPointer(RenderFramework::VERTEX_COLOR, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glDrawArrays(GL_TRIANGLES, 0, (m_meshData->attribArray.size() / 4));
+
+	glDisableVertexAttribArray(RenderFramework::VERTEX_POSITION);
+	glDisableVertexAttribArray(RenderFramework::VERTEX_COLOR);
 	glUseProgram(0);
 	glBindVertexArray(0);
 }

@@ -3,7 +3,6 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
-#include <iostream>
 
 namespace scim
 {
@@ -19,14 +18,14 @@ Scene::Scene()
 	std::cout << "mat " << 0 << ": " << std::endl;
 	for (int j = 0; j < 4; ++j)
 	{
-		std::cout << "row " << j << ": ";
+		printf("row %d: ", j);
 		for (int k = 0; k < 4; ++k)
 		{
-			std::cout << m_lmat[0][j][k] << ", ";
+			printf("%f, ", m_lmat[0][j][k]);
 		}
-		std::cout << std::endl;
+		printf("\n");
 	}
-	std::cout << std::endl;
+	printf("\n");
 }
 SceneNode Scene::CreateNode(U32 parentNode)
 {
@@ -55,14 +54,13 @@ const SceneNode Scene::GetNode(U32 nodeIndex)
 void Scene::UpdateNodes()
 {
 	U32* 				parents = m_parents;
-	glm::mat4* 			wmat = m_wmat.data();
-	glm::mat4* 			lmat = m_lmat.data();
+	glm::mat4* 			wmat = &m_wmat[0];
+	glm::mat4* 			lmat = &m_lmat[0];
 
 	wmat[0] = lmat[0];
 	for (size_t i = 1; i < m_lmat.size(); ++i)
 	{
-		const U32 parentNode = parents[i];
-		wmat[i] = wmat[parentNode] * lmat[i];
+		wmat[i] = wmat[parents[i]] * lmat[i];
 	}
 }
 

@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <stdio.h>
 
 namespace scim
 {
@@ -25,6 +26,20 @@ public:
 	{
 		ROOT_NODE = 0
 	};
+
+	static void PrintMatrix(const glm::mat4& matToPrint)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			printf("row %d: ", j);
+			for (int k = 0; k < 4; ++k)
+			{
+				printf("%f, ", matToPrint[j][k]);
+			}
+			printf("\n");
+		}
+		printf("\n");
+	}
 
 	Scene();
 	void UpdateNodes();

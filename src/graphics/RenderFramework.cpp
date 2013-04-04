@@ -31,6 +31,7 @@ namespace scim
 RenderFramework::RenderFramework() : camToClipMatx(0.0f)
 {
     running = 0;
+    isResized = true;
 
     theProgram = 0;
     m_VAO = 0;
@@ -44,10 +45,12 @@ bool RenderFramework::Init()
 {
 	if (glfwInit() != GL_TRUE)
 		return false;
+
     int glfwVers[3];
     glfwGetVersion(&glfwVers[0], &glfwVers[1], &glfwVers[2]);
-    logging::log::emit<logging::Info>() << "Using GLFW " <<
-        glfwVers[0] << '.' << glfwVers[1] << '.' << glfwVers[2] << logging::log::endl;
+    logging::log::emit<logging::Info>() << "Using GLFW " << glfwVers[0] << '.' << glfwVers[1] << '.' << glfwVers[2] << logging::log::endl;
+
+    glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
 	if (!glfwOpenWindow(window_w, window_h, 0,0,0,0,0,0, GLFW_WINDOW))
 		return false;
@@ -91,11 +94,6 @@ bool RenderFramework::Init()
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glDepthRange(0.0f, 1.0f);
-
-	InitProgram();
-
-    modelToCamUnf = glGetUniformLocation(theProgram, "modelToCamMatx");
-    camToClipUnf = glGetUniformLocation(theProgram, "camToClipMatx");
 
     camToClipMatx = glm::perspective(45.0f, 1.0f * window_w / window_h, 0.1f, 10.0f);
 
@@ -145,23 +143,10 @@ void RenderFramework::Shutdown()
 	glfwTerminate();
 }
 
-void RenderFramework::InitProgram()
-{
-    glGenVertexArrays(1, &m_VAO);
-    glBindVertexArray(m_VAO);
-
-    GLuint vert = LoadShader(GL_VERTEX_SHADER, "MatrixPerspective.v.glsl");
-    GLuint frag = LoadShader(GL_FRAGMENT_SHADER, "StandardColors.f.glsl");
-
-    if (!(vert && frag))
-    	Shutdown();
-
-    LinkProgram(theProgram, vert, frag);
-}
 GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
-    std::string shaderData = ResourceManager::GetInstance().GetFileContents(
-        ResourceManager::GetInstance().FindFileOrThrow("graphics/shader/" + strShaderFilename));
+    std::string shaderData = ResourceManager::GetFileContents(
+        ResourceManager::FindFileOrThrow("graphics/shader/" + strShaderFilename));
     try
     {
 	    GLuint shader_id = MakeShader(eShaderType, shaderData);
@@ -181,8 +166,8 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
     const char* shad_type = eShaderType == 35633 ? "vertex shader" : (eShaderType == 35632 ? "fragment shader" : "unkown shader type");
 
     shader = glCreateShader(eShaderType);
-    glShaderSource(shader, 1, &source, NULL); // fourth parameter assumes null-terminated string as this will
-    glCompileShader(shader);                                  // happen with the conversion from std::string to c_str()
+    glShaderSource(shader, 1, &source, NULL);   // fourth parameter assumes null-terminated string
+    glCompileShader(shader);                    // this will happen with the conversion from std::string to c_str()
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
     if (!shader_ok)
@@ -190,25 +175,41 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
         std::fprintf(stderr, "Failed to compile %s\n", shad_type);
         GLint i;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &i);
-        char logBuffer[i];
-        glGetShaderInfoLog(shader, i, NULL, logBuffer);
-        std::fprintf(stderr, "%s\n", logBuffer);
+        std::vector<char> logBuffer(i);
+        glGetShaderInfoLog(shader, i, NULL, &logBuffer[0]);
+        std::fprintf(stderr, "%s\n", &logBuffer[0]);
         glDeleteShader(shader);
         return 0;
     }
     return shader;
 }
-GLuint RenderFramework::LinkProgram(GLuint program, GLuint shaderOne, GLuint shaderTwo)
+GLuint RenderFramework::LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
 {
-    glAttachShader(program, shaderOne);
-    glAttachShader(program, shaderTwo);
+    for (size_t i = 0; i < shaderList.size(); ++i)
+        glAttachShader(program, shaderList[i]);
 
     glBindAttribLocation(program, 0, "position");
     glBindAttribLocation(program, 1, "color");
     glLinkProgram(program);
 
-    glDetachShader(program, shaderOne);
-    glDetachShader(program, shaderTwo);
+    GLint Result = GL_FALSE;
+    int InfoLogLength;
+
+    glGetProgramiv(program, GL_LINK_STATUS, &Result);
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &InfoLogLength);
+    std::vector<char> ProgramErrorMessage(std::max(InfoLogLength, (int)1));
+    glGetProgramInfoLog(program, InfoLogLength, NULL, &ProgramErrorMessage[0]);
+    if (InfoLogLength > 1)
+        logging::log::emit<logging::Error>() << &ProgramErrorMessage[0] << logging::log::endl;
+    else
+        logging::log::emit<logging::Info>() << "program linked successfully" << logging::log::endl;
+
+    for (size_t i = 0; i < shaderList.size(); ++i)
+    {
+        // glDetachShader(program, shaderList[i]);
+        // glDeleteShader(shaderList[i]);
+    }
+
     return program;
 }
 

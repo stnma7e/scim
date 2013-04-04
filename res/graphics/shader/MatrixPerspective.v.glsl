@@ -3,15 +3,13 @@
 attribute vec4 position;
 attribute vec4 color;
 
-varying vec4 theColor;
+varying vec4 vertColor;
 
-uniform vec2 modelToCamMatx;
-uniform mat4 camToClipMatx;
+uniform mat4 mvp;
 
 void main()
 {
-	vec4 cameraPos = position + vec4(modelToCamMatx.x, modelToCamMatx.y, 0.0, 0.0);
+	gl_Position = mvp * position;
 
-	gl_Position = camToClipMatx * cameraPos;
-	theColor = color;
+	vertColor = color;
 }

@@ -1,0 +1,23 @@
+<mesh>
+	<vertex>
+		 0.75  0.75 0.0 1.0
+		 0.75 -0.75 0.0 1.0
+		-0.75 -0.75 0.0 1.0
+	</vertex>
+	<color>
+		1.0 1.0 0.0 1.0
+		0.0 1.0 1.0 1.0
+		0.0 0.0 1.0 1.0
+	</color>
+	<index>
+		1
+	</index>
+	<program>
+		<shader type="vertex">
+			MatrixPerspective.v.glsl
+		</shader>
+		<shader type="fragment">
+			StandardColors.f.glsl
+		</shader>
+	</program>
+</mesh>

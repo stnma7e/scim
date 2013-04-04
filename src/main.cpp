@@ -1,5 +1,4 @@
 #include "entity/component/GameComponent.h"
-#include "entity/component/manager/RenderComponentManager.h"
 #include "graphics/RenderFramework.h"
 #include "entity/component/ComponentCollection.h"
 #include "res/ResourceManager.h"
@@ -7,10 +6,12 @@
 #include "event/EventManager.h"
 #include "event/events/CreateGameObjectEvent.h"
 #include "event/events/ShutdownGameEvent.h"
+#include "graphics/Mesh.h"
 
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <sstream>
 
 #include <logging/logging.h>
 
@@ -26,7 +27,6 @@ bool stopFlag;
 namespace scim
 {
 	RenderFramework* 			g_renderFramework;
-	RenderComponentManager*		g_renderComponentManager;
 	Scene*						g_scene;
 	EventManager*				g_eventManager;
 }
@@ -34,19 +34,12 @@ namespace scim
 int main(int argc, char* argv[])
 {
 	RenderFramework r;
-	RenderComponentManager rcm;
 	Scene sc;
 	EventManager em;
 
 	g_renderFramework = &r;
-	g_renderComponentManager = &rcm;
 	g_scene = &sc;
 	g_eventManager = &em;
-
-	for (size_t i = 1; i < 1024; ++i)
-	{
-		g_scene->CreateNode(i);
-	}
 
 	if (!init())
 	{
@@ -57,7 +50,7 @@ int main(int argc, char* argv[])
 
 	stopFlag = false;
 
-	std::string deerFile = ResourceManager::GetInstance().GetFileContents(ResourceManager::GetInstance().FindFileOrThrow(("entity/deer.xml")));
+	std::string deerFile = ResourceManager::GetFileContents(ResourceManager::FindFileOrThrow(("entity/deer.xml")));
 	XMLResults* res = NULL;
 	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
 	if (res)
@@ -66,6 +59,17 @@ int main(int argc, char* argv[])
 		shutdown();
 		return 1;
 	}
+
+	std::stringstream meshName;
+	meshName << "graphics/mesh/" << deerNode.getChildNode("mesh").getAttribute("name") << ".mesh";
+	std::string meshSource = ResourceManager::GetFileContents(ResourceManager::FindFileOrThrow(meshName.str()));
+	XMLResults* res2 = NULL;
+	XMLNode meshNode = XMLNode::parseString(meshSource.c_str(), "mesh", res);
+	if (res2)
+	{
+		log::emit<logging::Error>() << "Invalid mesh resource" << log::endl;
+	}
+	Mesh mesh(meshNode);
 
 	g_eventManager->AddListener(GameObjectTools::CreateGameObject, 0);
 	g_eventManager->AddListener(shutdown_delegate, 1);
@@ -79,29 +83,41 @@ int main(int argc, char* argv[])
 			log::emit<logging::Error>() << "Failed to queue event" << log::endl;
 	}
 
-	size_t i = 0;
+	size_t i;
+	size_t nFrames = 0;
 	F64 oldTime = glfwGetTime();
 	while (!stopFlag)
 	{
+		// Measure speed
+		F64 currentTime = glfwGetTime();
+		nFrames++;
+		if ( currentTime - oldTime >= 1.0 ) // If last printf() was more than 1 sec ago
+		{
+			printf("%f ms/frame\n", 1000.0/double(nFrames));
+			nFrames = 0;
+			oldTime += 1.0;
+		}
+
+		if (i % 100 == 0)
+		{
+			for (int i = 0; i < numObjs; ++i)
+			{
+				log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
+				// Scene::PrintMatrix(*go[i]->GetSceneNode()->wmat);
+			}
+
+		}
+
 		g_renderFramework->OnUpdate();
 		g_renderFramework->PreRender();
 
-		g_renderComponentManager->OnUpdate(glfwGetTime());
+		mesh.Render(glm::mat4(1));
 
 		g_renderFramework->PostRender();
 
 		g_scene->UpdateNodes();
 		g_eventManager->OnUpdate(0.01f);
 
-		if (i % 100 == 0)
-		{
-			std::cout << glfwGetTime() - oldTime << std::endl;
-			oldTime = glfwGetTime();
-			for (int i = 0; i < numObjs; ++i)
-			{
-				log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
-			}
-		}
 		++i;
 	}
 
@@ -120,7 +136,6 @@ bool init()
 {
 	bool success = true;
 
-	success &= g_renderComponentManager->Init();
 	success &= g_renderFramework->Init();
 
 	return success;
@@ -134,5 +149,4 @@ void shutdown_delegate(GameEvent* evt)
 void shutdown()
 {
 	g_renderFramework->Shutdown();
-	g_renderComponentManager->Shutdown();
 }
