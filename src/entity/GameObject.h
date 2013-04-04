@@ -14,7 +14,7 @@ class ComponentCollection;
 
 class GameObject
 {
-	GameObject(GOid id, const char* type, const SceneNode sceneNode);
+	GameObject(GOid id, const char* type, U32 sceneNodeIndex);
 
 	static GOid nextGOid;
 	static GOid GetNextGOid() { return nextGOid++; }
@@ -23,14 +23,14 @@ class GameObject
 	const char* m_type;
 	ComponentCollection* m_compColl;
 
-	SceneNode 	m_sceneNode;
+	U32 	m_sceneNodeIndex;
 public:
 	friend void GameObjectTools::CreateGameObject(GameEvent* evt);
 
 	const GOid& GetID() const { return m_id; }
 	const char* GetType() const { return m_type; }
 	ComponentCollection* GetComponentCollection() const { return m_compColl; }
-	const SceneNode* GetSceneNode() const { return &m_sceneNode; }
+	U32 GetSceneNodeIndex() const { return m_sceneNodeIndex; }
 };
 
 }

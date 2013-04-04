@@ -21,6 +21,7 @@ class RenderFramework
 	static U16 window_h;
 	const char* window_title;
 
+	glm::mat4 lookAtMatrix;
 
 	GLuint theProgram;
 	GLuint m_VAO;

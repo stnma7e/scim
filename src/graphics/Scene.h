@@ -10,6 +10,7 @@ namespace scim
 
 struct SceneNode
 {
+	U32 			index;
 	glm::mat4*		wmat;
 	glm::mat4* 		lmat;
 	U32 			parentNode;
@@ -34,7 +35,7 @@ public:
 			printf("row %d: ", j);
 			for (int k = 0; k < 4; ++k)
 			{
-				printf("%f, ", matToPrint[j][k]);
+				printf("%f, ", matToPrint[k][j]);	// column major order
 			}
 			printf("\n");
 		}

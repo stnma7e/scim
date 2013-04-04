@@ -95,7 +95,11 @@ bool RenderFramework::Init()
     glDepthFunc(GL_LESS);
     glDepthRange(0.0f, 1.0f);
 
-    camToClipMatx = glm::perspective(45.0f, 1.0f * window_w / window_h, 0.1f, 10.0f);
+    lookAtMatrix = glm::lookAt(
+        glm::vec3(4, 3,-3),     // where camera sits
+        glm::vec3(0, 0, 0),     // looks at origin
+        glm::vec3(0, 1, 0)      // head is up y-axis
+    );
 
 	printf("\n");
 	return true;
@@ -119,13 +123,7 @@ void GLFWCALL RenderFramework::ResizeCallback(int width, int height)
 }
 void RenderFramework::OnResize(int width, int height)
 {
-    camToClipMatx = glm::perspective(45.0f, 1.0f * window_w / window_h, 0.1f, 10.0f);
-
-    // glUseProgram(theProgram);
-    // glUniformMatrix4fv(camToClipUnf, 1, GL_FALSE, glm::value_ptr(camToClipMatx));
-    // glUseProgram(0);
-    // FIX THIS SHOULD BE REIMPLEMENTED IN SCENE_NODE
-
+    camToClipMatx = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f) * lookAtMatrix;
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
     isResized = false;

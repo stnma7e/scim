@@ -21,11 +21,11 @@ Scene::Scene()
 		printf("row %d: ", j);
 		for (int k = 0; k < 4; ++k)
 		{
-			printf("%f, ", m_lmat[0][j][k]);
+			printf("%e, ", m_lmat[0][j][k]);
 		}
-		printf("\n");
+		std::cout << std::endl;
 	}
-	printf("\n");
+	std::cout << std::endl;
 }
 SceneNode Scene::CreateNode(U32 parentNode)
 {
@@ -34,10 +34,13 @@ SceneNode Scene::CreateNode(U32 parentNode)
 
 	m_parents[m_wmat.size()] = parentNode;
 
-	SceneNode sn;
-	sn.wmat 		= &m_wmat[m_wmat.size()];
-	sn.lmat 		= &m_lmat[m_lmat.size()];
-	sn.parentNode	= m_parents[m_wmat.size()];
+	SceneNode sn =
+	{
+		(U32)m_wmat.size() - 1,				// node index
+		&m_wmat[m_wmat.size()],		// wmat pointer
+		&m_lmat[m_lmat.size()],		// lmat pointer
+		m_parents[m_wmat.size()]	// parent node
+	};
 
 	return sn;
 }
@@ -45,6 +48,7 @@ const SceneNode Scene::GetNode(U32 nodeIndex)
 {
 	return SceneNode
 	{
+		nodeIndex,
 		&m_wmat.data()[nodeIndex],
 		&m_lmat.data()[nodeIndex],
 		m_parents[nodeIndex]
@@ -54,13 +58,14 @@ const SceneNode Scene::GetNode(U32 nodeIndex)
 void Scene::UpdateNodes()
 {
 	U32* 				parents = m_parents;
-	glm::mat4* 			wmat = &m_wmat[0];
-	glm::mat4* 			lmat = &m_lmat[0];
+	glm::mat4* 			wmat = m_wmat.data();
+	glm::mat4* 			lmat = m_lmat.data();
 
 	wmat[0] = lmat[0];
 	for (size_t i = 1; i < m_lmat.size(); ++i)
 	{
-		wmat[i] = wmat[parents[i]] * lmat[i];
+		const U32 parentNode = parents[i];
+		wmat[i] = wmat[parentNode] * lmat[i];
 	}
 }
 

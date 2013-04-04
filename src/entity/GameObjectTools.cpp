@@ -25,8 +25,8 @@ namespace GameObjectTools
 		GameObject** p_go = creEvt->GetPointerToAssign();
 
 		XMLNode breedNode = *creEvt->GetRootNode();
-		SceneNode sceneNode = g_scene->CreateNode(Scene::ROOT_NODE);
-		GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"), sceneNode);
+		U32 sceneNodeIndex = g_scene->CreateNode(Scene::ROOT_NODE).index;
+		GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"), sceneNodeIndex);
 		GameComponentFactory* fact = &GameComponentFactory::GetInstance();
 
 		for (int i = 0; i < breedNode.nChildNode("component"); ++i)

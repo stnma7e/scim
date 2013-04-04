@@ -102,7 +102,7 @@ void Mesh::Render(const glm::mat4& modelToWorldMatrix)
 	glBindVertexArray(m_meshData->VAO);
 	glUseProgram(m_meshData->program);
 
-	glm::mat4 transformMatrix = modelToWorldMatrix;
+	glm::mat4 transformMatrix = g_renderFramework->camToClipMatx * modelToWorldMatrix;
 	glUniformMatrix4fv(m_meshData->mvpMatrixUnf, 1, GL_FALSE, &transformMatrix[0][0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, m_meshData->vertexBuffer);

@@ -103,7 +103,8 @@ int main(int argc, char* argv[])
 			for (int i = 0; i < numObjs; ++i)
 			{
 				log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
-				// Scene::PrintMatrix(*go[i]->GetSceneNode()->wmat);
+				glm::mat4* mat = g_scene->GetNode(go[i]->GetSceneNodeIndex()).wmat;
+				Scene::PrintMatrix(*mat);
 			}
 
 		}
