@@ -12,8 +12,7 @@ namespace scim
 namespace ResourceManager
 {
 
-std::string FindFileOrThrow(const std::string &strBasename); // returns name of file if in resource directory
-std::string GetFileContents(const std::string &strFilename);
+std::string GetFileContents(const std::string &strBasename);
 
 template<typename T>
 static T ato(const char* c);

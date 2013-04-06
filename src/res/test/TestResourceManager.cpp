@@ -56,6 +56,5 @@ TEST(TryGetFileContents)
 {
 	std::stringstream filename;
 	filename << "test/" << "TestResourceManager" << ".txt";
-	std::string fullFilename = scim::ResourceManager::FindFileOrThrow(filename.str());
-	std::string fileConents = scim::ResourceManager::GetFileContents(fullFilename);
+	std::string fileConents = scim::ResourceManager::GetFileContents(filename.str());
 }

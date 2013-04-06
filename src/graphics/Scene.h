@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <stdio.h>
+#include <iostream>
 
 namespace scim
 {
@@ -35,7 +36,7 @@ public:
 			printf("row %d: ", j);
 			for (int k = 0; k < 4; ++k)
 			{
-				printf("%f, ", matToPrint[k][j]);	// column major order
+				std::cout << matToPrint[k][j] << ", ";	// row major order
 			}
 			printf("\n");
 		}

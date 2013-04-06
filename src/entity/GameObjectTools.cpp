@@ -5,7 +5,6 @@
 #include "component/GameComponentFactory.h"
 #include "event/events/CreateGameObjectEvent.h"
 #include "component/ComponentCollection.h"
-#include "graphics/Mesh.h"
 #include "res/ResourceManager.h"
 
 #include <xmlParser.h>
@@ -14,7 +13,6 @@ namespace scim
 {
 
 extern Scene* g_scene;
-extern Mesh*  mesh;
 
 namespace GameObjectTools
 {

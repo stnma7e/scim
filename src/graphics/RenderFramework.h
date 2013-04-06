@@ -51,9 +51,7 @@ public:
 	void Shutdown();
 
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
-	GLuint LinkProgram(GLuint program, const std::vector<GLuint>&);
-
-	GLuint GetProgram() const { return theProgram; }
+	bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList);
 };
 
 }

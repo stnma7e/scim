@@ -6,13 +6,18 @@
 #include "event/EventManager.h"
 #include "event/events/CreateGameObjectEvent.h"
 #include "event/events/ShutdownGameEvent.h"
-#include "graphics/Mesh.h"
+#include "graphics/XMLMesh.h"
+#include "graphics/MeshTools.h"
 
 #include <iostream>
 #include <string>
 #include <stdio.h>
 #include <sstream>
+#include <vector>
+#include <algorithm>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <logging/logging.h>
 
 using namespace scim;
@@ -50,7 +55,7 @@ int main(int argc, char* argv[])
 
 	stopFlag = false;
 
-	std::string deerFile = ResourceManager::GetFileContents(ResourceManager::FindFileOrThrow(("entity/deer.xml")));
+	std::string deerFile = ResourceManager::GetFileContents("entity/deer.xml");
 	XMLResults* res = NULL;
 	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
 	if (res)
@@ -59,17 +64,6 @@ int main(int argc, char* argv[])
 		shutdown();
 		return 1;
 	}
-
-	std::stringstream meshName;
-	meshName << "graphics/mesh/" << deerNode.getChildNode("mesh").getAttribute("name") << ".mesh";
-	std::string meshSource = ResourceManager::GetFileContents(ResourceManager::FindFileOrThrow(meshName.str()));
-	XMLResults* res2 = NULL;
-	XMLNode meshNode = XMLNode::parseString(meshSource.c_str(), "mesh", res);
-	if (res2)
-	{
-		log::emit<logging::Error>() << "Invalid mesh resource" << log::endl;
-	}
-	Mesh mesh(meshNode);
 
 	g_eventManager->AddListener(GameObjectTools::CreateGameObject, 0);
 	g_eventManager->AddListener(shutdown_delegate, 1);
@@ -80,8 +74,25 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < numObjs; ++i)
 	{
 		if (!g_eventManager->TriggerEvent(new CreateGameObjectEvent(1.0f, &go[i], deerNode)))
+		{
 			log::emit<logging::Error>() << "Failed to queue event" << log::endl;
+		}
 	}
+
+	size_t numMesh = 1;
+	std::vector<glm::mat4> matList(numMesh * 2);
+
+	for (size_t i = 0; i < matList.size(); ++i)
+	{
+		matList[i] = glm::scale(matList[i], glm::vec3(0.25, 0.25, 0.25));
+	}
+	for (size_t i = 1; i < matList.size(); ++i)
+	{
+		matList[i] = glm::translate(matList[i], glm::vec3(i + 1, i + 1, i + 1));
+	}
+
+	AssimpMesh* asMesh = MeshTools::GetMesh<AssimpMesh>("cube");
+	XMLMesh* mesh = MeshTools::GetMesh<XMLMesh>("deer");
 
 	size_t i;
 	size_t nFrames = 0;
@@ -93,7 +104,7 @@ int main(int argc, char* argv[])
 		nFrames++;
 		if ( currentTime - oldTime >= 1.0 ) // If last printf() was more than 1 sec ago
 		{
-			printf("%f ms/frame\n", 1000.0/double(nFrames));
+			std::cout << (1000.0f / (F64)nFrames) << " ms/frame" << std::endl;
 			nFrames = 0;
 			oldTime += 1.0;
 		}
@@ -102,9 +113,9 @@ int main(int argc, char* argv[])
 		{
 			for (int i = 0; i < numObjs; ++i)
 			{
-				log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
-				glm::mat4* mat = g_scene->GetNode(go[i]->GetSceneNodeIndex()).wmat;
-				Scene::PrintMatrix(*mat);
+				// log::emit<logging::Info>() << "id: " << go[i]->GetID() << ", type: " << go[i]->GetType() << log::endl;
+				// glm::mat4* mat = g_scene->GetNode(go[i]->GetSceneNodeIndex()).wmat;
+				// Scene::PrintMatrix(*mat);
 			}
 
 		}
@@ -112,7 +123,11 @@ int main(int argc, char* argv[])
 		g_renderFramework->OnUpdate();
 		g_renderFramework->PreRender();
 
-		mesh.Render(glm::mat4(1));
+		for (size_t i = 0; i < matList.size(); i += 2)
+		{
+			asMesh->Render(matList[i]);
+			mesh->Render(matList[i + 1]);
+		}
 
 		g_renderFramework->PostRender();
 

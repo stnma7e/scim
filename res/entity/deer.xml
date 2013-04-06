@@ -1,4 +1,12 @@
 <?xml version="1.0"?>
 <breed type="deer">
-	<mesh name="deer" />
+	<mesh name="deer.mesh" />
+	<program>
+		<shader type="vertex">
+			MatrixTransform.v.glsl
+		</shader>
+		<shader type="fragment">
+			StandardColors.f.glsl
+		</shader>
+	</program>
 </breed>

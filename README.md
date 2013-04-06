@@ -1,13 +1,19 @@
 scimc
 =====
 
-Revamped game engine in C++
+Toy game engine in C++
 
 ----
 
-This app uses libglfw and libGLEW for OpenGL rendering, so in order to compile it, you must have these libraries installed on your system. A OpenGL implementation of version 2.1 and GLSL version 1.2 is also required. Unit tests are run by UnitTest++. To build the test target this is needed.
+This app uses various libraries to run, so in order to compile it, you must have these libraries installed on your system. A OpenGL implementation of at least version 2.1 and GLSL version 1.2 is required.
 
-All external libraries are open source and included in the 'dep' directory.
+Libs needed:
+- GL, for graphics rendering
+- GLEW, for OpenGL extension handling
+- GLFW, for window creation and OpenGL context creation
+- glm, for math classes
+- UnitTest++, for unit testing
+- Assimp, for mesh loading
 
-The external dependency will be changed in the future.
+All external libraries are open source and most are included in the 'dep' directory. If not a quick Google search will find you what you need. The headers of all the libraries are already included in the build as system header, so the only thing the compiler should complain about is linking.
 

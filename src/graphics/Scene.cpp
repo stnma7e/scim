@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "math/Vec3.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
@@ -15,17 +14,6 @@ Scene::Scene()
 	m_parents[0] = 0;
 
 	m_lmat[0] = glm::translate(m_lmat[0], glm::vec3(2,2,2));
-	std::cout << "mat " << 0 << ": " << std::endl;
-	for (int j = 0; j < 4; ++j)
-	{
-		printf("row %d: ", j);
-		for (int k = 0; k < 4; ++k)
-		{
-			printf("%e, ", m_lmat[0][j][k]);
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
 }
 SceneNode Scene::CreateNode(U32 parentNode)
 {
@@ -36,7 +24,7 @@ SceneNode Scene::CreateNode(U32 parentNode)
 
 	SceneNode sn =
 	{
-		(U32)m_wmat.size() - 1,				// node index
+		(U32)m_wmat.size() - 1,		// node index
 		&m_wmat[m_wmat.size()],		// wmat pointer
 		&m_lmat[m_lmat.size()],		// lmat pointer
 		m_parents[m_wmat.size()]	// parent node

@@ -33,12 +33,8 @@ RenderFramework::RenderFramework() : camToClipMatx(0.0f)
     running = 0;
     isResized = true;
 
-    theProgram = 0;
-    m_VAO = 0;
-
     window_title = "Scim";
 
-    modelToCamUnf = 0;
     camToClipUnf = 0;
 }
 bool RenderFramework::Init()
@@ -85,9 +81,9 @@ bool RenderFramework::Init()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glViewport(0, 0, (GLsizei) window_w, (GLsizei) window_h);
 
-    // glEnable(GL_CULL_FACE);
-    // glCullFace(GL_BACK);
-    // glFrontFace(GL_CW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_CLAMP);
@@ -123,7 +119,7 @@ void GLFWCALL RenderFramework::ResizeCallback(int width, int height)
 }
 void RenderFramework::OnResize(int width, int height)
 {
-    camToClipMatx = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f) * lookAtMatrix;
+    camToClipMatx = glm::perspective(45.0f, (F32)width / (F32)height, 0.1f, 100.0f) * lookAtMatrix;
     glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
     isResized = false;
@@ -143,8 +139,7 @@ void RenderFramework::Shutdown()
 
 GLuint RenderFramework::LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
-    std::string shaderData = ResourceManager::GetFileContents(
-        ResourceManager::FindFileOrThrow("graphics/shader/" + strShaderFilename));
+    std::string shaderData = ResourceManager::GetFileContents("graphics/shader/" + strShaderFilename);
     try
     {
 	    GLuint shader_id = MakeShader(eShaderType, shaderData);
@@ -181,7 +176,7 @@ GLuint RenderFramework::MakeShader(GLenum eShaderType, const std::string &strSha
     }
     return shader;
 }
-GLuint RenderFramework::LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
+bool RenderFramework::LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
 {
     for (size_t i = 0; i < shaderList.size(); ++i)
         glAttachShader(program, shaderList[i]);
@@ -198,17 +193,18 @@ GLuint RenderFramework::LinkProgram(GLuint program, const std::vector<GLuint>& s
     std::vector<char> ProgramErrorMessage(std::max(InfoLogLength, (int)1));
     glGetProgramInfoLog(program, InfoLogLength, NULL, &ProgramErrorMessage[0]);
     if (InfoLogLength > 1)
+    {
         logging::log::emit<logging::Error>() << &ProgramErrorMessage[0] << logging::log::endl;
-    else
-        logging::log::emit<logging::Info>() << "program linked successfully" << logging::log::endl;
+        return false;
+    }
 
     for (size_t i = 0; i < shaderList.size(); ++i)
     {
-        // glDetachShader(program, shaderList[i]);
-        // glDeleteShader(shaderList[i]);
+        glDetachShader(program, shaderList[i]);
+        glDeleteShader(shaderList[i]);
     }
 
-    return program;
+    return true;
 }
 
 }

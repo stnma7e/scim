@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES (
 	${ROOT_PATH}/dep/xmlParser
 	${ROOT_PATH}/dep/unittest-cpp/src
 	${ROOT_PATH}/dep/logging/include
+	${ROOT_PATH}/dep/assimp-3.0.1270/include
 	${ROOT_PATH}/src
 )
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -28,12 +29,12 @@ SET (PROJ_SOURCE_PAIR
 	entity/component/manager/ComponentManager
 	event/EventManager
 	graphics/RenderFramework
-	graphics/Mesh
+	graphics/IMesh
+	graphics/XMLMesh
+	graphics/AssimpMesh
+	graphics/MeshTools
 	graphics/Scene
 	res/ResourceManager
-	math/Vec3
-	math/Plane
-	math/MatrixStack
 )
 SET (PROJ_SOURCES
 )
@@ -78,6 +79,7 @@ SET (LINK_LIBS
 	GLEW
 	GL
 	xmlParser
+	assimp
 )
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${sbdir} ${lib})
