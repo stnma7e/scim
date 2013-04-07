@@ -18,8 +18,6 @@
 namespace scim
 {
 
-extern RenderFramework* g_renderFramework;
-
 namespace MeshTools
 {
 
@@ -38,7 +36,7 @@ namespace
 			0
 		};
 
-		std::string entityFileContents = ResourceManager::GetFileContents("entity/" + entityName + ".xml");
+		std::string entityFileContents = ResourceManager::GetFileContents<std::string>("entity/" + entityName + ".xml");
 		XMLResults* res = NULL;
 		XMLNode entityNode = XMLNode::parseString(entityFileContents.c_str(), "breed", res);
 		if (res)
@@ -55,10 +53,10 @@ namespace
 			const char* shaderType = shaderNode.getAttribute("type");
 			if (strcmp(shaderType, "vertex") == 0)
 			{
-				shaderList.push_back(g_renderFramework->LoadShader(GL_VERTEX_SHADER, shaderNode.getText()));
+				shaderList.push_back(RenderFramework::LoadShader(GL_VERTEX_SHADER, shaderNode.getText() + std::string(".vert")));
 			} else if (strcmp(shaderType, "fragment") == 0)
 			{
-				shaderList.push_back(g_renderFramework->LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText()));
+				shaderList.push_back(RenderFramework::LoadShader(GL_FRAGMENT_SHADER, shaderNode.getText() + std::string(".frag")));
 			} else
 			{
 				std::cout << "Error: invalid shader element type" << std::endl;
@@ -66,7 +64,7 @@ namespace
 		}
 
 		GLuint program = glCreateProgram();
-		if (!g_renderFramework->LinkProgram(program, shaderList))
+		if (!RenderFramework::LinkProgram(program, shaderList))
 		{
 			return voidData;
 		}
@@ -92,12 +90,14 @@ namespace
 			return meshMap.find(meshName)->second;
 		}
 
-		std::string fileContents = ResourceManager::GetFileContents("graphics/mesh/" + meshName);
+		std::string fileContents = ResourceManager::GetFileContents<std::string>("graphics/mesh/" + meshName);
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFileFromMemory(fileContents.c_str(),
 			fileContents.size(),
-			aiProcess_Triangulate | aiProcess_JoinIdenticalVertices,
+			aiProcess_Triangulate |
+				aiProcess_JoinIdenticalVertices |
+				aiProcessPreset_TargetRealtime_Quality,
 			""
 		);
 
@@ -121,7 +121,7 @@ namespace
 			return meshMap.find(meshName)->second;
 		}
 
-		std::string meshSource = ResourceManager::GetFileContents("graphics/mesh/" + meshName);
+		std::string meshSource = ResourceManager::GetFileContents<std::string>("graphics/mesh/" + meshName);
 		XMLResults* res = NULL;
 		XMLNode meshNode = XMLNode::parseString(meshSource.c_str(), "mesh", res);
 		if (res)

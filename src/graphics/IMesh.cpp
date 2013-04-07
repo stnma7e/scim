@@ -7,15 +7,14 @@
 namespace scim
 {
 
-extern RenderFramework* g_renderFramework;
-
 MeshData::MeshData(GLuint program,
 	const std::vector<glm::vec3> &vertexList,
 	const std::vector<U32> &indexList,
 	const std::vector<glm::vec4> &colorList,
 	const std::vector<glm::vec2> &texUVList,
-	const std::vector<glm::vec3> &normalList
-) : program(program)
+	const std::vector<glm::vec3> &normalList,
+	const std::vector<GLuint> &textureList
+) : program(program), textureList(textureList)
 {
 	GLint linked;
 	glGetProgramiv(program, GL_LINK_STATUS, &linked);
@@ -45,27 +44,30 @@ MeshData::MeshData(GLuint program,
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
-	// if (!texUVList.empty())
-	// {
-	// 	glGenBuffers(1, &indexBuffer);
-	// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-	// 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (indexList.size() * sizeof(U32)), &indexList[0], GL_STATIC_DRAW);
-	// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	// }
+	if (!texUVList.empty())
+	{
+		glGenBuffers(1, &textureBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, textureBuffer);
+		glBufferData(GL_ARRAY_BUFFER, (texUVList.size() * sizeof(glm::vec2)), &texUVList[0], GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
 
 	mvpMatrixUnf = glGetUniformLocation(program, "mvp");
+	texUnitUnf = glGetUniformLocation(program, "texUnit");
 
 	bufferInfo.vertexSize = (U16)vertexList.size();
 	bufferInfo.indexSize  =	(U16)indexList.size();
-	bufferInfo.isColors   =	colorList.empty()  ? false : true;
-	bufferInfo.isTextured =	texUVList.empty()  ? false : true;
-	bufferInfo.isNormals  =	normalList.empty() ? false : true;
+	bufferInfo.isColored    =	colorList.empty()   ? false : true;
+	bufferInfo.isTextured   =	textureList.empty() ? false : true;
+	bufferInfo.hasNormals   =	normalList.empty()  ? false : true;
 }
 MeshData::~MeshData()
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &colorBuffer);
 	glDeleteBuffers(1, &indexBuffer);
+	for (GLuint tex: textureList)
+		glDeleteTextures(1, &tex);
 	glDeleteVertexArrays(1, &VAO);
 }
 
@@ -85,7 +87,7 @@ void IMesh::Render(const glm::mat4& modelToWorldMatrix)
 		glBindVertexArray(meshData->VAO);
 		glUseProgram(meshData->program);
 
-		glm::mat4 transformMatrix = g_renderFramework->camToClipMatx * modelToWorldMatrix;
+		glm::mat4 transformMatrix = (*RenderFramework::GetCamToClipMatrix()) * modelToWorldMatrix;
 		glUniformMatrix4fv(meshData->mvpMatrixUnf, 1, GL_FALSE, &transformMatrix[0][0]);
 
 		glBindBuffer(GL_ARRAY_BUFFER, meshData->vertexBuffer);
@@ -93,12 +95,27 @@ void IMesh::Render(const glm::mat4& modelToWorldMatrix)
 		glVertexAttribPointer(RenderFramework::VERTEX_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		if (meshData->bufferInfo.isColors)
+		if (meshData->bufferInfo.isColored)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, meshData->colorBuffer);
 			glEnableVertexAttribArray(RenderFramework::VERTEX_COLOR);
 			glVertexAttribPointer(RenderFramework::VERTEX_COLOR, 4, GL_FLOAT, GL_FALSE, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
+		if (meshData->bufferInfo.isTextured)
+		{
+			for (size_t i = 0; i < meshData->textureList.size(); ++i)
+			{
+				GLuint tex = meshData->textureList[i];
+				glUniform1i(meshData->texUnitUnf, 0);
+				glActiveTexture(GL_TEXTURE0 + i);
+				glBindTexture(GL_TEXTURE_2D, tex);
+
+				glBindBuffer(GL_ARRAY_BUFFER, meshData->textureBuffer);
+				glEnableVertexAttribArray(RenderFramework::TEXTURE_UV);
+				glVertexAttribPointer(RenderFramework::TEXTURE_UV, 2, GL_FLOAT, GL_FALSE, 0, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
 		}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->indexBuffer);
@@ -106,6 +123,7 @@ void IMesh::Render(const glm::mat4& modelToWorldMatrix)
 
 		glDisableVertexAttribArray(RenderFramework::VERTEX_POSITION);
 		glDisableVertexAttribArray(RenderFramework::VERTEX_COLOR);
+		glDisableVertexAttribArray(RenderFramework::TEXTURE_UV);
 		glUseProgram(0);
 		glBindVertexArray(0);
 	}

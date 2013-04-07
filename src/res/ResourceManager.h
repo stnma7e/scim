@@ -5,6 +5,8 @@
 
 #include <string>
 #include <vector>
+#include <GL/glew.h>
+#include <GL/glfw.h>
 
 namespace scim
 {
@@ -12,7 +14,10 @@ namespace scim
 namespace ResourceManager
 {
 
-std::string GetFileContents(const std::string &strBasename);
+template <typename T>
+T GetFileContents(const std::string &strBasename);
+
+bool LoadRGBATexture(const std::string& textureName, GLuint* textureID);
 
 template<typename T>
 static T ato(const char* c);
@@ -56,6 +61,11 @@ template<>
 inline I32 ato<I32>(const char* c)
 {
     return atoi(c);
+}
+template<>
+inline U32 ato<U32>(const char* c)
+{
+    return (U32)atoi(c);
 }
 
 template<>

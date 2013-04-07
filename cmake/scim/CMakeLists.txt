@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES (
 	${ROOT_PATH}/dep/unittest-cpp/src
 	${ROOT_PATH}/dep/logging/include
 	${ROOT_PATH}/dep/assimp-3.0.1270/include
+	${ROOT_PATH}/dep/devil-1.7.8/include
 	${ROOT_PATH}/src
 )
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -80,6 +81,8 @@ SET (LINK_LIBS
 	GL
 	xmlParser
 	assimp
+	IL
+	ILU
 )
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${sbdir} ${lib})

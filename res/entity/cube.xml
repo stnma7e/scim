@@ -3,10 +3,10 @@
 	<mesh name="unitCube.dae" />
 	<program>
 		<shader type="vertex">
-			MatrixTransform.v.glsl
+			MatrixTransform
 		</shader>
 		<shader type="fragment">
-			White.f.glsl
+			Textures
 		</shader>
 	</program>
 </breed>

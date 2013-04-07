@@ -10,49 +10,27 @@
 namespace scim
 {
 
-class RenderFramework
+namespace RenderFramework
 {
-	friend class RenderComponent;
-
-	bool running;
-	static bool isResized;
-
-	static U16 window_w;
-	static U16 window_h;
-	const char* window_title;
-
-	glm::mat4 lookAtMatrix;
-
-	GLuint theProgram;
-	GLuint m_VAO;
-
-	GLuint modelToCamUnf;
-	GLuint camToClipUnf;
-
-	GLuint MakeShader(GLenum type, const std::string &strShader);
-	void OnResize(int width, int height);
-
-	static void GLFWCALL ResizeCallback(int width, int height);
-public:
 	enum AttributeLocations
 	{
 		VERTEX_POSITION = 0,
-		VERTEX_COLOR 	= 1
+		VERTEX_COLOR 	= 1,
+		TEXTURE_UV		= 2
 	};
 
-	glm::mat4 camToClipMatx;
-
-	RenderFramework();
-
 	bool Init();
-	void OnUpdate();
+	void OnUpdate(F64 dtime);
 	void PreRender();
 	void PostRender();
 	void Shutdown();
+	void OnResize(int width, int height);
 
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
 	bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList);
-};
+
+	const glm::mat4* GetCamToClipMatrix();
+}
 
 }
 #endif

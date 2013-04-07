@@ -9,27 +9,35 @@
 #include <string.h>
 #include <vector>
 
+#include <GL/glfw.h>
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <logging/logging.h>
+
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
 namespace scim
 {
 
-extern RenderFramework* g_renderFramework;
-
-XMLMesh::XMLMesh(const XMLNode& compRootNode, GLuint program)
+XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)
 {
-	XMLNode vertexNode = compRootNode.getChildNode("vertex");
-	std::stringstream strVertex(vertexNode.getText());
+	std::string strVertex(meshNode.getChildNode("vertex").getText()),
+		strColors(meshNode.getChildNode("color").getText()),
+		strIndicies(meshNode.getChildNode("index").getText()),
+		strTextures(meshNode.getChildNode("texture").getText());
 
-	XMLNode colorNode = compRootNode.getChildNode("color");
-	std::stringstream strColors(colorNode.getText());
+	std::vector<F32> vertexList 	= ResourceManager::GetListFromSpacedString<F32>(strVertex);
+	std::vector<U32> indexList  	= ResourceManager::GetListFromSpacedString<U32>(strIndicies);
+	std::vector<F32> colorList, textureList;
 
-	XMLNode indexNode = compRootNode.getChildNode("index");
-	std::stringstream strIndicies(indexNode.getText());
-
-	std::vector<F32> vertexList = ResourceManager::GetListFromSpacedString<F32>(strVertex.str());
-	std::vector<F32> colorList  = ResourceManager::GetListFromSpacedString<F32>(strColors.str());
-	std::vector<U32> indexList  = ResourceManager::GetListFromSpacedString<U32>(strIndicies.str());
+	if (!strColors.empty())
+	{
+		colorList = ResourceManager::GetListFromSpacedString<F32>(strColors);
+	};
+	if (!strTextures.empty())
+	{
+		textureList = ResourceManager::GetListFromSpacedString<F32>(strTextures);
+	}
 
 	std::vector<glm::vec3> vertVectorList;
 	glm::vec3 tmpVec;
@@ -80,12 +88,41 @@ XMLMesh::XMLMesh(const XMLNode& compRootNode, GLuint program)
 		colorVectorList.push_back(tmpVec2);
 	}
 
+	std::vector<glm::vec2> textureVectorList;
+	glm::vec2 tmpVec3;
+	for (size_t i = 0; i < textureList.size(); i += 2)
+	{
+		for (size_t k = 0; k < 2; ++k)
+		{
+			switch (k)
+			{
+			case 0:
+				tmpVec3.x = textureList[i + k];
+				break;
+			case 1:
+				tmpVec3.y = textureList[i + k];
+				break;
+			}
+		}
+
+		textureVectorList.push_back(tmpVec3);
+	}
+
+	std::string textureName = meshNode.getChildNode("texture").getAttribute("name");
+	GLuint textureID;
+	std::vector<GLuint> textureIDs;
+	if (ResourceManager::LoadRGBATexture(textureName, &textureID))
+	{
+		textureIDs.push_back(textureID);
+	}
+
 	m_subMeshes.push_back(new MeshData(program,
 		vertVectorList,
 		indexList,
 		colorVectorList,
-		std::vector<glm::vec2>(),
-		std::vector<glm::vec3>()
+		textureVectorList,
+		std::vector<glm::vec3>(),
+		textureIDs
 	));
 }
 

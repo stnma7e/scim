@@ -1,7 +1,10 @@
 #include "AssimpMesh.h"
+#include "res/ResourceManager.h"
 
 #include <iostream>
+#include <stdio.h>
 #include <GL/glfw.h>
+#include <logging/logging.h>
 
 namespace scim
 {
@@ -9,6 +12,8 @@ namespace scim
 AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 {
     static const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
+	fprintf(stderr, "has textures: %s\n", pScene->HasTextures() ? "true" : "false");
+	fprintf(stderr, "has texture coords: %s\n", pScene->mMeshes[0]->HasTextureCoords(0) ? "true" : "false");
 
     GLint linked;
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linked);
@@ -41,19 +46,44 @@ AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 		for (size_t i = 0; i < mesh->mNumFaces; ++i)
 		{
 			const aiFace& Face = mesh->mFaces[i];
-			assert(Face.mNumIndices == 3);
+			// assert(Face.mNumIndices == 3);
 			indexList.push_back(Face.mIndices[0]);
 			indexList.push_back(Face.mIndices[1]);
 			indexList.push_back(Face.mIndices[2]);
 		}
 
+		std::vector<GLuint> textureIDs;
+		for (size_t i = 0; i < pScene->mNumMaterials; ++i)
+		{
+        	const aiMaterial* pMaterial = pScene->mMaterials[i];
+
+			if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+			{
+				aiString Path;
+
+				if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS)
+				{
+					std::cout << Path.data << std::endl;
+					GLuint textureID;
+					if (ResourceManager::LoadRGBATexture(Path.data, &textureID))
+					{
+						textureIDs.push_back(textureID);
+					}
+
+				}
+			} else
+			{
+				logging::log::emit<logging::Error>() << "cannot init texture" << logging::log::endl;
+			}
+		}
 
 		m_subMeshes.push_back(new MeshData(shaderProgram,
 			vertexList,
 			indexList,
-			std::vector<glm::vec4>(), 	// null colorList
+			std::vector<glm::vec4>(), 	// empty colorList
 			uvList,
-			normalList
+			normalList,
+			textureIDs
 		));
 	}
 }

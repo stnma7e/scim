@@ -17,7 +17,7 @@ GameComponent* GameComponentFactory::CreateComponent(XMLNode& compNode, GameObje
 	const char* strType = compNode.getAttribute("type");
 
 	GameComponent::Type type;
-	if (strcmp(strType, "transform") == 0) 
+	if (strcmp(strType, "transform") == 0)
 		type = GameComponent::TRANSFORM;
 	else if (strcmp(strType, "render") == 0)
 		type = GameComponent::RENDER;

@@ -3,10 +3,10 @@
 	<mesh name="deer.mesh" />
 	<program>
 		<shader type="vertex">
-			MatrixTransform.v.glsl
+			MatrixTransform
 		</shader>
 		<shader type="fragment">
-			StandardColors.f.glsl
+			Textures
 		</shader>
 	</program>
 </breed>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<breed type="cube">
+	<mesh name="house.dae" />
+	<program>
+		<shader type="vertex">
+			MatrixTransform
+		</shader>
+		<shader type="fragment">
+			Textures
+		</shader>
+	</program>
+</breed>

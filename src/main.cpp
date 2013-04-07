@@ -19,6 +19,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <logging/logging.h>
+#include <IL/il.h>
 
 using namespace scim;
 using namespace logging;
@@ -31,18 +32,15 @@ bool stopFlag;
 
 namespace scim
 {
-	RenderFramework* 			g_renderFramework;
 	Scene*						g_scene;
 	EventManager*				g_eventManager;
 }
 
 int main(int argc, char* argv[])
 {
-	RenderFramework r;
 	Scene sc;
 	EventManager em;
 
-	g_renderFramework = &r;
 	g_scene = &sc;
 	g_eventManager = &em;
 
@@ -55,7 +53,7 @@ int main(int argc, char* argv[])
 
 	stopFlag = false;
 
-	std::string deerFile = ResourceManager::GetFileContents("entity/deer.xml");
+	std::string deerFile = ResourceManager::GetFileContents<std::string>("entity/deer.xml");
 	XMLResults* res = NULL;
 	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
 	if (res)
@@ -94,7 +92,7 @@ int main(int argc, char* argv[])
 	AssimpMesh* asMesh = MeshTools::GetMesh<AssimpMesh>("cube");
 	XMLMesh* mesh = MeshTools::GetMesh<XMLMesh>("deer");
 
-	size_t i;
+	size_t i = 0;
 	size_t nFrames = 0;
 	F64 oldTime = glfwGetTime();
 	while (!stopFlag)
@@ -120,16 +118,18 @@ int main(int argc, char* argv[])
 
 		}
 
-		g_renderFramework->OnUpdate();
-		g_renderFramework->PreRender();
+		RenderFramework::OnUpdate(currentTime - oldTime);
+		RenderFramework::PreRender();
 
 		for (size_t i = 0; i < matList.size(); i += 2)
 		{
-			asMesh->Render(matList[i]);
-			mesh->Render(matList[i + 1]);
+			if (asMesh)
+				asMesh->Render(matList[i]);;
+			if (mesh)
+				mesh->Render(matList[i + 1]);;
 		}
 
-		g_renderFramework->PostRender();
+		RenderFramework::PostRender();
 
 		g_scene->UpdateNodes();
 		g_eventManager->OnUpdate(0.01f);
@@ -152,7 +152,7 @@ bool init()
 {
 	bool success = true;
 
-	success &= g_renderFramework->Init();
+	success &= RenderFramework::Init();
 
 	return success;
 }
@@ -164,5 +164,5 @@ void shutdown_delegate(GameEvent* evt)
 }
 void shutdown()
 {
-	g_renderFramework->Shutdown();
+	RenderFramework::Shutdown();
 }

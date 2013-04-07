@@ -17,7 +17,8 @@ struct MeshData
 		const std::vector<U32> &indexList,
 		const std::vector<glm::vec4> &colorList,
 		const std::vector<glm::vec2> &texUVList,
-		const std::vector<glm::vec3> &normalList
+		const std::vector<glm::vec3> &normalList,
+		const std::vector<GLuint> &textureList
 	);
 	~MeshData();
 
@@ -28,16 +29,18 @@ struct MeshData
 
 	GLuint VAO;
 	GLuint program;
+	std::vector<GLuint> textureList;
 
 	GLint mvpMatrixUnf;
+	GLint texUnitUnf;
 
 	struct
 	{
 		U16 vertexSize;
 		U16 indexSize;
-		bool isColors;
+		bool isColored;
 		bool isTextured;
-		bool isNormals;
+		bool hasNormals;
 	} bufferInfo;
 };
 
