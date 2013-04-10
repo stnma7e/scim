@@ -10,6 +10,8 @@
 namespace scim
 {
 
+
+
 struct MeshData
 {
 	MeshData(GLuint program,
@@ -26,6 +28,7 @@ struct MeshData
 	GLuint colorBuffer;
 	GLuint indexBuffer;
 	GLuint textureBuffer;
+	GLuint normalBuffer;
 
 	GLuint VAO;
 	GLuint program;
@@ -33,6 +36,8 @@ struct MeshData
 
 	GLint mvpMatrixUnf;
 	GLint texUnitUnf;
+	GLint d_lightColorUnf;
+	GLint d_lightAmbIntUnf;
 
 	struct
 	{
@@ -42,6 +47,12 @@ struct MeshData
 		bool isTextured;
 		bool hasNormals;
 	} bufferInfo;
+
+	struct
+	{
+		glm::vec3 color;
+		float ambInt;
+	} directionalLight;
 };
 
 class IMesh
@@ -51,7 +62,7 @@ protected:
 public:
 	virtual ~IMesh();
 
-	virtual void Render(const glm::mat4& modelToWorldMatrix);
+	virtual void Render(const glm::mat4& transformMatrix);
 
 	const std::vector<MeshData*>* GetMeshData() const { return &m_subMeshes; }
 };

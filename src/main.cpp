@@ -32,7 +32,7 @@ bool stopFlag;
 
 namespace scim
 {
-	Scene*						g_scene;
+	Scene*						g_currentScene;
 	EventManager*				g_eventManager;
 }
 
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	Scene sc;
 	EventManager em;
 
-	g_scene = &sc;
+	g_currentScene = &sc;
 	g_eventManager = &em;
 
 	if (!init())
@@ -83,6 +83,7 @@ int main(int argc, char* argv[])
 	for (size_t i = 0; i < matList.size(); ++i)
 	{
 		matList[i] = glm::scale(matList[i], glm::vec3(0.25, 0.25, 0.25));
+		matList[i] = matList[i] = glm::translate(matList[i], glm::vec3(5, 5, 5));
 	}
 	for (size_t i = 1; i < matList.size(); ++i)
 	{
@@ -90,7 +91,8 @@ int main(int argc, char* argv[])
 	}
 
 	AssimpMesh* asMesh = MeshTools::GetMesh<AssimpMesh>("cube");
-	XMLMesh* mesh = MeshTools::GetMesh<XMLMesh>("deer");
+	// AssimpMesh* asMesh2 = MeshTools::GetMesh<AssimpMesh>("house");
+	// XMLMesh* mesh = MeshTools::GetMesh<XMLMesh>("deer");
 
 	size_t i = 0;
 	size_t nFrames = 0;
@@ -124,14 +126,15 @@ int main(int argc, char* argv[])
 		for (size_t i = 0; i < matList.size(); i += 2)
 		{
 			if (asMesh)
-				asMesh->Render(matList[i]);;
-			if (mesh)
-				mesh->Render(matList[i + 1]);;
+			{
+				asMesh->Render((*RenderFramework::GetCamToClipMatrix()) * matList[i]);
+				asMesh->Render((*RenderFramework::GetCamToClipMatrix()) * matList[i + 1]);
+			}
 		}
 
 		RenderFramework::PostRender();
 
-		g_scene->UpdateNodes();
+		g_currentScene->UpdateNodes();
 		g_eventManager->OnUpdate(0.01f);
 
 		++i;

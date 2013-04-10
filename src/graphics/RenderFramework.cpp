@@ -21,7 +21,6 @@ namespace scim
 
 namespace
 {
-
 	bool running;
 	static bool isResized;
 
@@ -61,20 +60,19 @@ namespace
 	void ComputeMatricesFromInputs(F32 dtime)
 	{
 		static glm::vec3 cameraPosition = glm::vec3(0, 0, 5);
-
-		F32 horizontalAngle = 3.14f; 	// horizontal angle : toward -Z
-		F32 verticalAngle = 0.0f; 		// vertical angle : 0, look at the horizon
-		F32 initialFoV = 45.0f;			// Initial Field of View
-		F32 speed = 0.1f;				// 3 units / second
-		F32 mouseSpeed = 0.005f;
-		I32 xpos, ypos;					// mouse positions
+		static F32 horizontalAngle = 3.14f; 					// horizontal angle : toward -Z
+		static F32 verticalAngle = 0.0f; 						// vertical angle : 0, look at the horizon
+		static const F32 initialFoV = 45.0f;					// Initial Field of View
+		static const F32 speed = 0.1f;							// 3 units / second
+		static const F32 mouseSpeed = 0.005f;
+		static I32 xpos, ypos;									// mouse positions
 
 		glfwGetMousePos(&xpos, &ypos);
 		// glfwSetMousePos((F32)window_w / 2, (F32)window_h / 2);
 		// horizontalAngle += mouseSpeed * dtime * F32(window_w / 2 - xpos);
 		// verticalAngle   += mouseSpeed * dtime * F32(window_h / 2 - ypos);
 		horizontalAngle = 3.14f + mouseSpeed * F32(window_w / 2 - xpos );
-		verticalAngle   = mouseSpeed * F32( window_h / 2 - ypos );
+		verticalAngle   = mouseSpeed * F32(window_h / 2 - ypos );
 
 		glm::vec3 direction = glm::vec3(
 			cos(verticalAngle) * sin(horizontalAngle),
@@ -142,8 +140,7 @@ bool Init()
 		glfwGetVersion(&glfwVers[0], &glfwVers[1], &glfwVers[2]);
 		logging::log::emit<logging::Info>() << "Using GLFW " << glfwVers[0] << '.' << glfwVers[1] << '.' << glfwVers[2] << logging::log::endl;
 
-		glfwOpenWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
-		if (!glfwOpenWindow(window_w, window_h, 0,0,0,0,0,0, GLFW_WINDOW))
+		if (!glfwOpenWindow(window_w, window_h, 8, 8, 8, 8, 24, 8, GLFW_WINDOW))
 		{
 			return false;
 		}
@@ -200,13 +197,17 @@ bool Init()
 }
 void OnUpdate(F64 dtime)
 {
-	running = (!glfwGetKey(GLFW_KEY_ESC)) && glfwGetWindowParam(GLFW_OPENED);
+	running = !glfwGetKey(GLFW_KEY_ESC) &&
+			glfwGetWindowParam(GLFW_OPENED)
+	;
 	if (!running)
 	{
 		g_eventManager->QueueEvent(new ShutdownGameEvent(1.0f, "RenderFramework received 'ESC' keypress"));
 	}
 	if(isResized)
+	{
 		OnResize(window_w, window_h);
+	}
 
 	ComputeMatricesFromInputs(dtime);
 }
@@ -230,16 +231,16 @@ void Shutdown()
 
 GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
-	std::string shaderData = ResourceManager::GetFileContents<std::string>("graphics/shader/" + strShaderFilename);
 	try
 	{
+		std::string shaderData = ResourceManager::GetFileContents<std::string>("graphics/shader/" + strShaderFilename);
 		GLuint shader_id = MakeShader(eShaderType, shaderData);
 		return shader_id;
 	}
 	catch(std::exception &e)
 	{
-		fprintf(stderr, "%s\n", e.what());
-		throw;
+		logging::log::emit<logging::Error>() << e.what() << logging::log::endl;
+		return 0;
 	}
 }
 bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
@@ -248,8 +249,9 @@ bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
 		glAttachShader(program, shaderList[i]);
 
 	glBindAttribLocation(program, 0, "position");
-	glBindAttribLocation(program, 1, "color");
-	glBindAttribLocation(program, 2, "uv");
+	glBindAttribLocation(program, 1, "normal");
+	glBindAttribLocation(program, 2, "color");
+	glBindAttribLocation(program, 3, "uv");
 	glLinkProgram(program);
 
 	GLint Result = GL_FALSE;

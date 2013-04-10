@@ -15,8 +15,9 @@ namespace RenderFramework
 	enum AttributeLocations
 	{
 		VERTEX_POSITION = 0,
-		VERTEX_COLOR 	= 1,
-		TEXTURE_UV		= 2
+		NORMAL_POSITION = 1,
+		VERTEX_COLOR 	= 2,
+		TEXTURE_UV		= 3
 	};
 
 	bool Init();

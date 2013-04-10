@@ -29,7 +29,6 @@ MeshData::MeshData(GLuint program,
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, (vertexList.size() * sizeof(glm::vec3)), &vertexList[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glGenBuffers(1, &indexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -41,25 +40,36 @@ MeshData::MeshData(GLuint program,
 		glGenBuffers(1, &colorBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
 		glBufferData(GL_ARRAY_BUFFER, (colorList.size() * sizeof(glm::vec4)), &colorList[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-
 	if (!texUVList.empty())
 	{
 		glGenBuffers(1, &textureBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, textureBuffer);
 		glBufferData(GL_ARRAY_BUFFER, (texUVList.size() * sizeof(glm::vec2)), &texUVList[0], GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+	if (!normalList.empty())
+	{
+		glGenBuffers(1, &normalBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+		glBufferData(GL_ARRAY_BUFFER, (normalList.size() * sizeof(glm::vec3)), &normalList[0], GL_STATIC_DRAW);
+	}
+
 
 	mvpMatrixUnf = glGetUniformLocation(program, "mvp");
 	texUnitUnf = glGetUniformLocation(program, "texUnit");
+	d_lightColorUnf = glGetUniformLocation(program, "d_light.color");
+	d_lightAmbIntUnf = glGetUniformLocation(program, "d_light.ambientIntensity");
+
+	directionalLight.color = glm::vec3(1.0, 1.0, 1.0);
+	directionalLight.ambInt = 1.0;
 
 	bufferInfo.vertexSize = (U16)vertexList.size();
 	bufferInfo.indexSize  =	(U16)indexList.size();
 	bufferInfo.isColored    =	colorList.empty()   ? false : true;
 	bufferInfo.isTextured   =	textureList.empty() ? false : true;
 	bufferInfo.hasNormals   =	normalList.empty()  ? false : true;
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 MeshData::~MeshData()
 {
@@ -78,7 +88,7 @@ IMesh::~IMesh()
 		delete m_subMeshes[i];
 	}
 }
-void IMesh::Render(const glm::mat4& modelToWorldMatrix)
+void IMesh::Render(const glm::mat4& transformMatrix)
 {
 	for (size_t i = 0; i < m_subMeshes.size(); ++i)
 	{
@@ -87,8 +97,9 @@ void IMesh::Render(const glm::mat4& modelToWorldMatrix)
 		glBindVertexArray(meshData->VAO);
 		glUseProgram(meshData->program);
 
-		glm::mat4 transformMatrix = (*RenderFramework::GetCamToClipMatrix()) * modelToWorldMatrix;
 		glUniformMatrix4fv(meshData->mvpMatrixUnf, 1, GL_FALSE, &transformMatrix[0][0]);
+		glUniform3f(meshData->d_lightColorUnf, meshData->directionalLight.color.x, meshData->directionalLight.color.y, meshData->directionalLight.color.z);
+		glUniform1f(meshData->d_lightAmbIntUnf, meshData->directionalLight.ambInt);
 
 		glBindBuffer(GL_ARRAY_BUFFER, meshData->vertexBuffer);
 		glEnableVertexAttribArray(RenderFramework::VERTEX_POSITION);
@@ -116,6 +127,13 @@ void IMesh::Render(const glm::mat4& modelToWorldMatrix)
 				glVertexAttribPointer(RenderFramework::TEXTURE_UV, 2, GL_FLOAT, GL_FALSE, 0, 0);
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			}
+		}
+		if (meshData->bufferInfo.hasNormals)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, meshData->normalBuffer);
+			glEnableVertexAttribArray(RenderFramework::NORMAL_POSITION);
+			glVertexAttribPointer(RenderFramework::NORMAL_POSITION, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshData->indexBuffer);

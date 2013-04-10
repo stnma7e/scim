@@ -12,7 +12,7 @@
 namespace scim
 {
 
-extern Scene* g_scene;
+extern Scene* g_currentScene;
 
 namespace GameObjectTools
 {
@@ -23,7 +23,7 @@ namespace GameObjectTools
 		GameObject** p_go = creEvt->GetPointerToAssign();
 
 		XMLNode breedNode = *creEvt->GetRootNode();
-		U32 sceneNodeIndex = g_scene->CreateNode(Scene::ROOT_NODE).index;
+		U32 sceneNodeIndex = g_currentScene->CreateNode(Scene::ROOT_NODE).index;
 		GameObject* go = new GameObject(GameObject::GetNextGOid(), breedNode.getAttribute("type"), sceneNodeIndex);
 		GameComponentFactory* fact = &GameComponentFactory::GetInstance();
 

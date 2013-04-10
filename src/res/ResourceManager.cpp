@@ -28,12 +28,12 @@ namespace
         std::string strFilename = LOCAL_FILE_DIR + strBasename;
         std::ifstream testFile(strFilename.c_str());
         if(testFile.is_open())
-            return strFilename.c_str();
+            return strFilename;
 
         strFilename = GLOBAL_FILE_DIR + strBasename;
         testFile.open(strFilename.c_str());
         if(testFile.is_open())
-            return strFilename.c_str();
+            return strFilename;
 
         throw std::runtime_error("Could not find the file " + strBasename);
     }
@@ -54,7 +54,6 @@ bool LoadRGBATexture(const std::string& textureName, GLuint* textureID)
 		ilDeleteImages(1, &imageID);
 		return false;
 	}
-	success = false;
 	success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 	if (!success)
 	{

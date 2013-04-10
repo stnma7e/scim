@@ -12,8 +12,6 @@ namespace scim
 AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 {
     static const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
-	fprintf(stderr, "has textures: %s\n", pScene->HasTextures() ? "true" : "false");
-	fprintf(stderr, "has texture coords: %s\n", pScene->mMeshes[0]->HasTextureCoords(0) ? "true" : "false");
 
     GLint linked;
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linked);
@@ -73,7 +71,7 @@ AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 				}
 			} else
 			{
-				logging::log::emit<logging::Error>() << "cannot init texture" << logging::log::endl;
+				logging::log::emit<logging::Error>() << "no diffuse textures" << logging::log::endl;
 			}
 		}
 
