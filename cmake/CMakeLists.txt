@@ -22,7 +22,7 @@ SET (ROOT_PATH ${CMAKE_SOURCE_DIR}/..)
 #)
 
 SET (SUBDIRS
-	scim
+	intern
 )
 FOREACH (sbdir ${SUBDIRS})
 	ADD_SUBDIRECTORY (${sbdir})

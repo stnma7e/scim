@@ -175,7 +175,7 @@ bool Init()
 		logging::log::emit<logging::Info>() << "Using GLEW " << (const char*)glewGetString(GLEW_VERSION) << logging::log::endl;
 	}
 
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(0.8f, 1.0f, 0.8f, 0.0f);
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glViewport(0, 0, (GLsizei) window_w, (GLsizei) window_h);
@@ -209,7 +209,8 @@ void OnUpdate(F64 dtime)
 		OnResize(window_w, window_h);
 	}
 
-	ComputeMatricesFromInputs(dtime);
+	// if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT))
+		ComputeMatricesFromInputs(dtime);
 }
 void GLFWCALL OnResize(int width, int height)
 {

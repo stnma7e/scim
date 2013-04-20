@@ -55,13 +55,13 @@ MeshData::MeshData(GLuint program,
 	}
 
 
-	mvpMatrixUnf = glGetUniformLocation(program, "mvp");
-	texUnitUnf = glGetUniformLocation(program, "texUnit");
-	d_lightColorUnf = glGetUniformLocation(program, "d_light.color");
-	d_lightAmbIntUnf = glGetUniformLocation(program, "d_light.ambientIntensity");
+	uniforms.mvpMatrix = glGetUniformLocation(program, "mvp");
+	uniforms.texUnit = glGetUniformLocation(program, "texUnit");
+	uniforms.lightColor = glGetUniformLocation(program, "d_light.color");
+	uniforms.lightAmbInt = glGetUniformLocation(program, "d_light.ambientIntensity");
 
-	directionalLight.color = glm::vec3(1.0, 1.0, 1.0);
-	directionalLight.ambInt = 1.0;
+	lights.color = glm::vec3(1.0, 1.0, 1.0);
+	lights.ambInt = 1.0;
 
 	bufferInfo.vertexSize = (U16)vertexList.size();
 	bufferInfo.indexSize  =	(U16)indexList.size();
@@ -97,9 +97,9 @@ void IMesh::Render(const glm::mat4& transformMatrix)
 		glBindVertexArray(meshData->VAO);
 		glUseProgram(meshData->program);
 
-		glUniformMatrix4fv(meshData->mvpMatrixUnf, 1, GL_FALSE, &transformMatrix[0][0]);
-		glUniform3f(meshData->d_lightColorUnf, meshData->directionalLight.color.x, meshData->directionalLight.color.y, meshData->directionalLight.color.z);
-		glUniform1f(meshData->d_lightAmbIntUnf, meshData->directionalLight.ambInt);
+		glUniformMatrix4fv(meshData->uniforms.mvpMatrix, 1, GL_FALSE, &transformMatrix[0][0]);
+		glUniform3f(meshData->uniforms.lightColor, meshData->lights.color.x, meshData->lights.color.y, meshData->lights.color.z);
+		glUniform1f(meshData->uniforms.lightAmbInt, meshData->lights.ambInt);
 
 		glBindBuffer(GL_ARRAY_BUFFER, meshData->vertexBuffer);
 		glEnableVertexAttribArray(RenderFramework::VERTEX_POSITION);
@@ -118,7 +118,7 @@ void IMesh::Render(const glm::mat4& transformMatrix)
 			for (size_t i = 0; i < meshData->textureList.size(); ++i)
 			{
 				GLuint tex = meshData->textureList[i];
-				glUniform1i(meshData->texUnitUnf, 0);
+				glUniform1i(meshData->uniforms.texUnit, 0);
 				glActiveTexture(GL_TEXTURE0 + i);
 				glBindTexture(GL_TEXTURE_2D, tex);
 

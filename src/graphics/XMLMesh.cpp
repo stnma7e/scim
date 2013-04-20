@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string.h>
 #include <vector>
+#include <stdexcept>
 
 #include <GL/glfw.h>
 #include <IL/il.h>
@@ -21,14 +22,25 @@ namespace scim
 
 XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)
 {
-	std::string strVertex(meshNode.getChildNode("vertex").getText()),
-		strColors(meshNode.getChildNode("color").getText()),
-		strIndicies(meshNode.getChildNode("index").getText()),
-		strTextures(meshNode.getChildNode("texture").getText());
+	std::string strVertex,
+				strColors,
+				strIndicies,
+				strTextures;
+	try
+	{
+		strVertex = meshNode.getChildNode("vertex").getText();
+		strColors = meshNode.getChildNode("color").getText();
+		strIndicies = meshNode.getChildNode("index").getText();
+		strTextures = meshNode.getChildNode("texture").getText();
+	} catch (std::logic_error& e)
+	{
+		logging::log::emit<logging::Error>() << "XMLMesh not set up right: " << e.what() << logging::log::endl;
+	}
 
-	std::vector<F32> vertexList 	= ResourceManager::GetListFromSpacedString<F32>(strVertex);
-	std::vector<U32> indexList  	= ResourceManager::GetListFromSpacedString<U32>(strIndicies);
+	std::vector<F32> vertexList = ResourceManager::GetListFromSpacedString<F32>(strVertex);
+	std::vector<U32> indexList  = ResourceManager::GetListFromSpacedString<U32>(strIndicies);
 	std::vector<F32> colorList, textureList;
+	std::vector<GLuint> textureIDs;
 
 	if (!strColors.empty())
 	{
@@ -37,6 +49,13 @@ XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)
 	if (!strTextures.empty())
 	{
 		textureList = ResourceManager::GetListFromSpacedString<F32>(strTextures);
+
+		std::string textureName = meshNode.getChildNode("texture").getAttribute("name");
+		GLuint textureID;
+		if (ResourceManager::LoadRGBATexture(textureName, &textureID))
+		{
+			textureIDs.push_back(textureID);
+		}
 	}
 
 	std::vector<glm::vec3> vertVectorList;
@@ -108,20 +127,12 @@ XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)
 		textureVectorList.push_back(tmpVec3);
 	}
 
-	std::string textureName = meshNode.getChildNode("texture").getAttribute("name");
-	GLuint textureID;
-	std::vector<GLuint> textureIDs;
-	if (ResourceManager::LoadRGBATexture(textureName, &textureID))
-	{
-		textureIDs.push_back(textureID);
-	}
-
 	m_subMeshes.push_back(new MeshData(program,
 		vertVectorList,
 		indexList,
 		colorVectorList,
 		textureVectorList,
-		std::vector<glm::vec3>(),
+		std::vector<glm::vec3>(),	// empty normal list
 		textureIDs
 	));
 }

@@ -71,7 +71,7 @@ AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 				}
 			} else
 			{
-				logging::log::emit<logging::Error>() << "no diffuse textures" << logging::log::endl;
+				logging::log::emit<logging::Info>() << "no diffuse textures" << logging::log::endl;
 			}
 		}
 

@@ -89,7 +89,13 @@ std::string GetFileContents<std::string>(const std::string &strBasename)
 	std::stringstream fileData;
 	fileData << resFile.rdbuf();
 	resFile.close();
-	return fileData.str();
+	if (fileData.str().size())
+	{
+		return fileData.str();
+	} else
+	{
+		return std::string();
+	}
 }
 template <typename T>
 T GetFileContents(const std::string& strBasename)

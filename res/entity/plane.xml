@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<breed type="plane">
+	<mesh name="plane.dae" />
+	<program>
+		<shader type="vertex">
+			MatrixTransform
+		</shader>
+		<shader type="fragment">
+			StandardColors
+		</shader>
+	</program>
+</breed>
