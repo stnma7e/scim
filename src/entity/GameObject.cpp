@@ -1,5 +1,5 @@
-#include "GameObject.h"
-#include "component/ComponentCollection.h"
+#include "entity/GameObject.h"
+#include "entity/component/ComponentCollection.h"
 
 namespace scim
 {

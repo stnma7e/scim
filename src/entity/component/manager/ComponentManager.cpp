@@ -1,6 +1,6 @@
-#include "ComponentManager.h"
-#include "../GameComponentFactory.h"
-#include "../ComponentCollection.h"
+#include "entity/component/manager/ComponentManager.h"
+#include "entity/component/GameComponentFactory.h"
+#include "entity/component/ComponentCollection.h"
 
 #include <iostream>
 

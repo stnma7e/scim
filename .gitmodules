@@ -1,3 +1,0 @@
-[submodule "dep/fast_delegate"]
-	path = dep/fast_delegate
-	url = https://github.com/dreamcat4/FastDelegate.git

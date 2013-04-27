@@ -11,9 +11,10 @@ namespace scim
 class CreateGameObjectEvent: public GameEvent
 {
 	GameObject** m_pointerToBeAssigned;
-	XMLNode m_rootNode;
+	const std::string m_entityName;
+	const XMLNode m_rootNode;
 public:
-	CreateGameObjectEvent(const F32 timestamp, GameObject** pointerToBeAssigned, const XMLNode& rootNode) : GameEvent(0, timestamp),
+	CreateGameObjectEvent(const F32 timestamp, GameObject** pointerToBeAssigned, const XMLNode& rootNode) : GameEvent(CREATE_GAMEOBJECT, timestamp),
 		m_pointerToBeAssigned(pointerToBeAssigned),
 		m_rootNode(rootNode) { }
 

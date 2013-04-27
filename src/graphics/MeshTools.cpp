@@ -1,8 +1,8 @@
-#include "MeshTools.h"
-#include "AssimpMesh.h"
+#include "graphics/MeshTools.h"
+#include "graphics/AssimpMesh.h"
 #include "res/ResourceManager.h"
 #include "graphics/RenderFramework.h"
-#include "XMLMesh.h"
+#include "graphics/XMLMesh.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

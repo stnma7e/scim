@@ -1,4 +1,4 @@
-#include "AssimpMesh.h"
+#include "graphics/AssimpMesh.h"
 #include "res/ResourceManager.h"
 
 #include <iostream>

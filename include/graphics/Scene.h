@@ -1,6 +1,8 @@
 #ifndef SCENE_H_
 #define SCENE_H_
 
+#include "IMesh.h"
+
 #include <glm/glm.hpp>
 #include <vector>
 #include <stdio.h>
@@ -15,14 +17,16 @@ struct SceneNode
 	glm::mat4*		wmat;
 	glm::mat4* 		lmat;
 	U32 			parentNode;
+	IMesh*			mesh;
 };
 
 class Scene
 {
 	std::vector<glm::mat4> 		m_wmat;	// world transform matrix list
 	std::vector<glm::mat4> 		m_lmat;	// local transform matrix list
+	std::vector<const IMesh*>	m_meshes;
 
-	U32 m_parents[65536];
+	std::vector<U32> 			m_parents;
 public:
 	enum SceneConstant
 	{
@@ -46,7 +50,7 @@ public:
 	Scene();
 	void UpdateNodes();
 	void RenderNodes();
-	SceneNode CreateNode(U32 parentNode);
+	SceneNode CreateNode(U32 parentNode, IMesh* mesh);
 
 	const SceneNode GetNode(U32 nodeIndex);
 };

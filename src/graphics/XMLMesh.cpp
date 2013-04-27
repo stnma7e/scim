@@ -1,6 +1,6 @@
-#include "XMLMesh.h"
+#include "graphics/XMLMesh.h"
 #include "res/ResourceManager.h"
-#include "RenderFramework.h"
+#include "graphics/RenderFramework.h"
 
 #include <sstream>
 #include <iostream>

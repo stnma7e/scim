@@ -41,6 +41,16 @@ namespace scim
 
 int main(int argc, char* argv[])
 {
+	if (argc > 1)
+	{
+		std::cout << "USAGE: demo_scim" << std::endl;
+		for (int i = 1; i < argc; ++i)
+		{
+			std::cout << "\tinvalid arg: \"" << argv[i] << "\"" << std::endl;
+		}
+		return 1;
+	}
+
 	Scene sc;
 	EventManager em;
 
@@ -56,9 +66,9 @@ int main(int argc, char* argv[])
 
 	stopFlag = false;
 
-	std::string deerFile = ResourceManager::GetFileContents<std::string>("entity/deer.xml");
+	std::string cubeFile = ResourceManager::GetFileContents<std::string>("entity/cube.xml");
 	XMLResults* res = NULL;
-	XMLNode deerNode = XMLNode::parseString(deerFile.c_str(), "breed", res);
+	XMLNode cubeNode = XMLNode::parseString(cubeFile.c_str(), "breed", res);
 	if (res)
 	{
 		log::emit<logging::Error>() << "Invalid XML resource" << log::endl;
@@ -66,36 +76,25 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	g_eventManager->AddListener(GameObjectTools::CreateGameObject, 0);
-	g_eventManager->AddListener(shutdown_delegate, 1);
+	g_eventManager->AddListener(GameObjectTools::CreateGameObject, GameEvent::CREATE_GAMEOBJECT);
+	g_eventManager->AddListener(shutdown_delegate, GameEvent::SHUTDOWN);
 
-	const int numObjs = 3;
+	const int numObjs = 1;
 	GameObject* go[numObjs];
 
-	for (int i = 0; i < numObjs; ++i)
+	try
 	{
-		if (!g_eventManager->TriggerEvent(new CreateGameObjectEvent(1.0f, &go[i], deerNode)))
+		for (int i = 0; i < numObjs; ++i)
 		{
-			log::emit<logging::Error>() << "Failed to queue event" << log::endl;
+			if (!g_eventManager->TriggerEvent(new CreateGameObjectEvent(1.0f, &go[i], cubeNode)))
+			{
+				log::emit<logging::Error>() << "Failed to queue event" << log::endl;
+			}
 		}
-	}
-
-	size_t numMesh = 2;
-	std::vector<glm::mat4> matList(numMesh);
-
-	for (size_t i = 0; i < matList.size(); ++i)
+	} catch (std::runtime_error& e)
 	{
-		matList[i] = glm::scale(matList[i], glm::vec3(0.25, 0.25, 0.25));
-		matList[i] = matList[i] = glm::translate(matList[i], glm::vec3(5, 5, 5));
+		log::emit<logging::Error>() << e.what() << log::endl;
 	}
-	for (size_t i = 1; i < matList.size(); ++i)
-	{
-		matList[i] = glm::translate(matList[i], glm::vec3(i + 1, i + 1, i + 1));
-	}
-
-	AssimpMesh* asMesh = MeshTools::GetMesh<AssimpMesh>("cube");
-	// AssimpMesh* asMesh2 = MeshTools::GetMesh<AssimpMesh>("house");
-	AssimpMesh* mesh = MeshTools::GetMesh<AssimpMesh>("plane");
 
 	size_t i = 0;
 	size_t nFrames = 0;
@@ -126,21 +125,10 @@ int main(int argc, char* argv[])
 		RenderFramework::OnUpdate(currentTime - oldTime);
 		RenderFramework::PreRender();
 
-		for (size_t i = 0; i < matList.size(); i += 2)
-		{
-			if (asMesh)
-			{
-				mesh->Render((*RenderFramework::GetCamToClipMatrix()) * matList[i]);
-			}
-			if (mesh)
-			{
-				asMesh->Render((*RenderFramework::GetCamToClipMatrix()) * matList[i + 1]);
-			}
-		}
+		g_currentScene->UpdateNodes();
+		g_currentScene->RenderNodes();
 
 		RenderFramework::PostRender();
-
-		g_currentScene->UpdateNodes();
 		g_eventManager->OnUpdate(0.01f);
 
 		++i;

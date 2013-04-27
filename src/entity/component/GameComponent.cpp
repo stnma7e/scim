@@ -1,4 +1,4 @@
-#include "GameComponent.h"
+#include "entity/component/GameComponent.h"
 
 namespace scim
 {

@@ -28,7 +28,7 @@ SET (PROJ_HEADERS
 
 FOREACH (src IN ITEMS ${PROJ_SOURCE_PAIR})
 	SET (SRCS ${SRCS} ${ROOT_PATH}/src/${src}.cpp)
-	SET (HEADERS ${HEADERS} ${ROOT_PATH}/src/${src}.h)
+	SET (HEADERS ${HEADERS} ${ROOT_PATH}/include/${src}.h)
 ENDFOREACH (src)
 FOREACH (src IN ITEMS ${PROJ_SOURCES})
 	SET (SRCS ${SRCS} ${ROOT_PATH}/src/${src}.cpp)

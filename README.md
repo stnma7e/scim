@@ -25,7 +25,7 @@ All external libraries are open source and most are included in the 'dep' direct
 
 The library currently only builds on Linux, but could be easily modified to work on windoze.
 
-Confirmed build with gcc 4.7.2, gcc 4.8.1
+Confirmed build with gcc 4.7.2, gcc 4.8.0
 
 You can import "scim.sublime_project" into Sublime Text 2. The project file specifies a build directory, "build", and Ninja as the build program.
 

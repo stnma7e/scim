@@ -66,7 +66,7 @@ protected:
 public:
 	virtual ~IMesh();
 
-	virtual void Render(const glm::mat4& transformMatrix);
+	virtual void Render(const glm::mat4& transformMatrix) const;
 
 	const std::vector<MeshData*>* GetMeshData() const { return &m_subMeshes; }
 };

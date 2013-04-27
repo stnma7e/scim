@@ -1,5 +1,5 @@
-#include "IMesh.h"
-#include "RenderFramework.h"
+#include "graphics/IMesh.h"
+#include "graphics/RenderFramework.h"
 
 #include <iostream>
 #include <GL/glfw.h>
@@ -88,7 +88,7 @@ IMesh::~IMesh()
 		delete m_subMeshes[i];
 	}
 }
-void IMesh::Render(const glm::mat4& transformMatrix)
+void IMesh::Render(const glm::mat4& transformMatrix) const
 {
 	for (size_t i = 0; i < m_subMeshes.size(); ++i)
 	{

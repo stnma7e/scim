@@ -1,4 +1,4 @@
-#include "ComponentCollection.h"
+#include "entity/component/ComponentCollection.h"
 
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "GameComponentFactory.h"
+#include "entity/component/GameComponentFactory.h"
 
 #include <iostream>
 #include <xmlParser.h>

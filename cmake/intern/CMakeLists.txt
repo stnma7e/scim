@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES (
 )
 
 IF ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -g3 -O0 -std=c++11")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -pedantic -g3 -O0 -std=c++11")
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -include ${ROOT_PATH}/include/common/Types.h")
 ENDIF ()
 

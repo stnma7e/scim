@@ -1,4 +1,4 @@
-#include "EventManager.h"
+#include "event/EventManager.h"
 
 #include <iostream>
 #include <GL/glfw.h>

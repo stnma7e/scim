@@ -1,4 +1,4 @@
-#include "RenderFramework.h"
+#include "graphics/RenderFramework.h"
 #include "res/ResourceManager.h"
 #include "event/events/ShutdownGameEvent.h"
 #include "event/EventManager.h"
@@ -12,8 +12,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <logging/logging.h>
 #include <IL/il.h>
-#include <IL/ilu.h>
-#include <IL/ilut.h>
 
 namespace scim
 {

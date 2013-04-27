@@ -10,7 +10,7 @@ class ShutdownGameEvent: public GameEvent
 {
 	const char* m_shutdownString;
 public:
-	ShutdownGameEvent(const F32 timestamp, const char* shutdownString) : GameEvent(1, timestamp),
+	ShutdownGameEvent(const F32 timestamp, const char* shutdownString) : GameEvent(SHUTDOWN, timestamp),
 		m_shutdownString(shutdownString) { }
 
 	const char* GetShutdownString() const { return m_shutdownString; }
