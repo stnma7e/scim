@@ -2,6 +2,8 @@
 #include "res/ResourceManager.h"
 #include "event/events/ShutdownGameEvent.h"
 #include "event/EventManager.h"
+#include "input/InputTools.h"
+#include "input/GLFWWindowManager.h"
 
 #include <string>
 #include <string>
@@ -13,17 +15,16 @@
 #include <logging/logging.h>
 #include <IL/il.h>
 
+#define INIT_WINW 1024
+#define INIT_WINH 768
+
 namespace scim
 {
 	extern EventManager* g_eventManager;
+	extern IWindowManager* g_curWindow;
 
 namespace
 {
-	bool running;
-	static bool isResized;
-
-	U16 window_w = 1024;
-	U16 window_h = 768;
 	const char* window_title = "Scim";
 
 	glm::mat4 camToClipMatrix(0.0f);
@@ -57,20 +58,25 @@ namespace
 
 	void ComputeMatricesFromInputs(F32 dtime)
 	{
+		static const F32 initialFoV = 45.0f;					// Initial Field of View
+		static const F32 speed = 0.1f;							// 3 units / second
+		static const F32 mouseSpeed = 0.001f;
+
 		static glm::vec3 cameraPosition = glm::vec3(0, 0, 5);
 		static F32 horizontalAngle = 3.14f; 					// horizontal angle : toward -Z
 		static F32 verticalAngle = 0.0f; 						// vertical angle : 0, look at the horizon
-		static const F32 initialFoV = 45.0f;					// Initial Field of View
-		static const F32 speed = 0.1f;							// 3 units / second
-		static const F32 mouseSpeed = 0.005f;
 		static I32 xpos, ypos;									// mouse positions
+		static I32 window_w, window_h;
 
-		glfwGetMousePos(&xpos, &ypos);
-		// glfwSetMousePos((F32)window_w / 2, (F32)window_h / 2);
-		// horizontalAngle += mouseSpeed * dtime * F32(window_w / 2 - xpos);
-		// verticalAngle   += mouseSpeed * dtime * F32(window_h / 2 - ypos);
-		horizontalAngle = 3.14f + mouseSpeed * F32(window_w / 2 - xpos );
-		verticalAngle   = mouseSpeed * F32(window_h / 2 - ypos );
+		const Input* inptStruct = g_curWindow->GetCollectedInput();
+
+		xpos = inptStruct->mousePosX;
+		ypos = inptStruct->mousePosY;
+		window_w = inptStruct->window_w;
+		window_h = inptStruct->window_h;
+		
+		horizontalAngle = 3.14f + mouseSpeed * F32(window_w / 2 - xpos);
+		verticalAngle   = mouseSpeed * F32(window_h / 2 - ypos);
 
 		glm::vec3 direction = glm::vec3(
 			cos(verticalAngle) * sin(horizontalAngle),
@@ -84,22 +90,23 @@ namespace
 		);
 		glm::vec3 up = glm::cross(right, direction);
 
-		if (glfwGetKey(GLFW_KEY_UP) == GLFW_PRESS)
+		// Move forward
+		if (inptStruct->specialKeys & SCIM_KEY_UP)
 		{
 			cameraPosition += direction * dtime * speed;
 		};
 		// Move backward
-		if (glfwGetKey(GLFW_KEY_DOWN) == GLFW_PRESS)
+		if (inptStruct->specialKeys & SCIM_KEY_DOWN)
 		{
 			cameraPosition -= direction * dtime * speed;
 		};
 		// Strafe right
-		if (glfwGetKey(GLFW_KEY_RIGHT) == GLFW_PRESS)
+		if (inptStruct->specialKeys & SCIM_KEY_RIGHT)
 		{
 			cameraPosition += right * dtime * speed;
 		};
 		// Strafe left
-		if (glfwGetKey(GLFW_KEY_LEFT)  == GLFW_PRESS)
+		if (inptStruct->specialKeys & SCIM_KEY_LEFT)
 		{
 			cameraPosition -= right * dtime * speed;
 		};
@@ -109,11 +116,11 @@ namespace
 			cameraPosition + direction,
 			up
 		);
-		float FoV = initialFoV - 5 * glfwGetMouseWheel();
+		float FoV = initialFoV - 5;
 
 		camToClipMatrix = glm::perspective(FoV, (F32)window_w / (F32)window_h, 0.1f, 100.0f) * lookAtMatrix;
 
-		glViewport(0, 0, (GLsizei) window_w, (GLsizei) window_w);
+		glViewport(0, 0, (GLsizei)window_w, (GLsizei)window_w);
 	}
 }
 
@@ -131,33 +138,12 @@ bool Init()
 
 	// GLFW window creation and OpenGL context initialization
 	{
-		if (glfwInit() != GL_TRUE)
-			return false;
-
-		int glfwVers[3];
-		glfwGetVersion(&glfwVers[0], &glfwVers[1], &glfwVers[2]);
-		logging::log::emit<logging::Info>() << "Using GLFW " << glfwVers[0] << '.' << glfwVers[1] << '.' << glfwVers[2] << logging::log::endl;
-
-		if (!glfwOpenWindow(window_w, window_h, 8, 8, 8, 8, 24, 8, GLFW_WINDOW))
+		g_curWindow = new GLFWWindowManager(window_title, INIT_WINW, INIT_WINH, false);
+		if (!g_curWindow)
 		{
+			logging::log::emit<logging::Error>() << "glfw failed to open window" << logging::log::endl;
 			return false;
 		}
-		glfwDisable(GLFW_MOUSE_CURSOR);
-
-		glfwSetWindowTitle(window_title);
-		glfwSetWindowSizeCallback(RenderFramework::OnResize);
-
-		logging::log::emit<logging::Info>() <<
-			"Using hardware accelerated graphics? " << (glfwGetWindowParam(GLFW_ACCELERATED) ? "True" : "False") <<
-			logging::log::endl;
-		logging::log::emit<logging::Info>() <<
-			"Refresh rate? " << glfwGetWindowParam(GLFW_REFRESH_RATE) << logging::log::endl;
-		logging::log::emit<logging::Info>() <<
-			"OpenGL version? " << glfwGetWindowParam(GLFW_OPENGL_VERSION_MAJOR) << '.' <<
-			glfwGetWindowParam(GLFW_OPENGL_VERSION_MINOR) << logging::log::endl;
-		logging::log::emit<logging::Info>() <<
-			"Using debug version of OpenGL? " << (glfwGetWindowParam(GLFW_OPENGL_DEBUG_CONTEXT) ? "True" : "False") <<
-			logging::log::endl;
 	}
 
 	// GLEW OpenGL extension handling
@@ -167,7 +153,6 @@ bool Init()
 		{
 		  /* Problem: glewInit failed, something is seriously wrong. */
 		  fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		  Shutdown();
 		  return false;
 		}
 		logging::log::emit<logging::Info>() << "Using GLEW " << (const char*)glewGetString(GLEW_VERSION) << logging::log::endl;
@@ -176,7 +161,7 @@ bool Init()
 	glClearColor(0.8f, 1.0f, 0.8f, 0.0f);
 	glClearDepth(1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, (GLsizei) window_w, (GLsizei) window_h);
+	glViewport(0, 0, (GLsizei) INIT_WINW, (GLsizei) INIT_WINH);
 
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
@@ -188,44 +173,22 @@ bool Init()
 	glDepthFunc(GL_LESS);
 	glDepthRange(0.0f, 1.0f);
 
-	running = true;
-
 	printf("\n");
 	return true;
 }
 void OnUpdate(F64 dtime)
 {
-	running = !glfwGetKey(GLFW_KEY_ESC) &&
-			glfwGetWindowParam(GLFW_OPENED)
-	;
-	if (!running)
+	if (g_curWindow->GetCollectedInput()->specialKeys & SCIM_KEY_ESC)
 	{
-		g_eventManager->QueueEvent(new ShutdownGameEvent(1.0f, "RenderFramework received 'ESC' keypress"));
-	}
-	if(isResized)
-	{
-		OnResize(window_w, window_h);
+		g_eventManager->QueueEvent(new ShutdownGameEvent(1.0f, "Window received 'ESC' keypress"));
 	}
 
 	// if (glfwGetMouseButton(GLFW_MOUSE_BUTTON_LEFT))
 		ComputeMatricesFromInputs(dtime);
 }
-void GLFWCALL OnResize(int width, int height)
-{
-	window_w = width;
-	window_h = height;
-}
-void PreRender()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-void PostRender()
-{
-	glfwSwapBuffers();
-}
 void Shutdown()
 {
-	glfwTerminate();
+	delete g_curWindow;
 }
 
 GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename)

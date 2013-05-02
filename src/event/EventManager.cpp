@@ -1,7 +1,7 @@
 #include "event/EventManager.h"
 
 #include <iostream>
-#include <GL/glfw.h>
+#include <GL/glfw3.h>
 
 namespace scim
 {

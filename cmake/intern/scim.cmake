@@ -15,6 +15,10 @@ SET (PROJ_SOURCE_PAIR
 	graphics/MeshTools
 	graphics/Scene
 	res/ResourceManager
+	input/InputTools
+	input/XWindowManager
+	input/GLFWWindowManager
+	net/UnixSocket
 )
 SET (PROJ_SOURCES
 )
@@ -24,6 +28,9 @@ SET (PROJ_HEADERS
 	event/GameEvent
 	event/events/CreateGameObjectEvent
 	event/events/ShutdownGameEvent
+	input/IWindowManager
+	input/KeyCode
+	net/ISocket
 )
 
 FOREACH (src IN ITEMS ${PROJ_SOURCE_PAIR})
@@ -41,12 +48,16 @@ ADD_LIBRARY(${libname} ${SRCS} ${HEADERS})
 ADD_LIBRARY(xmlParser ${ROOT_PATH}/dep/xmlParser/xmlParser.cpp)
 
 SET (LINK_LIBS
-	glfw
+	glfw3
 	GLEW
 	GL
 	xmlParser
 	assimp
 	IL
+	X11
+	Xi
+	Xxf86vm
+	Xrandr
 )
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${libname} ${lib})

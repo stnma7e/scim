@@ -3,7 +3,7 @@
 
 #include "IMesh.h"
 
-#include <GL/glfw.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <assimp/scene.h>
 #include <string>

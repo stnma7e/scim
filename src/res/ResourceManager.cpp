@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <string.h>
 
-#include <GL/glfw.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <IL/il.h>
 #include <logging/logging.h>

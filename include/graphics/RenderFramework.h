@@ -2,7 +2,6 @@
 #define RENDERFRAMEWORK_H_
 
 #include <GL/glew.h>
-#include <GL/glfw.h>
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
@@ -22,10 +21,8 @@ namespace RenderFramework
 
 	bool Init();
 	void OnUpdate(F64 dtime);
-	void PreRender();
-	void PostRender();
-	void Shutdown();
 	void OnResize(int width, int height);
+	void Shutdown();
 
 	GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename);
 	bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList);

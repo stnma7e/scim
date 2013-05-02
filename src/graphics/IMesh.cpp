@@ -2,7 +2,6 @@
 #include "graphics/RenderFramework.h"
 
 #include <iostream>
-#include <GL/glfw.h>
 
 namespace scim
 {

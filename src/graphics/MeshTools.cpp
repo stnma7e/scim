@@ -9,7 +9,7 @@
 #include <assimp/postprocess.h>
 #include <logging/logging.h>
 #include <xmlParser.h>
-#include <GL/glfw.h>
+#include <GL/glew.h>
 #include <logging/logging.h>
 
 #include <map>

@@ -11,6 +11,10 @@
 #include "event/events/ShutdownGameEvent.h"
 #include "graphics/XMLMesh.h"
 #include "graphics/MeshTools.h"
+#include "net/UnixSocket.h"
+#include "ConnectPacket.h"
+#include "input/InputTools.h"
+#include "input/XWindowManager.h"
 
 #include <iostream>
 #include <string>
@@ -18,11 +22,13 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <errno.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <logging/logging.h>
 #include <IL/il.h>
+#include <GL/glfw3.h>
 
 using namespace scim;
 using namespace logging;
@@ -37,6 +43,7 @@ namespace scim
 {
 	Scene*						g_currentScene;
 	EventManager*				g_eventManager;
+	IWindowManager* 			g_curWindow;
 }
 
 int main(int argc, char* argv[])
@@ -49,6 +56,44 @@ int main(int argc, char* argv[])
 			std::cout << "\tinvalid arg: \"" << argv[i] << "\"" << std::endl;
 		}
 		return 1;
+	}
+
+	UnixSocket sock("127.0.0.1", "13572");
+	for (size_t i = 0; i < 1; ++i)
+	{
+		const size_t size = sizeof(ConnectPacket);
+		ConnectPacket c =
+		{ 
+			0x0000,
+			0x3,
+			0x8,
+			"sam",
+			"gatorade"
+		};
+		if (!sock.Send((char*)&c, size))
+		{
+			printf("send failed\n");
+			return 1;
+		}
+		char buf[501];
+		memset(buf, 0, sizeof(buf));
+		I32 len = 0; // sock.Recieve(buf, 500);
+		if (len == -1)
+		{
+			U32 errsv = errno;
+			if (errsv == 107)
+				printf("no connection. is server down?\n");
+			else
+				printf("errno: %d\n", errsv);
+			return 1;
+		}
+		printf("len: %d\n", len);
+		printf("hex: ");
+		for (I32 i = 0; i < len; ++i)
+		{
+			printf("%x ", buf[i]);
+		}
+		printf("\n");
 	}
 
 	Scene sc;
@@ -122,13 +167,15 @@ int main(int argc, char* argv[])
 
 		}
 
-		RenderFramework::OnUpdate(currentTime - oldTime);
-		RenderFramework::PreRender();
+		g_curWindow->CollectInputs();
 
+		RenderFramework::OnUpdate(currentTime - oldTime);
 		g_currentScene->UpdateNodes();
+		g_curWindow->PreRender();
+
 		g_currentScene->RenderNodes();
 
-		RenderFramework::PostRender();
+		g_curWindow->PostRender();
 		g_eventManager->OnUpdate(0.01f);
 
 		++i;

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <GL/glfw.h>
+#include <GL/glew.h>
 #include <logging/logging.h>
 
 namespace scim

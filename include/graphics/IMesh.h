@@ -2,7 +2,6 @@
 #define IMESH_H_
 
 #include <GL/glew.h>
-#include <GL/glfw.h>
 #include <glm/glm.hpp>
 
 #include <vector>

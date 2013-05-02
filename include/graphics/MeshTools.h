@@ -5,7 +5,6 @@
 #include "XMLMesh.h"
 
 #include <string>
-#include <GL/glfw.h>
 
 namespace scim
 {
