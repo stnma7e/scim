@@ -12,9 +12,11 @@
 #include "graphics/XMLMesh.h"
 #include "graphics/MeshTools.h"
 #include "net/UnixSocket.h"
-#include "ConnectPacket.h"
 #include "input/InputTools.h"
 #include "input/XWindowManager.h"
+#include "input/NetworkInputHandler.h"
+
+#include "ScimProtocol.h"
 
 #include <iostream>
 #include <string>
@@ -44,13 +46,16 @@ namespace scim
 	Scene*						g_currentScene;
 	EventManager*				g_eventManager;
 	IWindowManager* 			g_curWindow;
+	ISocket*					g_authSocket;
+	ISocket*					g_portalSocket;
+	NetworkInputHandler*		g_netInputHandler;
 }
 
 int main(int argc, char* argv[])
 {
 	if (argc > 1)
 	{
-		std::cout << "USAGE: demo_scim" << std::endl;
+		printf("USAGE: %s\n", argv[0]);
 		for (int i = 1; i < argc; ++i)
 		{
 			std::cout << "\tinvalid arg: \"" << argv[i] << "\"" << std::endl;
@@ -58,32 +63,38 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	UnixSocket sock("127.0.0.1", "13572");
+	UnixSocket asock("127.0.0.1", "13572");
+	g_authSocket = &asock;
+
+	std::string portalIP, portalPort;
+
+	const size_t size = sizeof(Connect);
+	Connect c =
+	{
+		0x0000,
+		0x15,
+		0xA,
+		"svdelmerico@gmail.com",
+		"gatorade12"
+	};
 	for (size_t i = 0; i < 1; ++i)
 	{
-		const size_t size = sizeof(ConnectPacket);
-		ConnectPacket c =
-		{ 
-			0x0000,
-			0x3,
-			0x8,
-			"sam",
-			"gatorade"
-		};
-		if (!sock.Send((char*)&c, size))
+		if (!g_authSocket->BlockSend((char*)&c, size))
 		{
 			printf("send failed\n");
 			return 1;
 		}
 		char buf[501];
 		memset(buf, 0, sizeof(buf));
-		I32 len = 0; // sock.Recieve(buf, 500);
+		I32 len = g_authSocket->Recieve(buf, 500);
 		if (len == -1)
 		{
 			U32 errsv = errno;
 			if (errsv == 107)
 				printf("no connection. is server down?\n");
-			else
+			else if (errsv == 11)
+				printf("nonblock no connection\n");
+			else 
 				printf("errno: %d\n", errsv);
 			return 1;
 		}
@@ -94,13 +105,54 @@ int main(int argc, char* argv[])
 			printf("%x ", buf[i]);
 		}
 		printf("\n");
+		printf("str: %s\n", buf);
+		U32 id = 0;
+		if ((id = buf[0]))
+		{
+			printf("auth'd: %u\n", id);
+			RequestPortal rqp =
+			{
+				0x0300,
+				id
+			};
+			g_authSocket->BlockSend((char*)&rqp, sizeof(RequestPortal));
+
+			const I32 bufSize = 501;
+			char buf[bufSize];
+			memset(buf, 0, sizeof(buf));
+			I32 len = g_authSocket->Recieve(buf, 500);
+			printf("hex: ");
+			for (I32 i = 0; i < len; ++i)
+			{
+				printf("%x ", buf[i]);
+			}
+			puts("");
+			printf("str: %s\n", buf);
+			I32 ilen = 0;
+			for (;;++ilen)
+			{
+				if (buf[ilen] == ' ')
+				{
+					buf[ilen] ='\0';
+					break;
+				}
+			}
+			portalIP.assign(buf, ilen+1);
+			portalPort.assign(&buf[ilen+1], bufSize - (ilen + 1));
+		}
 	}
 
 	Scene sc;
 	EventManager em;
+	UnixSocket psock(portalIP, portalPort);
+	NetworkInputHandler nethndl(&psock);
 
-	g_currentScene = &sc;
-	g_eventManager = &em;
+	g_currentScene 		= &sc;
+	g_eventManager 		= &em;
+	g_portalSocket 		= &psock;
+	g_netInputHandler 	= &nethndl;
+
+	g_portalSocket->BlockSend((char*)&c, size);
 
 	if (!init())
 	{
@@ -168,6 +220,7 @@ int main(int argc, char* argv[])
 		}
 
 		g_curWindow->CollectInputs();
+		g_netInputHandler->CollectInputs();
 
 		RenderFramework::OnUpdate(currentTime - oldTime);
 		g_currentScene->UpdateNodes();

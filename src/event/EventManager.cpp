@@ -121,4 +121,10 @@ bool EventManager::OnUpdate(F64 maxSeconds)
 		return false;
 }
 
+EventManager::~EventManager()
+{
+	// flush event queue
+	while (!OnUpdate(kINFINITE));
+}
+
 }

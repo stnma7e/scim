@@ -1,6 +1,7 @@
 #ifndef IWINDOWMANAGER_H_
 #define IWINDOWMANAGER_H_
 
+#include "IInputHandler.h"
 #include "KeyCode.h"
 
 namespace scim
@@ -17,7 +18,7 @@ struct Input
 	I32 window_w, window_h;
 };
 
-class IWindowManager
+class IWindowManager : public IInputHandler
 {
 protected:
 	void (*m_resizeCallback)(I32 width, I32 height);
@@ -31,7 +32,7 @@ public:
 
 	virtual void CollectInputs() = 0;
 	virtual void PreRender() = 0;
-	virtual void PostRender() = 0;
+	virtual void PostRender() = 0;	
 
 	virtual const Input* GetCollectedInput() const
 	{

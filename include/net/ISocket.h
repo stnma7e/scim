@@ -11,8 +11,8 @@ class ISocket
 public:
 	virtual ~ISocket() { }
 
-	virtual bool Send(char* data, size_t length) = 0;
-	virtual I32 Recieve(void* buffer, U32 numBytes) = 0;
+	virtual bool BlockSend(char* data, size_t length) = 0;
+	virtual I32 Recieve(void* buffer, U32 numBytes) const = 0;
 };
 
 }

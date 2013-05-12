@@ -18,6 +18,7 @@ SET (PROJ_SOURCE_PAIR
 	input/InputTools
 	input/XWindowManager
 	input/GLFWWindowManager
+	input/NetworkInputHandler
 	net/UnixSocket
 )
 SET (PROJ_SOURCES

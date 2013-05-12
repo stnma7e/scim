@@ -5,6 +5,12 @@ PROJECT (${PROJ_NAME})
 
 SET (ROOT_PATH ${CMAKE_SOURCE_DIR}/..)
 
+IF (${CMAKE_GENERATOR} STREQUAL Ninja)
+	SET (builderName ninja)
+ELSEIF (${CMAKE_GENERATOR} STREQUAL Ninja)
+	SET (builderName make)
+ENDIF (${CMAKE_GENERATOR} STREQUAL Ninja)
+
 #INCLUDE (ExternalProject)
 #ExternalProject_Add(glew
 #	SOURCE_DIR ${ROOT_PATH}/dep/glew-1.9.0

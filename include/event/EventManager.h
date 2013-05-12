@@ -23,6 +23,8 @@ public:
 	virtual bool AbortEvent(const EventType inType, bool allOfType = false);
 
 	virtual bool OnUpdate(F64 maxSeconds = kINFINITE);
+
+	~EventManager();
 };
 
 }

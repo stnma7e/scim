@@ -15,14 +15,14 @@ namespace scim
 
 class UnixSocket : public ISocket
 {
-	U32 m_socket;
+	U32 m_sockfd;
 	struct addrinfo* m_servinfo;
 public:
 	UnixSocket(const std::string& destAddr, const std::string& portNumber);
 	~UnixSocket();
 
-	bool Send(char* data, size_t length);
-	I32 Recieve(void* buffer, U32 numBytes);
+	bool BlockSend(char* data, size_t length);
+	I32 Recieve(void* buffer, U32 numBytes) const;
 };
 
 }

@@ -5,11 +5,13 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
+#include <sys/poll.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <netdb.h>
-
-#define MAXRCVLEN 500
 
 namespace scim
 {
@@ -17,6 +19,7 @@ namespace scim
 UnixSocket::UnixSocket(const std::string& destAddr, const std::string& portNumber)
 {
 	int status;
+	int on = 1;
 	struct addrinfo hints;
 
 	memset(&hints, 0, sizeof(hints));
@@ -30,14 +33,21 @@ UnixSocket::UnixSocket(const std::string& destAddr, const std::string& portNumbe
 	    exit(1);
 	}
 
-	m_socket = socket(m_servinfo->ai_family, m_servinfo->ai_socktype, m_servinfo->ai_protocol);
+	m_sockfd = socket(m_servinfo->ai_family, m_servinfo->ai_socktype, m_servinfo->ai_protocol);
+
+	if ((status = ioctl(m_sockfd, FIONBIO, (char *)&on)) < 0)
+	{
+		perror("ioctl() failed");
+		close(m_sockfd);
+		exit(1);
+	}
 }
 UnixSocket::~UnixSocket()
 {
-	close (m_socket);
+	close (m_sockfd);
 }
 
-bool UnixSocket::Send(char* data, size_t length)
+bool UnixSocket::BlockSend(char* data, size_t length)
 {
 	size_t loc;
 	printf("sent hex: ");
@@ -46,7 +56,7 @@ bool UnixSocket::Send(char* data, size_t length)
 		printf("%x ", data[i]);
 	}
 	puts("");
-	I32 bytes_sent = sendto(m_socket, data, length, 0, m_servinfo->ai_addr, m_servinfo->ai_addrlen);
+	I32 bytes_sent = sendto(m_sockfd, data, length, 0, m_servinfo->ai_addr, m_servinfo->ai_addrlen);
 	printf("bytes_sent: %x\n", bytes_sent);
 	if (bytes_sent > 1)
 	{
@@ -55,7 +65,7 @@ bool UnixSocket::Send(char* data, size_t length)
 			loc += bytes_sent;
 			data += loc;
 			length -= loc;
-			bytes_sent = sendto(m_socket, data, length, 0, m_servinfo->ai_addr, m_servinfo->ai_addrlen);
+			bytes_sent = sendto(m_sockfd, data, length, 0, m_servinfo->ai_addr, m_servinfo->ai_addrlen);
 		}
 	} else
 	{
@@ -66,12 +76,28 @@ bool UnixSocket::Send(char* data, size_t length)
 
 	return true;
 }
-I32 UnixSocket::Recieve(void* buffer, U32 numBytes)
+I32 UnixSocket::Recieve(void* buffer, U32 numBytes) const
 {
-	struct sockaddr_storage their_addr;
-	socklen_t addr_len = sizeof(their_addr);
+	int status;
+	struct pollfd ufds[1];
+	ufds[0].fd = m_sockfd;
+	ufds[0].events = POLLIN;
+	status = poll(ufds, 1, 50);
+	if (status == -1) 
+	{
+		perror("poll"); // error occurred in poll()
+	}
 
-	return recvfrom(m_socket, buffer, numBytes, 0, (sockaddr*)&their_addr, &addr_len);
+	if (status)
+	{
+		struct sockaddr_storage their_addr;
+		socklen_t addr_len = sizeof(their_addr);
+
+		return recvfrom(m_sockfd, buffer, numBytes, 0, (sockaddr*)&their_addr, &addr_len);
+	} else
+	{
+		return 0;
+	}
 }
 
 }

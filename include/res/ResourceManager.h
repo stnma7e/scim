@@ -18,7 +18,7 @@ T GetFileContents(const std::string &strBasename);
 
 bool LoadRGBATexture(const std::string& textureName, GLuint* textureID);
 
-template<typename T>
+template <typename T>
 static T ato(const char* c);
 bool IsFloatDevice(char t);
 
