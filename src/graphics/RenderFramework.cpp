@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <logging/logging.h>
 #include <IL/il.h>
 
 #define INIT_WINW 1024
@@ -141,7 +140,7 @@ bool Init()
 		g_curWindow = new GLFWWindowManager(window_title, INIT_WINW, INIT_WINH, false);
 		if (!g_curWindow)
 		{
-			logging::log::emit<logging::Error>() << "glfw failed to open window" << logging::log::endl;
+			LOG_ERR("glfw failed to open window");
 			return false;
 		}
 	}
@@ -155,7 +154,7 @@ bool Init()
 		  fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		  return false;
 		}
-		logging::log::emit<logging::Info>() << "Using GLEW " << (const char*)glewGetString(GLEW_VERSION) << logging::log::endl;
+		LOG_INFO("Using GLEW %s", (const char*)glewGetString(GLEW_VERSION));
 	}
 
 	glClearColor(0.8f, 1.0f, 0.8f, 0.0f);
@@ -195,13 +194,13 @@ GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename)
 {
 	try
 	{
-		std::string shaderData = ResourceManager::GetFileContents<std::string>("graphics/shader/" + strShaderFilename);
+		std::string shaderData = ResourceManager::GetFileContents("graphics/shader/" + strShaderFilename);
 		GLuint shader_id = MakeShader(eShaderType, shaderData);
 		return shader_id;
 	}
 	catch(std::exception &e)
 	{
-		logging::log::emit<logging::Error>() << e.what() << logging::log::endl;
+		LOG_ERR("%s", e.what());
 		return 0;
 	}
 }
@@ -225,7 +224,7 @@ bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)
 	glGetProgramInfoLog(program, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 	if (InfoLogLength > 1)
 	{
-		logging::log::emit<logging::Error>() << &ProgramErrorMessage[0] << logging::log::endl;
+		LOG_ERR("%s", &ProgramErrorMessage[0]);
 		return false;
 	}
 

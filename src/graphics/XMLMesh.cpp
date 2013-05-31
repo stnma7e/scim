@@ -13,7 +13,6 @@
 #include <GL/glfw.h>
 #include <IL/il.h>
 #include <IL/ilu.h>
-#include <logging/logging.h>
 
 #define ARRAY_COUNT( array ) (sizeof( array ) / (sizeof( array[0] ) * (sizeof( array ) != sizeof(void*) || sizeof( array[0] ) <= sizeof(void*))))
 
@@ -34,7 +33,7 @@ XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)
 		strTextures = meshNode.getChildNode("texture").getText();
 	} catch (std::logic_error& e)
 	{
-		logging::log::emit<logging::Error>() << "XMLMesh not set up right: " << e.what() << logging::log::endl;
+		LOG_ERR("XMLMesh not set up right: %s", e.what());
 	}
 
 	std::vector<F32> vertexList = ResourceManager::GetListFromSpacedString<F32>(strVertex);

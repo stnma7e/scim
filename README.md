@@ -1,7 +1,7 @@
 scim
 ====
 
-Toy game engine in C++
+Toy game and engine in C++
 
 Still a work in progress; not yet ready for real use.
 
@@ -21,7 +21,7 @@ Libs needed:
 - Assimp, for mesh loading; (git)
 - DevIL, for image loading
 
-All external libraries are open source and most are included in the 'dep' directory. If not a quick Google search will find you what you need. The headers of all the libraries are already included in the build as system header, so the only thing the compiler should complain about is linking. Those marked with (git) are added as repo submodules and are pulled in from the official repository.
+All external libraries are open source and are included in the 'dep' directory. If not a quick Google search will find you what you need. The headers of all the libraries are already included in the build as system header, so the only thing the compiler should complain about is linking. Those marked with (git) are added as repo submodules and are pulled in from the official repository.
 
 The library currently only builds on Linux, but could be easily modified to work on windoze.
 

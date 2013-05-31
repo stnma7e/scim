@@ -1,7 +1,7 @@
 #ifndef CONNECTPACKET_H_
 #define CONNECTPACKET_H_
 
-#pragma pack(push, 2)
+#pragma pack(push, 1)
 	struct Connect
 	{
 		U16 header;

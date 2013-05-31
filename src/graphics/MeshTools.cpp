@@ -7,13 +7,12 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <logging/logging.h>
 #include <xmlParser.h>
 #include <GL/glew.h>
-#include <logging/logging.h>
 
 #include <map>
 #include <vector>
+#include <iostream>
 
 namespace scim
 {
@@ -36,12 +35,12 @@ namespace
 			0
 		};
 
-		std::string entityFileContents = ResourceManager::GetFileContents<std::string>("entity/" + entityName + ".xml");
+		std::string entityFileContents = ResourceManager::GetFileContents("entity/" + entityName + ".xml");
 		XMLResults* res = NULL;
 		XMLNode entityNode = XMLNode::parseString(entityFileContents.c_str(), "breed", res);
 		if (res)
 		{
-			logging::log::emit<logging::Error>() << "Invalid XML resource: " << entityName.c_str() << logging::log::endl;
+			LOG_ERR("Invalid XML resource: %s", entityName.c_str());
 			return voidData;
 		}
 		std::string meshName = entityNode.getChildNode("mesh").getAttribute("name");
@@ -90,7 +89,7 @@ namespace
 			return meshMap.find(meshName)->second;
 		}
 
-		std::string fileContents = ResourceManager::GetFileContents<std::string>("graphics/mesh/" + meshName);
+		std::string fileContents = ResourceManager::GetFileContents("graphics/mesh/" + meshName);
 		Assimp::Importer importer;
 
 		const aiScene* scene = importer.ReadFileFromMemory(fileContents.c_str(),
@@ -103,7 +102,7 @@ namespace
 
 		if(!scene)
 	 	{
-			logging::log::emit<logging::Error>() << importer.GetErrorString() << logging::log::endl;
+			LOG_ERR("%s", importer.GetErrorString());
 		}
 
 		meshMap[meshName] = new AssimpMesh(scene, program);
@@ -121,12 +120,12 @@ namespace
 			return meshMap.find(meshName)->second;
 		}
 
-		std::string meshSource = ResourceManager::GetFileContents<std::string>("graphics/mesh/" + meshName);
+		std::string meshSource = ResourceManager::GetFileContents("graphics/mesh/" + meshName);
 		XMLResults* res = NULL;
 		XMLNode meshNode = XMLNode::parseString(meshSource.c_str(), "mesh", res);
 		if (res)
 		{
-			logging::log::emit<logging::Error>() << "Invalid mesh resource" << logging::log::endl;
+			LOG_ERR("invlaid mesh resource");
 		}
 
 		meshMap[meshName] = new XMLMesh(meshNode, program);

@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <logging/logging.h>
 #include <GL/glfw3.h>
 
 namespace scim

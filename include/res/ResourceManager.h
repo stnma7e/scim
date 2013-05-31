@@ -13,8 +13,7 @@ namespace scim
 namespace ResourceManager
 {
 
-template <typename T>
-T GetFileContents(const std::string &strBasename);
+std::string GetFileContents(const std::string &strBasename);
 
 bool LoadRGBATexture(const std::string& textureName, GLuint* textureID);
 

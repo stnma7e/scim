@@ -1,0 +1,415 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ARRAY_COUNT	src/graphics/XMLMesh.cpp	17;"	d	file:
+ASSIMPMESH_H_	include/graphics/AssimpMesh.h	2;"	d
+ASSIMPTOOLS_H_	include/graphics/MeshTools.h	2;"	d
+AbortEvent	src/event/EventManager.cpp	/^bool EventManager::AbortEvent(const EventType inType, bool allOfType)$/;"	f	class:scim::EventManager
+AddComponent	src/entity/component/ComponentCollection.cpp	/^void ComponentCollection::AddComponent(GameComponent* gc)$/;"	f	class:scim::ComponentCollection
+AddListener	src/event/EventManager.cpp	/^bool EventManager::AddListener(const EventListenerDelegate& eventDelegate, EventType type)$/;"	f	class:scim::EventManager
+AssimpMesh	include/graphics/AssimpMesh.h	/^class AssimpMesh: public IMesh$/;"	c	namespace:scim
+AssimpMesh	src/graphics/AssimpMesh.cpp	/^AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)$/;"	f	class:scim::AssimpMesh
+AttributeLocations	include/graphics/RenderFramework.h	/^	enum AttributeLocations$/;"	g	namespace:scim::RenderFramework
+BlockSend	src/net/UnixSocket.cpp	/^bool UnixSocket::BlockSend(char* data, size_t length)$/;"	f	class:scim::UnixSocket
+COMPONENTCOLLECTION_H_	include/entity/component/ComponentCollection.h	2;"	d
+COMPONENTMANAGER_H_	include/entity/component/manager/ComponentManager.h	2;"	d
+CONNECTPACKET_H_	src/ScimProtocol.h	2;"	d
+CREATEGAMEOBJECTEVENT_H_	include/event/events/CreateGameObjectEvent.h	2;"	d
+CREATE_GAMEOBJECT	include/event/GameEvent.h	/^		CREATE_GAMEOBJECT,$/;"	e	enum:scim::GameEvent::Type
+CollectInputs	src/input/GLFWWindowManager.cpp	/^void GLFWWindowManager::CollectInputs()$/;"	f	class:scim::GLFWWindowManager
+CollectInputs	src/input/NetworkInputHandler.cpp	/^void NetworkInputHandler::CollectInputs()$/;"	f	class:scim::NetworkInputHandler
+CollectInputs	src/input/XWindowManager.cpp	/^void XWindowManager::CollectInputs()$/;"	f	class:scim::XWindowManager
+ComponentCollection	include/entity/component/ComponentCollection.h	/^class ComponentCollection$/;"	c	namespace:scim
+ComponentList	include/entity/component/manager/ComponentManager.h	/^typedef std::list<GameComponent*> ComponentList;$/;"	t	namespace:scim
+ComponentManager	include/entity/component/manager/ComponentManager.h	/^class ComponentManager$/;"	c	namespace:scim
+ComponentManager	src/entity/component/manager/ComponentManager.cpp	/^ComponentManager::ComponentManager(GameComponent::Type type) : m_type(type)$/;"	f	class:scim::ComponentManager
+ComputeMatricesFromInputs	src/graphics/RenderFramework.cpp	/^	void ComputeMatricesFromInputs(F32 dtime)$/;"	f	namespace:scim::__anon5
+Connect	src/ScimProtocol.h	/^	struct Connect$/;"	s
+CreateComponent	src/entity/component/GameComponentFactory.cpp	/^GameComponent* GameComponentFactory::CreateComponent(XMLNode& compNode, GameObject* owner)$/;"	f	class:scim::GameComponentFactory
+CreateGameObject	src/entity/GameObjectTools.cpp	/^	void CreateGameObject(GameEvent* evt)$/;"	f	namespace:scim::GameObjectTools
+CreateGameObjectEvent	include/event/events/CreateGameObjectEvent.h	/^	CreateGameObjectEvent(const F32 timestamp, GameObject** pointerToBeAssigned, const XMLNode& rootNode) : GameEvent(CREATE_GAMEOBJECT, timestamp),$/;"	f	class:scim::CreateGameObjectEvent
+CreateGameObjectEvent	include/event/events/CreateGameObjectEvent.h	/^class CreateGameObjectEvent: public GameEvent$/;"	c	namespace:scim
+CreateNode	src/graphics/Scene.cpp	/^SceneNode Scene::CreateNode(U32 parentNode, IMesh* mesh)$/;"	f	class:scim::Scene
+DEBUG	include/common/Debug.h	7;"	d
+DEBUG	include/common/Debug.h	9;"	d
+DEBUG_H_	include/common/Debug.h	2;"	d
+DelegateList	include/event/IEventManager.h	/^typedef std::list<EventListenerDelegate> DelegateList;$/;"	t	namespace:scim
+DelegateMap	include/event/IEventManager.h	/^typedef std::map<EventType, DelegateList> DelegateMap;$/;"	t	namespace:scim
+EVENTMANAGER_H_	include/event/EventManager.h	2;"	d
+EventListenerDelegate	include/event/IEventManager.h	/^typedef fastdelegate::FastDelegate1<GameEvent*> EventListenerDelegate;$/;"	t	namespace:scim
+EventManager	include/event/EventManager.h	/^class EventManager: public IEventManager$/;"	c	namespace:scim
+EventQueue	include/event/IEventManager.h	/^typedef std::list<GameEvent*> EventQueue;$/;"	t	namespace:scim
+EventType	include/event/GameEvent.h	/^typedef U16 EventType;$/;"	t	namespace:scim
+F32	include/common/Types.h	/^	typedef float				F32;$/;"	t
+F32	src/common/Types.h	/^	typedef float				F32;$/;"	t
+F64	include/common/Types.h	/^	typedef double				F64;$/;"	t
+F64	src/common/Types.h	/^	typedef double				F64;$/;"	t
+FindFileOrThrow	src/res/ResourceManager.cpp	/^    std::string FindFileOrThrow(const std::string &strBasename)$/;"	f	namespace:scim::ResourceManager::__anon6
+GAMECOMPONENTFACTORY_H_	include/entity/component/GameComponentFactory.h	2;"	d
+GAMECOMPONENT_H_	include/entity/component/GameComponent.h	2;"	d
+GAMEEVENT_H_	include/event/GameEvent.h	2;"	d
+GAMEOBJECTTOOLS_H_	include/entity/GameObjectTools.h	2;"	d
+GAMEOBJECT_H_	include/entity/GameObject.h	2;"	d
+GLFWWINDOWMANAGER_H_	include/input/GLFWWindowManager.h	2;"	d
+GLFWWindowManager	include/input/GLFWWindowManager.h	/^class GLFWWindowManager : public IWindowManager$/;"	c	namespace:scim
+GLFWWindowManager	src/input/GLFWWindowManager.cpp	/^GLFWWindowManager::GLFWWindowManager(const char* windowName, I32 width, I32 height, bool fullscreen)$/;"	f	class:scim::GLFWWindowManager
+GLOBAL_FILE_DIR	src/res/ResourceManager.cpp	14;"	d	file:
+GOid	include/entity/GameObject.h	/^typedef U64 GOid;$/;"	t	namespace:scim
+GameComponent	include/entity/component/GameComponent.h	/^class GameComponent$/;"	c	namespace:scim
+GameComponent	src/entity/component/GameComponent.cpp	/^GameComponent::GameComponent(GameObject* owner, Type type) : m_owner(owner), m_type(type)$/;"	f	class:scim::GameComponent
+GameComponentFactory	include/entity/component/GameComponentFactory.h	/^class GameComponentFactory: public Singleton<GameComponentFactory>$/;"	c	namespace:scim
+GameComponentFactory	src/entity/component/GameComponentFactory.cpp	/^GameComponentFactory::GameComponentFactory()$/;"	f	class:scim::GameComponentFactory
+GameEvent	include/event/GameEvent.h	/^	GameEvent(const U32 eventType, const F32 timestamp = 0.0f) : m_timeStamp(timestamp), m_type(eventType) { }$/;"	f	class:scim::GameEvent
+GameEvent	include/event/GameEvent.h	/^class GameEvent$/;"	c	namespace:scim
+GameObject	include/entity/GameObject.h	/^class GameObject$/;"	c	namespace:scim
+GameObject	src/entity/GameObject.cpp	/^GameObject::GameObject(GOid id, const char* type, U32 sceneNodeIndex) : m_id(id), m_type(type), m_sceneNodeIndex(sceneNodeIndex)$/;"	f	class:scim::GameObject
+GameObjectTools	include/entity/GameObjectTools.h	/^namespace GameObjectTools$/;"	n	namespace:scim
+GameObjectTools	src/entity/GameObjectTools.cpp	/^namespace GameObjectTools$/;"	n	namespace:scim	file:
+GetAssimpMesh	src/graphics/MeshTools.cpp	/^	AssimpMesh* GetAssimpMesh(const MeshConsData mcd)$/;"	f	namespace:scim::MeshTools::__anon4
+GetCamToClipMatrix	src/graphics/RenderFramework.cpp	/^const glm::mat4* GetCamToClipMatrix()$/;"	f	namespace:scim::RenderFramework
+GetCollectedInput	include/input/IWindowManager.h	/^	virtual const Input* GetCollectedInput() const$/;"	f	class:scim::IWindowManager
+GetComponent	src/entity/component/ComponentCollection.cpp	/^GameComponent* ComponentCollection::GetComponent(GameComponent::Type type)$/;"	f	class:scim::ComponentCollection
+GetComponentCollection	include/entity/GameObject.h	/^	ComponentCollection* GetComponentCollection() const { return m_compColl; }$/;"	f	class:scim::GameObject
+GetFileContents	src/res/ResourceManager.cpp	/^std::string GetFileContents(const std::string &strBasename)$/;"	f	namespace:scim::ResourceManager
+GetID	include/entity/GameObject.h	/^	const GOid& GetID() const { return m_id; }$/;"	f	class:scim::GameObject
+GetInstance	include/common/Singleton.h	/^	static T& GetInstance()$/;"	f	class:scim::Singleton
+GetInstance	src/common/Singleton.h	/^	static T& GetInstance()$/;"	f	class:scim::Singleton
+GetKeypressAndUpdate	src/input/InputTools.cpp	/^void GetKeypressAndUpdate(const char key, Input* inpt)$/;"	f	namespace:scim
+GetListFromSpacedString	include/res/ResourceManager.h	/^std::vector<T> GetListFromSpacedString(const std::string &strDataList)$/;"	f	namespace:scim::ResourceManager
+GetMesh	src/graphics/MeshTools.cpp	/^AssimpMesh* GetMesh<AssimpMesh>(const std::string& entityName)$/;"	f	namespace:scim::MeshTools
+GetMesh	src/graphics/MeshTools.cpp	/^XMLMesh* GetMesh<XMLMesh>(const std::string& entityName)$/;"	f	namespace:scim::MeshTools
+GetMeshData	include/graphics/IMesh.h	/^	const std::vector<MeshData*>* GetMeshData() const { return &m_subMeshes; }$/;"	f	class:scim::IMesh
+GetMeshData	src/graphics/MeshTools.cpp	/^	MeshConsData GetMeshData(const std::string& entityName)$/;"	f	namespace:scim::MeshTools::__anon4
+GetNextGOid	include/entity/GameObject.h	/^	static GOid GetNextGOid() { return nextGOid++; }$/;"	f	class:scim::GameObject
+GetNode	src/graphics/Scene.cpp	/^const SceneNode Scene::GetNode(U32 nodeIndex)$/;"	f	class:scim::Scene
+GetPointerToAssign	include/event/events/CreateGameObjectEvent.h	/^	GameObject** GetPointerToAssign() const { return m_pointerToBeAssigned; }$/;"	f	class:scim::CreateGameObjectEvent
+GetRootNode	include/event/events/CreateGameObjectEvent.h	/^	const XMLNode* GetRootNode() const { return &m_rootNode; }$/;"	f	class:scim::CreateGameObjectEvent
+GetSceneNodeIndex	include/entity/GameObject.h	/^	U32 GetSceneNodeIndex() const { return m_sceneNodeIndex; }$/;"	f	class:scim::GameObject
+GetShutdownString	include/event/events/ShutdownGameEvent.h	/^	const char* GetShutdownString() const { return m_shutdownString; }$/;"	f	class:scim::ShutdownGameEvent
+GetType	include/entity/GameObject.h	/^	const char* GetType() const { return m_type; }$/;"	f	class:scim::GameObject
+GetType	include/entity/component/GameComponent.h	/^	Type GetType() const { return m_type; }$/;"	f	class:scim::GameComponent
+GetType	include/entity/component/manager/ComponentManager.h	/^	GameComponent::Type GetType() const { return m_type; }$/;"	f	class:scim::ComponentManager
+GetType	include/event/GameEvent.h	/^	virtual EventType GetType() { return m_type; }$/;"	f	class:scim::GameEvent
+GetWindow	include/input/GLFWWindowManager.h	/^	GLFWwindow* GetWindow() const $/;"	f	class:scim::GLFWWindowManager
+GetXMLMesh	src/graphics/MeshTools.cpp	/^	XMLMesh* GetXMLMesh(const MeshConsData mcd)$/;"	f	namespace:scim::MeshTools::__anon4
+HEXCODEOF	include/input/KeyCode.h	5;"	d
+I16	include/common/Types.h	/^	typedef int16_t				I16;$/;"	t
+I16	src/common/Types.h	/^	typedef int16_t				I16;$/;"	t
+I32	include/common/Types.h	/^	typedef int32_t				I32;$/;"	t
+I32	src/common/Types.h	/^	typedef int32_t				I32;$/;"	t
+I64	include/common/Types.h	/^	typedef int64_t				I64;$/;"	t
+I64	src/common/Types.h	/^	typedef int64_t				I64;$/;"	t
+I8	include/common/Types.h	/^	typedef int8_t				I8;$/;"	t
+I8	src/common/Types.h	/^	typedef int8_t				I8;$/;"	t
+IEVENTMANAGER_H_	include/event/IEventManager.h	2;"	d
+IEventManager	include/event/IEventManager.h	/^class IEventManager$/;"	c	namespace:scim
+IINPUTHANDLER_H_	include/input/IInputHandler.h	2;"	d
+IInputHandler	include/input/IInputHandler.h	/^class IInputHandler$/;"	c	namespace:scim
+IMESH_H_	include/graphics/IMesh.h	2;"	d
+IMesh	include/graphics/IMesh.h	/^class IMesh$/;"	c	namespace:scim
+INIT_WINH	src/graphics/RenderFramework.cpp	18;"	d	file:
+INIT_WINW	src/graphics/RenderFramework.cpp	17;"	d	file:
+INPUTTOOLS_H_	include/input/InputTools.h	2;"	d
+ISOCKET_H_	include/net/ISocket.h	2;"	d
+ISocket	include/net/ISocket.h	/^class ISocket$/;"	c	namespace:scim
+IWINDOWMANAGER_H_	include/input/IWindowManager.h	2;"	d
+IWindowManager	include/input/IWindowManager.h	/^class IWindowManager : public IInputHandler$/;"	c	namespace:scim
+Init	src/graphics/RenderFramework.cpp	/^bool Init()$/;"	f	namespace:scim::RenderFramework
+Input	include/input/IWindowManager.h	/^struct Input$/;"	s	namespace:scim
+IsFloatDevice	src/res/ResourceManager.cpp	/^bool IsFloatDevice(char t)$/;"	f	namespace:scim::ResourceManager
+IsKeyDown	src/input/InputTools.cpp	/^bool IsKeyDown(const Input& inptStruct, const char key)$/;"	f	namespace:scim
+IsLowerCaseKeyDown	src/input/InputTools.cpp	/^	bool IsLowerCaseKeyDown(const Input& inptStruct, const char key)$/;"	f	namespace:scim::__anon7
+IsLowercaseKey	src/input/InputTools.cpp	/^	inline bool IsLowercaseKey(const char key)$/;"	f	namespace:scim::__anon7
+IsUppercaseKey	src/input/InputTools.cpp	/^	inline bool IsUppercaseKey(const char key)$/;"	f	namespace:scim::__anon7
+KEYCODE_H_	include/input/KeyCode.h	2;"	d
+LOCAL_FILE_DIR	src/res/ResourceManager.cpp	15;"	d	file:
+LOG_ERR	include/common/Debug.h	12;"	d
+LOG_INFO	include/common/Debug.h	14;"	d
+LOG_WARN	include/common/Debug.h	13;"	d
+LinkProgram	src/graphics/RenderFramework.cpp	/^bool LinkProgram(GLuint program, const std::vector<GLuint>& shaderList)$/;"	f	namespace:scim::RenderFramework
+LoadRGBATexture	src/res/ResourceManager.cpp	/^bool LoadRGBATexture(const std::string& textureName, GLuint* textureID)$/;"	f	namespace:scim::ResourceManager
+LoadShader	src/graphics/RenderFramework.cpp	/^GLuint LoadShader(GLenum eShaderType, const std::string &strShaderFilename)$/;"	f	namespace:scim::RenderFramework
+MakeShader	src/graphics/RenderFramework.cpp	/^	GLuint MakeShader(GLenum eShaderType, const std::string &strShader)$/;"	f	namespace:scim::__anon5
+MeshConsData	src/graphics/MeshTools.cpp	/^	struct MeshConsData$/;"	s	namespace:scim::MeshTools::__anon4	file:
+MeshData	include/graphics/IMesh.h	/^struct MeshData$/;"	s	namespace:scim
+MeshData	src/graphics/IMesh.cpp	/^MeshData::MeshData(GLuint program,$/;"	f	class:scim::MeshData
+MeshTools	include/graphics/MeshTools.h	/^namespace MeshTools$/;"	n	namespace:scim
+MeshTools	src/graphics/MeshTools.cpp	/^namespace MeshTools$/;"	n	namespace:scim	file:
+NETWORKINPUTHANDLER_H_	include/input/NetworkInputHandler.h	2;"	d
+NORMAL_POSITION	include/graphics/RenderFramework.h	/^		NORMAL_POSITION = 1,$/;"	e	enum:scim::RenderFramework::AttributeLocations
+NetInput	include/input/NetworkInputHandler.h	/^struct NetInput$/;"	s	namespace:scim
+NetworkInputHandler	include/input/NetworkInputHandler.h	/^	NetworkInputHandler(const ISocket* socket) : m_socket(socket) { }$/;"	f	class:scim::NetworkInputHandler
+NetworkInputHandler	include/input/NetworkInputHandler.h	/^class NetworkInputHandler : public IInputHandler$/;"	c	namespace:scim
+OnUpdate	src/event/EventManager.cpp	/^bool EventManager::OnUpdate(F64 maxSeconds)$/;"	f	class:scim::EventManager
+OnUpdate	src/graphics/RenderFramework.cpp	/^void OnUpdate(F64 dtime)$/;"	f	namespace:scim::RenderFramework
+PostRender	src/input/GLFWWindowManager.cpp	/^void GLFWWindowManager::PostRender()$/;"	f	class:scim::GLFWWindowManager
+PostRender	src/input/XWindowManager.cpp	/^void XWindowManager::PostRender()$/;"	f	class:scim::XWindowManager
+PreRender	src/input/GLFWWindowManager.cpp	/^void GLFWWindowManager::PreRender()$/;"	f	class:scim::GLFWWindowManager
+PreRender	src/input/XWindowManager.cpp	/^void XWindowManager::PreRender()$/;"	f	class:scim::XWindowManager
+PrintMatrix	include/graphics/Scene.h	/^	static void PrintMatrix(const glm::mat4& matToPrint)$/;"	f	class:scim::Scene
+QueueEvent	src/event/EventManager.cpp	/^bool EventManager::QueueEvent(GameEvent* pEvent)$/;"	f	class:scim::EventManager
+RENDER	include/entity/component/GameComponent.h	/^		RENDER$/;"	e	enum:scim::GameComponent::Type
+RENDERFRAMEWORK_H_	include/graphics/RenderFramework.h	2;"	d
+RESOURCEMANAGER_H_	include/res/ResourceManager.h	2;"	d
+ROOT_NODE	include/graphics/Scene.h	/^		ROOT_NODE = 0$/;"	e	enum:scim::Scene::SceneConstant
+Recieve	src/net/UnixSocket.cpp	/^I32 UnixSocket::Recieve(void* buffer, U32 numBytes) const$/;"	f	class:scim::UnixSocket
+RegisterManager	src/entity/component/manager/ComponentManager.cpp	/^void ComponentManager::RegisterManager(ComponentManager* toReg)$/;"	f	class:scim::ComponentManager
+RemoveComponent	src/entity/component/ComponentCollection.cpp	/^void ComponentCollection::RemoveComponent(GameComponent::Type type)$/;"	f	class:scim::ComponentCollection
+RemoveListener	src/event/EventManager.cpp	/^bool EventManager::RemoveListener(const EventListenerDelegate& eventDelegate, EventType type)$/;"	f	class:scim::EventManager
+Render	src/graphics/IMesh.cpp	/^void IMesh::Render(const glm::mat4& transformMatrix) const$/;"	f	class:scim::IMesh
+RenderFramework	include/graphics/RenderFramework.h	/^namespace RenderFramework$/;"	n	namespace:scim
+RenderFramework	src/graphics/RenderFramework.cpp	/^namespace RenderFramework$/;"	n	namespace:scim	file:
+RenderNodes	src/graphics/Scene.cpp	/^void Scene::RenderNodes()$/;"	f	class:scim::Scene
+RequestPortal	src/ScimProtocol.h	/^	struct RequestPortal$/;"	s
+ResourceManager	include/res/ResourceManager.h	/^namespace ResourceManager$/;"	n	namespace:scim
+ResourceManager	src/res/ResourceManager.cpp	/^namespace ResourceManager$/;"	n	namespace:scim	file:
+SCENE_H_	include/graphics/Scene.h	2;"	d
+SCIM_KEY_A	include/input/KeyCode.h	6;"	d
+SCIM_KEY_B	include/input/KeyCode.h	7;"	d
+SCIM_KEY_C	include/input/KeyCode.h	8;"	d
+SCIM_KEY_D	include/input/KeyCode.h	9;"	d
+SCIM_KEY_DOWN	include/input/KeyCode.h	35;"	d
+SCIM_KEY_E	include/input/KeyCode.h	10;"	d
+SCIM_KEY_ESC	include/input/KeyCode.h	33;"	d
+SCIM_KEY_F	include/input/KeyCode.h	11;"	d
+SCIM_KEY_G	include/input/KeyCode.h	12;"	d
+SCIM_KEY_H	include/input/KeyCode.h	13;"	d
+SCIM_KEY_I	include/input/KeyCode.h	14;"	d
+SCIM_KEY_J	include/input/KeyCode.h	15;"	d
+SCIM_KEY_K	include/input/KeyCode.h	16;"	d
+SCIM_KEY_L	include/input/KeyCode.h	17;"	d
+SCIM_KEY_LEFT	include/input/KeyCode.h	36;"	d
+SCIM_KEY_LSHIFT	include/input/KeyCode.h	38;"	d
+SCIM_KEY_M	include/input/KeyCode.h	18;"	d
+SCIM_KEY_N	include/input/KeyCode.h	19;"	d
+SCIM_KEY_NONE	include/input/KeyCode.h	41;"	d
+SCIM_KEY_O	include/input/KeyCode.h	20;"	d
+SCIM_KEY_P	include/input/KeyCode.h	21;"	d
+SCIM_KEY_Q	include/input/KeyCode.h	22;"	d
+SCIM_KEY_R	include/input/KeyCode.h	23;"	d
+SCIM_KEY_RIGHT	include/input/KeyCode.h	37;"	d
+SCIM_KEY_RSHIFT	include/input/KeyCode.h	39;"	d
+SCIM_KEY_S	include/input/KeyCode.h	24;"	d
+SCIM_KEY_T	include/input/KeyCode.h	25;"	d
+SCIM_KEY_U	include/input/KeyCode.h	26;"	d
+SCIM_KEY_UP	include/input/KeyCode.h	34;"	d
+SCIM_KEY_V	include/input/KeyCode.h	27;"	d
+SCIM_KEY_W	include/input/KeyCode.h	28;"	d
+SCIM_KEY_X	include/input/KeyCode.h	29;"	d
+SCIM_KEY_Y	include/input/KeyCode.h	30;"	d
+SCIM_KEY_Z	include/input/KeyCode.h	31;"	d
+SHUTDOWN	include/event/GameEvent.h	/^		SHUTDOWN$/;"	e	enum:scim::GameEvent::Type
+SHUTDOWNGAMEEVENT_H_	include/event/events/ShutdownGameEvent.h	2;"	d
+SINGLETON_H_	include/common/Singleton.h	2;"	d
+SINGLETON_H_	src/common/Singleton.h	2;"	d
+Scene	include/graphics/Scene.h	/^class Scene$/;"	c	namespace:scim
+Scene	src/graphics/Scene.cpp	/^Scene::Scene()$/;"	f	class:scim::Scene
+SceneConstant	include/graphics/Scene.h	/^	enum SceneConstant$/;"	g	class:scim::Scene
+SceneNode	include/graphics/Scene.h	/^struct SceneNode$/;"	s	namespace:scim
+SetResizeCallback	include/input/IWindowManager.h	/^	virtual void SetResizeCallback(resizeCallback resizeCallback)$/;"	f	class:scim::IWindowManager
+Shutdown	src/graphics/RenderFramework.cpp	/^void Shutdown()$/;"	f	namespace:scim::RenderFramework
+ShutdownGameEvent	include/event/events/ShutdownGameEvent.h	/^	ShutdownGameEvent(const F32 timestamp, const char* shutdownString) : GameEvent(SHUTDOWN, timestamp),$/;"	f	class:scim::ShutdownGameEvent
+ShutdownGameEvent	include/event/events/ShutdownGameEvent.h	/^class ShutdownGameEvent: public GameEvent$/;"	c	namespace:scim
+Singleton	include/common/Singleton.h	/^	Singleton() {}$/;"	f	class:scim::Singleton
+Singleton	include/common/Singleton.h	/^class Singleton$/;"	c	namespace:scim
+Singleton	src/common/Singleton.h	/^	Singleton() {}$/;"	f	class:scim::Singleton
+Singleton	src/common/Singleton.h	/^class Singleton$/;"	c	namespace:scim
+TEXTURE_UV	include/graphics/RenderFramework.h	/^		TEXTURE_UV		= 3$/;"	e	enum:scim::RenderFramework::AttributeLocations
+TRANSFORM	include/entity/component/GameComponent.h	/^		TRANSFORM,$/;"	e	enum:scim::GameComponent::Type
+TYPES_H_	include/common/Types.h	2;"	d
+TYPES_H_	src/common/Types.h	2;"	d
+TriggerEvent	src/event/EventManager.cpp	/^bool EventManager::TriggerEvent(GameEvent* pEvent)$/;"	f	class:scim::EventManager
+Type	include/entity/component/GameComponent.h	/^	enum Type$/;"	g	class:scim::GameComponent
+Type	include/event/GameEvent.h	/^	enum Type$/;"	g	class:scim::GameEvent
+U16	include/common/Types.h	/^	typedef uint16_t			U16;$/;"	t
+U16	src/common/Types.h	/^	typedef uint16_t			U16;$/;"	t
+U32	include/common/Types.h	/^	typedef uint32_t			U32;$/;"	t
+U32	src/common/Types.h	/^	typedef uint32_t			U32;$/;"	t
+U64	include/common/Types.h	/^	typedef uint64_t			U64;$/;"	t
+U64	src/common/Types.h	/^	typedef uint64_t			U64;$/;"	t
+U8	include/common/Types.h	/^	typedef uint8_t				U8;$/;"	t
+U8	src/common/Types.h	/^	typedef uint8_t				U8;$/;"	t
+UNIXSOCKET_H_	include/net/UnixSocket.h	2;"	d
+UnixSocket	include/net/UnixSocket.h	/^class UnixSocket : public ISocket$/;"	c	namespace:scim
+UnixSocket	src/net/UnixSocket.cpp	/^UnixSocket::UnixSocket(const std::string& destAddr, const std::string& portNumber)$/;"	f	class:scim::UnixSocket
+UpdateNodes	src/graphics/Scene.cpp	/^void Scene::UpdateNodes()$/;"	f	class:scim::Scene
+VAO	include/graphics/IMesh.h	/^	GLuint VAO;$/;"	m	struct:scim::MeshData
+VERTEX_COLOR	include/graphics/RenderFramework.h	/^		VERTEX_COLOR 	= 2,$/;"	e	enum:scim::RenderFramework::AttributeLocations
+VERTEX_POSITION	include/graphics/RenderFramework.h	/^		VERTEX_POSITION = 0,$/;"	e	enum:scim::RenderFramework::AttributeLocations
+XMLMESH_H_	include/graphics/XMLMesh.h	2;"	d
+XMLMesh	include/graphics/XMLMesh.h	/^class XMLMesh: public IMesh$/;"	c	namespace:scim
+XMLMesh	src/graphics/XMLMesh.cpp	/^XMLMesh::XMLMesh(const XMLNode& meshNode, GLuint program)$/;"	f	class:scim::XMLMesh
+XWINDOWMANAGER_H_	include/input/XWindowManager.h	2;"	d
+XWindowManager	include/input/XWindowManager.h	/^class XWindowManager : public IWindowManager$/;"	c	namespace:scim
+XWindowManager	src/input/XWindowManager.cpp	/^XWindowManager::XWindowManager(const char* windowName, I32 width, I32 height, bool fullscreen)$/;"	f	class:scim::XWindowManager
+abc	include/input/IWindowManager.h	/^	U32 abc;$/;"	m	struct:scim::Input
+ambInt	include/graphics/IMesh.h	/^		float ambInt;$/;"	m	struct:scim::MeshData::__anon3
+ato	include/res/ResourceManager.h	/^inline F32 ato<F32>(const char* c)$/;"	f	namespace:scim::ResourceManager
+ato	include/res/ResourceManager.h	/^inline I32 ato<I32>(const char* c)$/;"	f	namespace:scim::ResourceManager
+ato	include/res/ResourceManager.h	/^inline U32 ato<U32>(const char* c)$/;"	f	namespace:scim::ResourceManager
+bufferInfo	include/graphics/IMesh.h	/^	} bufferInfo;$/;"	m	struct:scim::MeshData	typeref:struct:scim::MeshData::__anon2
+cmap	include/input/XWindowManager.h	/^	Colormap                cmap;$/;"	m	class:scim::XWindowManager
+color	include/graphics/IMesh.h	/^		glm::vec3 color;$/;"	m	struct:scim::MeshData::__anon3
+colorBuffer	include/graphics/IMesh.h	/^	GLuint colorBuffer;$/;"	m	struct:scim::MeshData
+compList	include/entity/component/manager/ComponentManager.h	/^	ComponentList compList;$/;"	m	class:scim::ComponentManager
+compMap	include/entity/component/ComponentCollection.h	/^	std::map<GameComponent::Type, GameComponent*> compMap;$/;"	m	class:scim::ComponentCollection
+data	include/input/NetworkInputHandler.h	/^	char data[500];$/;"	m	struct:scim::NetInput
+dpy	include/input/XWindowManager.h	/^	Display*                dpy;$/;"	m	class:scim::XWindowManager
+e_constants	include/event/IEventManager.h	/^	enum e_constants { kINFINITE = 0xffffffff };$/;"	g	class:scim::IEventManager
+g_curWindow	src/main.cpp	/^	IWindowManager* 			g_curWindow;$/;"	m	namespace:scim	file:
+g_currentScene	src/main.cpp	/^	Scene*						g_currentScene;$/;"	m	namespace:scim	file:
+g_eventManager	src/main.cpp	/^	EventManager*				g_eventManager;$/;"	m	namespace:scim	file:
+glc	include/input/XWindowManager.h	/^	GLXContext              glc;$/;"	m	class:scim::XWindowManager
+gwa	include/input/XWindowManager.h	/^	XWindowAttributes       gwa;$/;"	m	class:scim::XWindowManager
+hasNormals	include/graphics/IMesh.h	/^		bool hasNormals;$/;"	m	struct:scim::MeshData::__anon2
+header	src/ScimProtocol.h	/^		U16 header;$/;"	m	struct:Connect
+header	src/ScimProtocol.h	/^		U16 header;$/;"	m	struct:RequestPortal
+id	src/ScimProtocol.h	/^		U32 id;$/;"	m	struct:RequestPortal
+index	include/graphics/Scene.h	/^	U32 			index;$/;"	m	struct:scim::SceneNode
+indexBuffer	include/graphics/IMesh.h	/^	GLuint indexBuffer;$/;"	m	struct:scim::MeshData
+indexSize	include/graphics/IMesh.h	/^		U16 indexSize;$/;"	m	struct:scim::MeshData::__anon2
+init	src/main.cpp	/^bool init()$/;"	f
+isColored	include/graphics/IMesh.h	/^		bool isColored;$/;"	m	struct:scim::MeshData::__anon2
+isTextured	include/graphics/IMesh.h	/^		bool isTextured;$/;"	m	struct:scim::MeshData::__anon2
+kINFINITE	include/event/IEventManager.h	/^	enum e_constants { kINFINITE = 0xffffffff };$/;"	e	enum:scim::IEventManager::e_constants
+lightAmbInt	include/graphics/IMesh.h	/^		GLint lightAmbInt;$/;"	m	struct:scim::MeshData::__anon1
+lightColor	include/graphics/IMesh.h	/^		GLint lightColor;$/;"	m	struct:scim::MeshData::__anon1
+lights	include/graphics/IMesh.h	/^	} lights;$/;"	m	struct:scim::MeshData	typeref:struct:scim::MeshData::__anon3
+lmat	include/graphics/Scene.h	/^	glm::mat4* 		lmat;$/;"	m	struct:scim::SceneNode
+m_collectedInputs	include/input/IWindowManager.h	/^	Input m_collectedInputs;$/;"	m	class:scim::IWindowManager
+m_compColl	include/entity/GameObject.h	/^	ComponentCollection* m_compColl;$/;"	m	class:scim::GameObject
+m_curData	include/input/NetworkInputHandler.h	/^	NetInput m_curData;$/;"	m	class:scim::NetworkInputHandler
+m_delegateMap	include/event/EventManager.h	/^	DelegateMap m_delegateMap;$/;"	m	class:scim::EventManager
+m_entityName	include/event/events/CreateGameObjectEvent.h	/^	const std::string m_entityName;$/;"	m	class:scim::CreateGameObjectEvent
+m_eventQueue	include/event/EventManager.h	/^	EventQueue m_eventQueue;$/;"	m	class:scim::EventManager
+m_id	include/entity/GameObject.h	/^	GOid		m_id;$/;"	m	class:scim::GameObject
+m_inputMask	include/input/XWindowManager.h	/^	const int m_inputMask = ExposureMask|StructureNotifyMask|ButtonPressMask|KeyPressMask|PointerMotionMask;$/;"	m	class:scim::XWindowManager
+m_lmat	include/graphics/Scene.h	/^	std::vector<glm::mat4> 		m_lmat;	\/\/ local transform matrix list$/;"	m	class:scim::Scene
+m_meshes	include/graphics/Scene.h	/^	std::vector<const IMesh*>	m_meshes;$/;"	m	class:scim::Scene
+m_owner	include/entity/component/GameComponent.h	/^	GameObject* m_owner;$/;"	m	class:scim::GameComponent
+m_parents	include/graphics/Scene.h	/^	std::vector<U32> 			m_parents;$/;"	m	class:scim::Scene
+m_pointerToBeAssigned	include/event/events/CreateGameObjectEvent.h	/^	GameObject** m_pointerToBeAssigned;$/;"	m	class:scim::CreateGameObjectEvent
+m_resizeCallback	include/input/IWindowManager.h	/^	void (*m_resizeCallback)(I32 width, I32 height);$/;"	m	class:scim::IWindowManager
+m_rootNode	include/event/events/CreateGameObjectEvent.h	/^	const XMLNode m_rootNode;$/;"	m	class:scim::CreateGameObjectEvent
+m_sceneNodeIndex	include/entity/GameObject.h	/^	U32 	m_sceneNodeIndex;$/;"	m	class:scim::GameObject
+m_servinfo	include/net/UnixSocket.h	/^	struct addrinfo* m_servinfo;$/;"	m	class:scim::UnixSocket	typeref:struct:scim::UnixSocket::addrinfo
+m_shutdownString	include/event/events/ShutdownGameEvent.h	/^	const char* m_shutdownString;$/;"	m	class:scim::ShutdownGameEvent
+m_socket	include/input/NetworkInputHandler.h	/^	const ISocket* m_socket;$/;"	m	class:scim::NetworkInputHandler
+m_sockfd	include/net/UnixSocket.h	/^	U32 m_sockfd;$/;"	m	class:scim::UnixSocket
+m_subMeshes	include/graphics/IMesh.h	/^	std::vector<MeshData*> m_subMeshes;$/;"	m	class:scim::IMesh
+m_timeStamp	include/event/GameEvent.h	/^	const F32 m_timeStamp;$/;"	m	class:scim::GameEvent
+m_type	include/entity/GameObject.h	/^	const char* m_type;$/;"	m	class:scim::GameObject
+m_type	include/entity/component/GameComponent.h	/^	Type m_type;$/;"	m	class:scim::GameComponent
+m_type	include/entity/component/manager/ComponentManager.h	/^	GameComponent::Type m_type;$/;"	m	class:scim::ComponentManager
+m_type	include/event/GameEvent.h	/^	const EventType m_type;$/;"	m	class:scim::GameEvent
+m_window	include/input/GLFWWindowManager.h	/^	GLFWwindow* m_window;$/;"	m	class:scim::GLFWWindowManager
+m_wmat	include/graphics/Scene.h	/^	std::vector<glm::mat4> 		m_wmat;	\/\/ world transform matrix list$/;"	m	class:scim::Scene
+main	src/main.cpp	/^int main(int argc, char* argv[])$/;"	f
+mangMap	include/entity/component/GameComponentFactory.h	/^	std::map<GameComponent::Type, ComponentManager*> mangMap;$/;"	m	class:scim::GameComponentFactory
+mesh	include/graphics/Scene.h	/^	IMesh*			mesh;$/;"	m	struct:scim::SceneNode
+meshName	src/graphics/MeshTools.cpp	/^		const std::string meshName;$/;"	m	struct:scim::MeshTools::__anon4::MeshConsData	file:
+mousePosX	include/input/IWindowManager.h	/^	F64 mousePosX;$/;"	m	struct:scim::Input
+mousePosY	include/input/IWindowManager.h	/^	F64 mousePosY;$/;"	m	struct:scim::Input
+mvpMatrix	include/graphics/IMesh.h	/^		GLint mvpMatrix;$/;"	m	struct:scim::MeshData::__anon1
+nextGOid	include/entity/GameObject.h	/^	static GOid nextGOid;$/;"	m	class:scim::GameObject
+nextGOid	src/entity/GameObject.cpp	/^GOid GameObject::nextGOid = 0;$/;"	m	class:scim::GameObject	file:
+normalBuffer	include/graphics/IMesh.h	/^	GLuint normalBuffer;$/;"	m	struct:scim::MeshData
+override	include/input/GLFWWindowManager.h	/^	virtual void CollectInputs() override;$/;"	m	class:scim::GLFWWindowManager
+override	include/input/GLFWWindowManager.h	/^	virtual void PostRender() override;$/;"	m	class:scim::GLFWWindowManager
+override	include/input/GLFWWindowManager.h	/^	virtual void PreRender() override;$/;"	m	class:scim::GLFWWindowManager
+override	include/input/NetworkInputHandler.h	/^	virtual void CollectInputs() override;$/;"	m	class:scim::NetworkInputHandler
+override	include/input/XWindowManager.h	/^	virtual void CollectInputs() override;$/;"	m	class:scim::XWindowManager
+override	include/input/XWindowManager.h	/^	virtual void PostRender() override;$/;"	m	class:scim::XWindowManager
+override	include/input/XWindowManager.h	/^	virtual void PreRender() override;$/;"	m	class:scim::XWindowManager
+parentNode	include/graphics/Scene.h	/^	U32 			parentNode;$/;"	m	struct:scim::SceneNode
+passwd_size	src/ScimProtocol.h	/^		U8 passwd_size;$/;"	m	struct:Connect
+password	src/ScimProtocol.h	/^		char password[32];$/;"	m	struct:Connect
+program	include/graphics/IMesh.h	/^	GLuint program;$/;"	m	struct:scim::MeshData
+program	src/graphics/MeshTools.cpp	/^		GLuint program;$/;"	m	struct:scim::MeshTools::__anon4::MeshConsData	file:
+resizeCallback	include/input/IWindowManager.h	/^typedef void (*resizeCallback)(I32, I32);$/;"	t	namespace:scim
+root	include/input/XWindowManager.h	/^	Window                  root;$/;"	m	class:scim::XWindowManager
+scim	include/common/Singleton.h	/^namespace scim$/;"	n
+scim	include/entity/GameObject.h	/^namespace scim$/;"	n
+scim	include/entity/GameObjectTools.h	/^namespace scim$/;"	n
+scim	include/entity/component/ComponentCollection.h	/^namespace scim$/;"	n
+scim	include/entity/component/GameComponent.h	/^namespace scim$/;"	n
+scim	include/entity/component/GameComponentFactory.h	/^namespace scim$/;"	n
+scim	include/entity/component/manager/ComponentManager.h	/^namespace scim$/;"	n
+scim	include/event/EventManager.h	/^namespace scim$/;"	n
+scim	include/event/GameEvent.h	/^namespace scim$/;"	n
+scim	include/event/IEventManager.h	/^namespace scim$/;"	n
+scim	include/event/events/CreateGameObjectEvent.h	/^namespace scim$/;"	n
+scim	include/event/events/ShutdownGameEvent.h	/^namespace scim$/;"	n
+scim	include/graphics/AssimpMesh.h	/^namespace scim$/;"	n
+scim	include/graphics/IMesh.h	/^namespace scim$/;"	n
+scim	include/graphics/MeshTools.h	/^namespace scim$/;"	n
+scim	include/graphics/RenderFramework.h	/^namespace scim$/;"	n
+scim	include/graphics/Scene.h	/^namespace scim$/;"	n
+scim	include/graphics/XMLMesh.h	/^namespace scim$/;"	n
+scim	include/input/GLFWWindowManager.h	/^namespace scim$/;"	n
+scim	include/input/IInputHandler.h	/^namespace scim$/;"	n
+scim	include/input/IWindowManager.h	/^namespace scim$/;"	n
+scim	include/input/InputTools.h	/^namespace scim$/;"	n
+scim	include/input/NetworkInputHandler.h	/^namespace scim$/;"	n
+scim	include/input/XWindowManager.h	/^namespace scim$/;"	n
+scim	include/net/ISocket.h	/^namespace scim$/;"	n
+scim	include/net/UnixSocket.h	/^namespace scim$/;"	n
+scim	include/res/ResourceManager.h	/^namespace scim$/;"	n
+scim	src/common/Singleton.h	/^namespace scim$/;"	n
+scim	src/entity/GameObject.cpp	/^namespace scim$/;"	n	file:
+scim	src/entity/GameObjectTools.cpp	/^namespace scim$/;"	n	file:
+scim	src/entity/component/ComponentCollection.cpp	/^namespace scim$/;"	n	file:
+scim	src/entity/component/GameComponent.cpp	/^namespace scim$/;"	n	file:
+scim	src/entity/component/GameComponentFactory.cpp	/^namespace scim$/;"	n	file:
+scim	src/entity/component/manager/ComponentManager.cpp	/^namespace scim$/;"	n	file:
+scim	src/event/EventManager.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/AssimpMesh.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/IMesh.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/MeshTools.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/RenderFramework.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/Scene.cpp	/^namespace scim$/;"	n	file:
+scim	src/graphics/XMLMesh.cpp	/^namespace scim$/;"	n	file:
+scim	src/input/GLFWWindowManager.cpp	/^namespace scim$/;"	n	file:
+scim	src/input/InputTools.cpp	/^namespace scim$/;"	n	file:
+scim	src/input/NetworkInputHandler.cpp	/^namespace scim$/;"	n	file:
+scim	src/input/XWindowManager.cpp	/^namespace scim$/;"	n	file:
+scim	src/main.cpp	/^namespace scim$/;"	n	file:
+scim	src/net/UnixSocket.cpp	/^namespace scim$/;"	n	file:
+scim	src/res/ResourceManager.cpp	/^namespace scim$/;"	n	file:
+shutdown	src/main.cpp	/^void shutdown()$/;"	f
+shutdown_delegate	src/main.cpp	/^void shutdown_delegate(GameEvent* evt)$/;"	f
+specialKeys	include/input/IWindowManager.h	/^	U32 specialKeys;$/;"	m	struct:scim::Input
+stopFlag	src/main.cpp	/^bool stopFlag;$/;"	v
+swa	include/input/XWindowManager.h	/^	XSetWindowAttributes    swa;$/;"	m	class:scim::XWindowManager
+texUnit	include/graphics/IMesh.h	/^		GLint texUnit;$/;"	m	struct:scim::MeshData::__anon1
+textureBuffer	include/graphics/IMesh.h	/^	GLuint textureBuffer;$/;"	m	struct:scim::MeshData
+textureList	include/graphics/IMesh.h	/^	std::vector<GLuint> textureList;$/;"	m	struct:scim::MeshData
+uniforms	include/graphics/IMesh.h	/^	} uniforms;$/;"	m	struct:scim::MeshData	typeref:struct:scim::MeshData::__anon1
+username	src/ScimProtocol.h	/^		char username[32];$/;"	m	struct:Connect
+usrname_size	src/ScimProtocol.h	/^		U8 usrname_size;$/;"	m	struct:Connect
+vertexBuffer	include/graphics/IMesh.h	/^	GLuint vertexBuffer;$/;"	m	struct:scim::MeshData
+vertexSize	include/graphics/IMesh.h	/^		U16 vertexSize;$/;"	m	struct:scim::MeshData::__anon2
+vi	include/input/XWindowManager.h	/^	XVisualInfo*            vi;$/;"	m	class:scim::XWindowManager
+viewMatrix	include/graphics/IMesh.h	/^		GLint viewMatrix;$/;"	m	struct:scim::MeshData::__anon1
+win	include/input/XWindowManager.h	/^	Window                  win;$/;"	m	class:scim::XWindowManager
+window_h	include/input/IWindowManager.h	/^	I32 window_w, window_h;$/;"	m	struct:scim::Input
+window_title	src/graphics/RenderFramework.cpp	/^	const char* window_title = "Scim";$/;"	m	namespace:scim::__anon5	file:
+window_w	include/input/IWindowManager.h	/^	I32 window_w, window_h;$/;"	m	struct:scim::Input
+wmat	include/graphics/Scene.h	/^	glm::mat4*		wmat;$/;"	m	struct:scim::SceneNode
+~ComponentManager	include/entity/component/manager/ComponentManager.h	/^	virtual ~ComponentManager() { }$/;"	f	class:scim::ComponentManager
+~EventManager	src/event/EventManager.cpp	/^EventManager::~EventManager()$/;"	f	class:scim::EventManager
+~GLFWWindowManager	src/input/GLFWWindowManager.cpp	/^GLFWWindowManager::~GLFWWindowManager()$/;"	f	class:scim::GLFWWindowManager
+~GameComponent	include/entity/component/GameComponent.h	/^	virtual ~GameComponent() { }$/;"	f	class:scim::GameComponent
+~GameEvent	include/event/GameEvent.h	/^	virtual ~GameEvent() { }$/;"	f	class:scim::GameEvent
+~IEventManager	include/event/IEventManager.h	/^	virtual ~IEventManager() { }$/;"	f	class:scim::IEventManager
+~IMesh	src/graphics/IMesh.cpp	/^IMesh::~IMesh()$/;"	f	class:scim::IMesh
+~ISocket	include/net/ISocket.h	/^	virtual ~ISocket() { }$/;"	f	class:scim::ISocket
+~IWindowManager	include/input/IWindowManager.h	/^	virtual ~IWindowManager() { }$/;"	f	class:scim::IWindowManager
+~MeshData	src/graphics/IMesh.cpp	/^MeshData::~MeshData()$/;"	f	class:scim::MeshData
+~Singleton	include/common/Singleton.h	/^	virtual ~Singleton() { }$/;"	f	class:scim::Singleton
+~Singleton	src/common/Singleton.h	/^	virtual ~Singleton() { }$/;"	f	class:scim::Singleton
+~UnixSocket	src/net/UnixSocket.cpp	/^UnixSocket::~UnixSocket()$/;"	f	class:scim::UnixSocket
+~XWindowManager	src/input/XWindowManager.cpp	/^XWindowManager::~XWindowManager()$/;"	f	class:scim::XWindowManager

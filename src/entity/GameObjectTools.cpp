@@ -8,8 +8,6 @@
 #include "res/ResourceManager.h"
 #include "graphics/MeshTools.h"
 
-#include <xmlParser.h>
-
 namespace scim
 {
 
@@ -23,7 +21,11 @@ namespace GameObjectTools
 		CreateGameObjectEvent* creEvt = (CreateGameObjectEvent*)evt;
 		GameObject** p_go = creEvt->GetPointerToAssign();
 		const XMLNode* breedNode = creEvt->GetRootNode();
-		const char* entityName = breedNode->getAttribute("type");
+		const char* entityName = breedNode->getAttribute("type", 1);
+		if (!entityName)
+		{
+			LOG_ERR("no attribute: 'type' in go node");
+		}
 
 		AssimpMesh* mesh = MeshTools::GetMesh<AssimpMesh>(entityName);
 		U32 sceneNodeIndex = g_currentScene->CreateNode(Scene::ROOT_NODE, mesh).index;

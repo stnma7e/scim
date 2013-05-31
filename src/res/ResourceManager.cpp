@@ -10,7 +10,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <IL/il.h>
-#include <logging/logging.h>
 
 #define GLOBAL_FILE_DIR "../../res/"
 #define LOCAL_FILE_DIR GLOBAL_FILE_DIR
@@ -50,14 +49,14 @@ bool LoadRGBATexture(const std::string& textureName, GLuint* textureID)
 	success = ilLoadImage((ILstring)fullpath.c_str());
 	if (!success)
 	{
-		logging::log::emit<logging::Error>() << "texture resource '" << fullpath.c_str() << "' is unavailable" << logging::log::endl;
+		LOG_ERR("texture resource '%s' is unavailable", fullpath.c_str());
 		ilDeleteImages(1, &imageID);
 		return false;
 	}
 	success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 	if (!success)
 	{
-		logging::log::emit<logging::Error>() << "could not convert texture resource '" << (fullpath + textureName).c_str()  << logging::log::endl;
+		LOG_ERR("could not convert texture resource '%s'", (fullpath + textureName).c_str());
 		ilDeleteImages(1, &imageID);
 		return false;
 	}
@@ -81,8 +80,7 @@ bool LoadRGBATexture(const std::string& textureName, GLuint* textureID)
 	return textureID;
 }
 
-template <>
-std::string GetFileContents<std::string>(const std::string &strBasename)
+std::string GetFileContents(const std::string &strBasename)
 {
 	std::string strFilename = FindFileOrThrow(strBasename);
 	std::ifstream resFile(strFilename.c_str());
@@ -96,16 +94,6 @@ std::string GetFileContents<std::string>(const std::string &strBasename)
 	{
 		return std::string();
 	}
-}
-template <typename T>
-T GetFileContents(const std::string& strBasename)
-{
-	std::string strFilename = FindFileOrThrow(strBasename);
-	std::ifstream resFile(strFilename.c_str(), std::ios::out | std::ios::binary);
-	std::ostream fileData;
-	fileData << resFile.rdbuf();
-	resFile.close();
-	return fileData;
 }
 
 bool IsFloatDevice(char t)

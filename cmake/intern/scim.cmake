@@ -63,3 +63,7 @@ SET (LINK_LIBS
 FOREACH (lib ${LINK_LIBS})
 	TARGET_LINK_LIBRARIES (${libname} ${lib})
 ENDFOREACH (lib)
+
+ADD_EXECUTABLE(ex${libname} ${ROOT_PATH}/src/main.cpp)
+TARGET_LINK_LIBRARIES(ex${libname} ${libname})
+

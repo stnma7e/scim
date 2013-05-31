@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdio.h>
 #include <GL/glew.h>
-#include <logging/logging.h>
 
 namespace scim
 {
@@ -71,7 +70,7 @@ AssimpMesh::AssimpMesh(const aiScene* pScene, GLuint shaderProgram)
 				}
 			} else
 			{
-				logging::log::emit<logging::Info>() << "no diffuse textures" << logging::log::endl;
+				LOG_ERR("no diffuse textures");
 			}
 		}
 

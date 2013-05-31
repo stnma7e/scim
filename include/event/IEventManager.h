@@ -1,7 +1,7 @@
 #ifndef IEVENTMANAGER_H_
 #define IEVENTMANAGER_H_
 
-#include "../../dep/fast_delegate/FastDelegate.h"
+#include <FastDelegate.h>
 #include "GameEvent.h"
 
 #include <map>
