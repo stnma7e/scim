@@ -1,9 +1,0 @@
-[submodule "dep/glfw"]
-	path = dep/glfw
-	url = git://github.com/glfw/glfw.git
-[submodule "dep/glew"]
-	path = dep/glew
-	url = git://glew.git.sourceforge.net/gitroot/glew/glew
-[submodule "dep/assimp"]
-	path = dep/assimp
-	url = git://github.com/assimp/assimp.git
